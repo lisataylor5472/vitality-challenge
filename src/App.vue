@@ -86,8 +86,9 @@ export default defineComponent({
   .header-banner {
     flex-basis: 38%;
     .title-svg {
-      width: 105%;
-      height: auto;
+      height: 28vh;
+      // width: 100%;
+      // height: auto;
     }
   }
   .header-details {

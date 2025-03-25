@@ -153,16 +153,14 @@ export default defineComponent({
   flex-direction: column;
   .players-view-header {
     img {
-      height: 10rem;
+      height: 9rem;
     }
   }
   table {
     border-collapse: collapse;
     width: 100%;
     height: 100%;
-    &::-webkit-scrollbar-track {
-      background: var(--theme-col-parchment);
-    }
+    margin-top: -2em;
     thead {
       color: var(--theme-col-dark-red);
       font-family: 'Grenze Gotisch', serif;
@@ -172,14 +170,14 @@ export default defineComponent({
       position: sticky;
       top: 0;
       z-index: 2;
-      background-color: var(--theme-col-parchment);
+      // background-color: var(--theme-col-parchment);
       th {
         padding-right: 10px;
       }
     }
     .scrollable-table {
       display: block;
-      max-height: 60vh; /* Adjust height */
+      max-height: 48vh; /* Adjust height */
       overflow-y: overlay;
       width: 100%;
       font-family: 'Space Grotesk', sans-serif;
