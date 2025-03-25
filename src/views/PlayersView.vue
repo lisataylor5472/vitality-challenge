@@ -1,9 +1,7 @@
 <template lang="pug">
-  .players-overview
+  .players-dashboard
     .players-view-header
-      .illuminated-letter
-        | P
-        h1 layers
+      img(src="@/assets/PlayersText.svg" alt="Players")
     .table-wrapper
       table
         thead
@@ -30,7 +28,7 @@ import { useAppStore } from '@/store/app'
 import moment from 'moment'
 
 export default defineComponent({
-  name: 'DashboardView',
+  name: 'PlayersView',
   components: {},
 
   setup() {
@@ -147,28 +145,15 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.players-overview {
-  // background-color: var(--theme-col-parchment);
-  padding: 2.5rem 4.8rem 2.5rem 2.5rem;
+.players-dashboard {
+  padding: 0 4.8rem 2.5rem 2.5rem;
   color: var(--theme-col-brown);
   height: 100%;
   display: flex;
   flex-direction: column;
   .players-view-header {
-    .illuminated-letter {
-      font-family: 'Grenze Gotisch', serif;
-      font-size: 5rem;
-      color: var(--theme-col-dark-red);
-      display: flex;
-      align-items: center;
-      h1 {
-        margin-left: 0.5rem;
-      }
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      font-family: 'Grenze Gotisch', serif;
+    img {
+      height: 10rem;
     }
   }
   table {

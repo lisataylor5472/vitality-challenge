@@ -8,6 +8,9 @@
   .left-panel {
     background-color: brown;
     flex-grow: 0.5;
+    background-image: url('src/assets/WoodGrain.svg');
+    background-size: cover;
+    background-position: center;
   }
   .app-wrapper {
     padding: 2rem 0;
@@ -18,6 +21,9 @@
   .right-panel {
     background-color: blue;
     flex-grow: 0.5;
+    background-image: url('src/assets/WoodGrain.svg');
+    background-size: cover;
+    background-position: center;
   }
 }
 
