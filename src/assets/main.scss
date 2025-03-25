@@ -1,0 +1,31 @@
+@import './base.css';
+
+#app {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  font-weight: normal;
+  .left-panel {
+    background-color: brown;
+    flex-grow: 0.5;
+  }
+  .app-wrapper {
+    padding: 2rem 0;
+    max-width: 1500px;
+    flex-grow: 2;
+    // max-width: 1280px;
+  }
+  .right-panel {
+    background-color: blue;
+    flex-grow: 0.5;
+  }
+}
+
+@media (hover: hover) {
+}
+/* a:hover {
+    /* background-color: hsla(160, 100%, 37%, 0.2); */
+/* } */
+
+@media (min-width: 1024px) {
+}

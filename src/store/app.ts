@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 
 interface challengeData {
   playerList: []
+  activityTracker: []
 }
 
 export const useAppStore = defineStore('app', () => {
@@ -26,6 +27,7 @@ export const useAppStore = defineStore('app', () => {
   }
 
   const playerList = computed(() => data.value?.playerList || [])
+  const activityData = computed(() => data.value?.activityTracker || [])
 
-  return { data, isLoading, fetchChallengeData, playerList }
+  return { data, isLoading, fetchChallengeData, playerList, activityData }
 })
