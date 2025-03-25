@@ -43,7 +43,8 @@
 
   .main-content
     .left-column
-      PlayerLeaderboard
+      SvgLeaderboard(:topPlayers="topPlayers")
+      //- PlayerLeaderboard
     .right-column
       //- .parchment-wrapper
       //-   img(src="@/assets/parchment1.svg" alt="Parchment")
@@ -54,9 +55,10 @@
 </template>
 <script lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { defineComponent, onMounted } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
 import { useAppStore } from '@/store/app'
 import PlayerLeaderboard from '@/components/PlayerLeaderboard.vue'
+import SvgLeaderboard from '@/components/SvgLeaderboard.vue'
 
 export default defineComponent({
   name: 'App',
@@ -64,6 +66,7 @@ export default defineComponent({
     RouterLink,
     RouterView,
     PlayerLeaderboard,
+    SvgLeaderboard,
   },
 
   setup() {
@@ -88,6 +91,12 @@ export default defineComponent({
       return monthMap[month] <= currentMonth
     }
 
+    const topPlayers = ref([
+      { name: 'Lisa', class: 'Warrior', level: 5, xp: 100, achievements: 3 },
+      { name: 'Bob', class: 'Mage', level: 3, xp: 50, achievements: 1 },
+      { name: 'Joe', class: 'Rogue', level: 4, xp: 75, achievements: 2 },
+    ])
+
     onMounted(() => {
       appStore.fetchChallengeData()
     })
@@ -95,6 +104,7 @@ export default defineComponent({
     return {
       appStore,
       dateAfter,
+      topPlayers,
     }
   },
 })
