@@ -59,7 +59,7 @@
   --color-border-hover: var(--vt-c-divider-light-1);
 
   --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
+  --color-text: var(--theme-col-black-mute);
 
   --section-gap: 160px;
 }
@@ -76,6 +76,8 @@ body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
+  background-image: url('@/assets/grid.svg');
+  background-repeat: repeat;
   transition:
     color 0.5s,
     background-color 0.5s;
@@ -97,4 +99,22 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+  font-size: 2rem;
+  color: var(--theme-col-black-mute);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+h2 {
+  font-size: 1.6rem;
+  color: var(--theme-col-black-mute);
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+h3 {
+  font-size: 1.2rem;
+  color: var(--theme-col-black-mute);
+  font-family: 'Space Grotesk', sans-serif;
 }

@@ -170,9 +170,11 @@ export default defineComponent({
       position: sticky;
       top: 0;
       z-index: 2;
+
       // background-color: var(--theme-col-parchment);
       th {
         padding-right: 10px;
+        border-bottom: 2px solid var(--theme-col-dark-red);
       }
     }
     .scrollable-table {

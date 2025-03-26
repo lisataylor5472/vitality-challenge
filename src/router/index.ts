@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import GuideView from '../views/GuideView.vue'
+// import GuideView from '../views/GuideView.vue'
 import PlayersView from '../views/PlayersView.vue'
 import CampaignView from '../views/CampaignView.vue'
 import MapView from '../views/MapView.vue'
@@ -10,13 +10,13 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: GuideView,
-    },
-    {
-      path: '/players',
-      name: 'players',
       component: PlayersView,
     },
+    // {
+    //   path: '/players',
+    //   name: 'players',
+    //   component: PlayersView,
+    // },
     {
       path: '/campaign',
       name: 'campaign',

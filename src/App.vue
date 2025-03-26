@@ -33,9 +33,7 @@
             img(v-else src="@/assets/flags/rolled-flag-final.svg" alt="Future Dungeon Flag")
       .nav-wrapper
         button.nav-button
-          RouterLink(to="/") guide
-        button.nav-button
-          RouterLink(to="/players") players
+          RouterLink(to="/") dashboard
         button.nav-button
           RouterLink(to="/map") map
         button.nav-button
@@ -45,6 +43,8 @@
     .left-column
       SvgLeaderboard(:topPlayers="topPlayers")
       //- PlayerLeaderboard
+      .fountain
+        img(src="@/assets/fountain.svg" alt="Fountain")
     .right-column
       //- .parchment-wrapper
       //-   img(src="@/assets/parchment1.svg" alt="Parchment")
@@ -93,8 +93,10 @@ export default defineComponent({
 
     const topPlayers = ref([
       { name: 'Lisa', class: 'Warrior', level: 5, xp: 100, achievements: 3 },
-      { name: 'Bob', class: 'Mage', level: 3, xp: 50, achievements: 1 },
-      { name: 'Joe', class: 'Rogue', level: 4, xp: 75, achievements: 2 },
+      { name: 'Evy', class: 'Mage', level: 3, xp: 50, achievements: 1 },
+      { name: 'Benny LongName', class: 'Rogue', level: 4, xp: 75, achievements: 2 },
+      { name: 'Derkus', class: 'Rogue', level: 4, xp: 75, achievements: 2 },
+      { name: 'Evy', class: 'Rogue', level: 4, xp: 75, achievements: 2 },
     ])
 
     onMounted(() => {
@@ -123,11 +125,13 @@ export default defineComponent({
     width: 100%;
     position: absolute;
     z-index: -1;
+    background-image: url('@/assets/noise.png');
   }
   .header-banner {
     flex-basis: 38%;
     .title-svg {
       height: 28vh;
+      z-index: 5;
       // width: 100%;
       // height: auto;
     }
@@ -188,7 +192,7 @@ export default defineComponent({
       display: flex;
       justify-content: space-between;
       padding: 1rem;
-      margin-right: 10rem;
+      margin-right: 25rem;
       align-items: end;
       .nav-button {
         border-radius: 37px;
@@ -228,6 +232,15 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     background-image: url('@/assets/parchment.svg'); /* Adjust path as needed */
+  }
+  .fountain {
+    img {
+      padding: 0 0 0 2rem;
+      position: absolute;
+      bottom: 1rem;
+      height: 25vh;
+      z-index: -1;
+    }
   }
 }
 </style>
