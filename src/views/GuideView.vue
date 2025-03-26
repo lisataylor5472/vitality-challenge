@@ -20,9 +20,6 @@
         h3 Step 3: Craft an Oath
         h1 Challenge Overview
         p Players
-
-
-
 </template>
 
 <script lang="ts">

@@ -43,8 +43,8 @@
     .left-column
       SvgLeaderboard(:topPlayers="topPlayers")
       //- PlayerLeaderboard
-      .fountain
-        img(src="@/assets/fountain.svg" alt="Fountain")
+      //- .fountain
+      //-   img(src="@/assets/fountain.svg" alt="Fountain")
     .right-column
       //- .parchment-wrapper
       //-   img(src="@/assets/parchment1.svg" alt="Parchment")
@@ -233,14 +233,14 @@ export default defineComponent({
     height: 100%;
     background-image: url('@/assets/parchment.svg'); /* Adjust path as needed */
   }
-  .fountain {
-    img {
-      padding: 0 0 0 2rem;
-      position: absolute;
-      bottom: 1rem;
-      height: 25vh;
-      z-index: -1;
-    }
-  }
+  // .fountain {
+  //   img {
+  //     padding: 0 0 0 2rem;
+  //     position: absolute;
+  //     bottom: 1rem;
+  //     height: 25vh;
+  //     z-index: -1;
+  //   }
+  // }
 }
 </style>
