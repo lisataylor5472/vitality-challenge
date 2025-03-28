@@ -103,8 +103,8 @@ body {
 
 h1 {
   font-size: 2rem;
-  color: var(--theme-col-black-mute);
-  font-family: 'Space Grotesk', sans-serif;
+  color: var(--theme-col-blurple);
+  font-family: 'Pixelify Sans', sans-serif;
 }
 
 h2 {

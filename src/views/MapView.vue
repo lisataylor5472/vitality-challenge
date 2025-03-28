@@ -3,6 +3,7 @@
   .map-view-header
     img(src="@/assets/MapText.svg" alt="Map")
   .map-view-content
+    h1 To be unveiled April 1
 
 </template>
 
@@ -23,6 +24,18 @@ export default defineComponent({
   .map-view-header {
     img {
       height: 10rem;
+    }
+  }
+  .map-view-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // justify-content: center;
+    height: 100%;
+    h1 {
+      font-size: 3rem;
+      color: var(--theme-col-blurple);
+      // text-align: center;
     }
   }
 }

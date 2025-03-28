@@ -92,11 +92,18 @@ export default defineComponent({
     }
 
     const topPlayers = ref([
-      { name: 'Lisa', class: 'Warrior', level: 5, xp: 100, achievements: 3 },
-      { name: 'Evy', class: 'Mage', level: 3, xp: 50, achievements: 1 },
-      { name: 'Benny LongName', class: 'Rogue', level: 4, xp: 75, achievements: 2 },
-      { name: 'Derkus', class: 'Rogue', level: 4, xp: 75, achievements: 2 },
-      { name: 'Evy', class: 'Rogue', level: 4, xp: 75, achievements: 2 },
+      {
+        name: 'Example Character',
+        playerId: 'U03EBQ5M40M',
+        class: 'Warrior',
+        level: 1,
+        xp: 100,
+        achievements: 3,
+      },
+      { name: '...', class: 'Mage', level: 1, xp: '---', achievements: 1 },
+      { name: '...', class: 'Rogue', level: 1, xp: '---', achievements: 2 },
+      { name: '...', class: 'Rogue', level: 1, xp: '---', achievements: 2 },
+      { name: '...', class: 'Rogue', level: 1, xp: '---', achievements: 2 },
     ])
 
     onMounted(() => {

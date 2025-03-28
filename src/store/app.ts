@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 interface challengeData {
-  playerList: []
+  playerTracker: []
   activityTracker: []
 }
 
@@ -26,8 +26,8 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
-  const playerList = computed(() => data.value?.playerList || [])
+  const playerTracker = computed(() => data.value?.playerTracker || [])
   const activityData = computed(() => data.value?.activityTracker || [])
 
-  return { data, isLoading, fetchChallengeData, playerList, activityData }
+  return { data, isLoading, fetchChallengeData, playerTracker, activityData }
 })

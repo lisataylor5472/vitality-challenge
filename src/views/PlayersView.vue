@@ -2,7 +2,9 @@
   .players-dashboard
     .players-view-header
       img(src="@/assets/PlayersText.svg" alt="Players")
-    .table-wrapper
+    .loading-text(v-if="isLoading")
+      h1 Loading...
+    .table-wrapper(v-if="!isLoading")
       table
         thead
           tr.players-header-wrapper
@@ -20,6 +22,7 @@
               template(v-else)
                 | {{ player[header.key] }}
 
+
 </template>
 
 <script lang="ts">
@@ -33,12 +36,13 @@ export default defineComponent({
 
   setup() {
     const appStore = useAppStore()
-    const players = computed(() => appStore.playerList)
+    const players = computed(() => appStore.playerTracker)
     const activityData = computed(() => appStore.activityData)
+    const isLoading = computed(() => appStore.isLoading)
 
     const playerColumns = ref([
       { name: '', key: 'avatar' },
-      { name: 'name', key: 'name' },
+      { name: 'name', key: 'charName' },
       { name: 'class', key: 'class' },
       { name: 'level', key: 'level' },
       { name: 'xp', key: 'xp' },
@@ -139,6 +143,7 @@ export default defineComponent({
     return {
       players,
       playerColumns,
+      isLoading,
     }
   },
 })
@@ -151,6 +156,14 @@ export default defineComponent({
   height: 100%;
   display: flex;
   flex-direction: column;
+  .loading-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 4rem;
+    color: var(--theme-col-blurple);
+  }
   .players-view-header {
     img {
       height: 9rem;
