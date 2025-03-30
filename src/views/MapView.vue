@@ -3,14 +3,19 @@
   .map-view-header
     img(src="@/assets/MapText.svg" alt="Map")
   .map-view-content
-    h1 To be unveiled April 1
+    AprilMap
 
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+
+import AprilMap from '@/components/maps/AprilMap.vue';
 export default defineComponent({
   name: 'MapView',
+  components: {
+    AprilMap,
+  },
 })
 </script>
 
@@ -32,6 +37,8 @@ export default defineComponent({
     align-items: center;
     // justify-content: center;
     height: 100%;
+    overflow: hidden;
+    padding-bottom: 1em;
     h1 {
       font-size: 3rem;
       color: var(--theme-col-blurple);
