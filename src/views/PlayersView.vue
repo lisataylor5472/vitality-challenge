@@ -15,7 +15,7 @@
               template(v-if="header.key === 'xp'")
                 .player-xp-bar
                   .player-xp(:style="{ width: player.xpBar + '%' }")
-              template(v-else-if="header.key === 'progress'")
+              template(v-else-if="header.key === 'dungeon'")
                 | {{ player.successRate }}%
               template(v-else-if="header.key === 'achievements'")
                 | {{ player[header.key] }}
@@ -51,7 +51,7 @@ export default defineComponent({
       { name: 'class', key: 'class' },
       { name: 'level', key: 'level' },
       { name: 'xp', key: 'xp' },
-      { name: 'progress', key: 'progress' },
+      { name: 'dungeon', key: 'dungeon' },
       { name: 'achievements', key: 'achievements' },
     ])
 
@@ -127,7 +127,6 @@ export default defineComponent({
       let totalXp = 0
       let playerLevel = 1
       let levelPercent = 0
-      const monthlySuccessRates = []
 
       const currentMonth = moment().format('MM')
       const currentWeek = moment().isoWeek()
@@ -246,7 +245,7 @@ export default defineComponent({
         background-color: var(--theme-col-parchment-light);
         border-bottom: 4px solid var(--theme-col-parchment);
         td {
-          padding: 0.5rem 0.4em;
+          padding: 0.2rem 0.4em;
           text-align: center;
           overflow: hidden;
         }
@@ -270,27 +269,28 @@ export default defineComponent({
   }
   .col-avatar {
     width: 5%;
+    padding: 0;
     img {
-      // width: 20px;
-      height: 30px;
+      height: 40px;
     }
   }
+
   .col-charName {
     width: 12%;
   }
   .col-level {
-    width: 10%;
+    width: 8%;
   }
   .col-class {
     width: 10%;
   }
   .col-xp {
-    width: 20%;
+    width: 25%;
   }
   .col-achievements {
     width: 20%;
   }
-  .col-progress {
+  .col-dungeon {
     width: 10%;
   }
 }

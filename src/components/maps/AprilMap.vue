@@ -11,12 +11,11 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
 
-import * as d3 from 'd3';
-import { useAppStore } from '@/store/app';
+import * as d3 from 'd3'
+import { useAppStore } from '@/store/app'
 
 export default defineComponent({
-  setup(props, ctx){
-
+  setup(props, ctx) {
     const mapRef = ref()
     const playerPathsRef = ref<SVGPathElement[]>()
 
@@ -38,74 +37,78 @@ export default defineComponent({
           playerPng: player.playerPng ? `/avatars/${player.playerPng}` : '/avatars/default.svg',
           pathPoints: d3.range(11).map((i) => {
             return {
-              x: i*10,
+              x: i * 10,
               y: Math.random() * 100,
             }
           }),
         }
       })
     })
-    const players = computed(()=>{
+    const players = computed(() => {
       return playersWithPaths.value.map((player: any) => {
         return {
           ...player,
-          successRate: debug.value ? successRate.value : player.successRate ?? 0,
+          successRate: debug.value ? successRate.value : (player.successRate ?? 0),
         }
       })
     })
 
-    const yScale = computed(()=>{
-      return d3.scaleLinear()
-        .domain([0, 100])
-        .range([0, mapHeight.value]);
+    const yScale = computed(() => {
+      return d3.scaleLinear().domain([0, 100]).range([0, mapHeight.value])
     })
 
-    const xScale = computed(()=>{
-      return d3.scaleLinear()
-        .domain([0, 100])
-        .range([0, mapWidth.value]);
+    const xScale = computed(() => {
+      return d3.scaleLinear().domain([0, 100]).range([0, mapWidth.value])
     })
 
-    const line = computed(()=>{
-      return d3.line()
+    const line = computed(() => {
+      return d3
+        .line()
         .x((d: any) => xScale.value(d.x))
         .y((d: any) => yScale.value(d.y))
-        .curve(d3.curveMonotoneX);
+        .curve(d3.curveMonotoneX)
     })
 
     const getPlayerX = (player: any, playerIx: number) => {
-
       const playerPath = playerPathsRef.value?.[playerIx]
-      if(playerPath == null) return 0
+      if (playerPath == null) return 0
 
-      const scale = d3.scaleLinear([0, 100], [0, playerPathsRef.value?.[playerIx].getTotalLength() ?? 100]);
-      const playerPoint = playerPathsRef.value?.[playerIx].getPointAtLength(scale(player.successRate))
-      return (playerPoint?.x ?? 0)
+      const scale = d3.scaleLinear(
+        [0, 100],
+        [0, playerPathsRef.value?.[playerIx].getTotalLength() ?? 100],
+      )
+      const playerPoint = playerPathsRef.value?.[playerIx].getPointAtLength(
+        scale(player.successRate),
+      )
+      return playerPoint?.x ?? 0
     }
     const getPlayerY = (player: any, playerIx: number) => {
-
       const playerPath = playerPathsRef.value?.[playerIx]
-      if(playerPath == null) return 0
+      if (playerPath == null) return 0
 
-      const scale = d3.scaleLinear([0, 100], [0, playerPathsRef.value?.[playerIx].getTotalLength() ?? 100]);
-      const playerPoint = playerPathsRef.value?.[playerIx].getPointAtLength(scale(player.successRate))
-      return (playerPoint?.y ?? 0)
+      const scale = d3.scaleLinear(
+        [0, 100],
+        [0, playerPathsRef.value?.[playerIx].getTotalLength() ?? 100],
+      )
+      const playerPoint = playerPathsRef.value?.[playerIx].getPointAtLength(
+        scale(player.successRate),
+      )
+      return playerPoint?.y ?? 0
     }
 
     const ro = new ResizeObserver((entries) => {
       for (const entry of entries) {
-        const { width, height } = entry.contentRect;
+        const { width, height } = entry.contentRect
         mapWidth.value = Math.floor(width)
         mapHeight.value = Math.floor(height)
       }
-    });
-    onMounted(()=>{
+    })
+    onMounted(() => {
       ro.observe(mapRef.value)
     })
-    onUnmounted(()=>{
+    onUnmounted(() => {
       ro.unobserve(mapRef.value)
     })
-
 
     return {
       mapRef,
@@ -122,7 +125,7 @@ export default defineComponent({
       getPlayerX,
       getPlayerY,
     }
-  }
+  },
 })
 </script>
 <style lang="scss">
