@@ -22,7 +22,7 @@
               template(v-else-if="header.key === 'level'")
                 | {{ player.level }}
               template(v-else-if="header.key === 'avatar'")
-                img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar")
+                img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
                 img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
               template(v-else)
                 | {{ player[header.key] }}
@@ -272,9 +272,11 @@ export default defineComponent({
     padding: 0;
     img {
       height: 40px;
+      &.shadow {
+        filter: grayscale(10);
+      }
     }
   }
-
   .col-charName {
     width: 12%;
   }

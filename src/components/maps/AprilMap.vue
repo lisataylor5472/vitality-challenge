@@ -5,7 +5,7 @@
       path(ref="playerPathsRef", :d="line(player.pathPoints)", fill="none", :stroke="debug ? 'red' : 'none'", stroke-width="2")
       //- foreignObject.avatar-wrapper(:x="xScale(player.successRate)", :y="yScale(player.successRate)", width="100", height="100")
       foreignObject.avatar-wrapper(:x="getPlayerX(player, playerIx)", :y="getPlayerY(player, playerIx)", width="100", height="100", style="overflow: visible")
-        img.avatar(:src="player.playerPng", :alt="player.charName", :title="player.charName")
+        img.avatar(:src="player.playerPng", :alt="player.charName", :title="player.charName", :class="player.isShadow ? 'shadow' : ''")
   input(v-if="debug", type="range", v-model="successRate", min="0", max="100", step="0.1")
 </template>
 <script lang="ts">
@@ -146,6 +146,9 @@ export default defineComponent({
         width: auto;
         height: 100%;
         transform: translate(-50%, -50%);
+        &.shadow {
+          filter: grayscale(10);
+        }
         // border-radius: 50%;
         // position: absolute;
         // transform: translate(-50%, -50%);
