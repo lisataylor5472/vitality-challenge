@@ -15,13 +15,16 @@
               template(v-if="header.key === 'xp'")
                 .player-xp-bar
                   .player-xp(:style="{ width: player.xpBar + '%' }")
+              template(v-else-if="header.key === 'progress'")
+                | {{ player.successRate }}%
               template(v-else-if="header.key === 'achievements'")
                 | {{ player[header.key] }}
               template(v-else-if="header.key === 'level'")
                 | {{ player.level }}
+              template(v-else-if="header.key === 'avatar'")
+                img(v-if="player", :src="`/avatars/${player.playerPng}`", alt="Player Avatar")
               template(v-else)
                 | {{ player[header.key] }}
-
 
 </template>
 
@@ -38,6 +41,7 @@ export default defineComponent({
     const appStore = useAppStore()
     const players = computed(() => appStore.playerTracker)
     const activityData = computed(() => appStore.activityData)
+    const oathTracker = computed(() => appStore.oathTracker)
     const isLoading = computed(() => appStore.isLoading)
 
     const playerColumns = ref([
@@ -46,95 +50,135 @@ export default defineComponent({
       { name: 'class', key: 'class' },
       { name: 'level', key: 'level' },
       { name: 'xp', key: 'xp' },
+      { name: 'progress', key: 'progress' },
       { name: 'achievements', key: 'achievements' },
     ])
-    const computePlayerXp = (player: any) => {
-      const goalPerWeek = player.goalPerWeek
-      const daysInMonth = moment().daysInMonth()
-      const xpIncrement = 100 / ((daysInMonth / 7) * goalPerWeek)
-      let xp = 0
-      console.log(player.name)
-      console.log('xpIncrement', xpIncrement)
-      console.log('goalPerWeek', goalPerWeek)
-      const weeklyCounts = {
-        '2025-02-23': { count: 0 },
-        '2025-03-02': { count: 0 },
-        '2025-03-09': { count: 0 },
-        '2025-03-16': { count: 0 },
-        '2025-03-23': { count: 0 },
-        '2025-03-30': { count: 0 },
-        '2025-04-06': { count: 0 },
-        '2025-04-13': { count: 0 },
-        '2025-04-20': { count: 0 },
-        '2025-04-27': { count: 0 },
-      }
-      if (player.playerId) {
-        const playerActivity = activityData.value.filter(
-          (activity: any) => activity.playerId == player.playerId,
-        )
-        console.log('playerActivity', playerActivity)
-        if (playerActivity) {
-          const uniqueDays = [
-            ...new Set(playerActivity.map((activity: any) => activity.date)),
-          ].sort()
-          console.log('uniqueDays', uniqueDays)
-          uniqueDays.forEach((day: string) => {
-            const mDay = moment(day)
-            const week = mDay.startOf('week').format('YYYY-MM-DD')
-            if (weeklyCounts[week]) {
-              console.log('week', week, weeklyCounts[week].count)
 
-              weeklyCounts[week].count += 1
-              if (weeklyCounts[week].count >= goalPerWeek + 2) {
-                return
-              } else if (weeklyCounts[week].count > goalPerWeek) {
-                console.log('half')
-                xp += xpIncrement / 2
-              } else {
-                xp += xpIncrement
-              }
-            }
-          })
-        }
+    const computePlayerStats = (player: any) => {
+      const goalPerWeek = findGoalPerWeek(player.playerId)
+
+      // Filter activity data for the current player
+      const playerActivity = activityData.value
+        .filter((activity: any) => activity.playerId === player.playerId)
+        .map((activity: any) => activity.date)
+      if (player.playerId == 'U03EBQ5M40M') {
+        console.log('playerActivity', playerActivity)
       }
-      return xp
+
+      const monthlyCounts = {}
+
+      for (let week = 1; week <= 52; week++) {
+        const weekKey = `W${week}`
+        const date = moment().month(0).startOf('month').week(week)
+        const monthKey = date.format('MM')
+        monthlyCounts[monthKey] = monthlyCounts[monthKey] || {}
+        monthlyCounts[monthKey][weekKey] = { count: 0, successRate: 0 }
+      }
+
+      // Calculate weekly and monthly counts
+      playerActivity.forEach((date) => {
+        const startOfWeekDate = moment(date).startOf('week') // Find the first day of the given date's week
+        const endOfWeekDate = moment(date).endOf('week') // Find the last day of the given date's week
+        const weekForDay =
+          startOfWeekDate.month() < endOfWeekDate.month() ? startOfWeekDate : endOfWeekDate
+
+        const week = weekForDay.week()
+        const weekKey = `W${week}`
+        const monthKey = Object.keys(monthlyCounts).find((month) =>
+          Object.keys(monthlyCounts[month]).includes(weekKey),
+        )
+        monthlyCounts[monthKey][weekKey].count += 1
+        monthlyCounts[monthKey][weekKey].successRate = Math.min(
+          1,
+          monthlyCounts[monthKey][weekKey].count / goalPerWeek,
+        )
+      })
+      // Calculate total XP and level based on weekly counts
+      const { totalXp, playerLevel, levelPercent, successRate } = findPlayerXp(
+        goalPerWeek,
+        monthlyCounts,
+      )
+
+      // Calculate success rate based on monthly counts
+      // const monthlySuccessRate = findPlayerSuccessRate(goalPerWeek, monthlyCounts)
+      player.totalXp = totalXp
+      player.xpBar = levelPercent
+      player.level = playerLevel
+      player.successRate = successRate
     }
 
     const levelThresholds = {
-      1: 100,
-      2: 250,
-      3: 450,
-      4: 700,
-      5: 1000,
-    }
-    const findPlayerLevel = (totalXp) => {
-      let level = 1
-      for (const [key, threshold] of Object.entries(levelThresholds)) {
-        if (totalXp >= threshold) {
-          level += 1
-        } else {
-          break
-        }
-      }
-      return level
+      1: [0, 100],
+      2: [100, 225],
+      3: [225, 375],
+      4: [375, 550],
+      5: [550, 750],
+      6: [750, 1000],
+      7: [1000, 1300],
     }
 
-    const findPlayerXpProgress = (totalXp, level) => {
-      const currentLevel = levelThresholds[level - 1]
-      const xpNeeded = levelThresholds[level] - currentLevel
-      const xpProgress = totalXp - currentLevel
-      console.log('xpProgress', xpProgress)
-      console.log('xpNeeded', xpNeeded)
-      return (xpProgress / xpNeeded) * 100
+    const findGoalPerWeek = (playerId: string) => {
+      // TODO - update to handle changing oaths/goalPerWeek .. yikes
+      const playerOath = oathTracker.value.find((oath) => oath.playerId == playerId)
+      return playerOath ? playerOath.xPerWeek : 0
+    }
+
+    const findPlayerXp = (goalPerWeek: int, monthlyCounts: any) => {
+      let totalXp = 0
+      let playerLevel = 1
+      let levelPercent = 0
+      const monthlySuccessRates = []
+
+      const currentMonth = moment().format('MM')
+      const currentWeek = moment().isoWeek()
+      let currentAdventureProgress = 0
+
+      // Calculate current adventure progress
+      if (monthlyCounts[currentMonth]) {
+        const weekKeys = Object.keys(monthlyCounts[currentMonth])
+        const currentWeekIndex = weekKeys.indexOf(`W${currentWeek}`) + 1
+
+        currentAdventureProgress = currentWeekIndex / weekKeys.length
+      }
+
+      const weeks = monthlyCounts[currentMonth]
+      const weeklyRates = Object.entries(weeks).map(([week, { successRate }]) => successRate)
+
+      Object.entries(monthlyCounts).forEach(([_, weeks]) => {
+        Object.entries(weeks).forEach(([week, { count }]) => {
+          if (count > goalPerWeek && goalPerWeek > 0) {
+            totalXp += 38.5
+          } else if (count == goalPerWeek) {
+            totalXp += 35
+          } else if (count < goalPerWeek && count > 0) {
+            totalXp += (count / goalPerWeek) * 35
+          } else {
+            totalXp += 0
+          }
+        })
+      })
+
+      // Calculate player success rate
+      const totalSuccessRate = weeklyRates.reduce((sum, rate) => sum + rate, 0) / weeklyRates.length
+      const successRate = Math.round(totalSuccessRate * currentAdventureProgress * 100)
+
+      // Find level XP based on total XP
+      Object.entries(levelThresholds).forEach(([level, thresholds]) => {
+        const [minXp, maxXp] = thresholds
+        if (totalXp >= minXp && totalXp < maxXp) {
+          playerLevel = parseInt(level)
+          levelPercent = ((totalXp - minXp) / (maxXp - minXp)) * 100
+          console.log('levelPercent', levelPercent)
+        }
+      })
+      return { totalXp, playerLevel, levelPercent, successRate }
     }
 
     watch(
       players,
       (newVal) => {
         newVal.forEach((player) => {
-          player.totalXp = computePlayerXp(player)
-          player.level = findPlayerLevel(player.totalXp)
-          player.xpBar = findPlayerXpProgress(player.totalXp, player.level)
+          computePlayerStats(player)
         })
       },
       { immediate: true },
@@ -237,7 +281,7 @@ export default defineComponent({
     width: 5%;
   }
   .col-name {
-    width: 15%;
+    width: 12%;
   }
   .col-level {
     width: 10%;
@@ -250,6 +294,9 @@ export default defineComponent({
   }
   .col-achievements {
     width: 20%;
+  }
+  .col-progress {
+    width: 10%;
   }
 }
 </style>

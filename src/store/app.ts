@@ -4,6 +4,7 @@ import { ref, computed } from 'vue'
 interface challengeData {
   playerTracker: []
   activityTracker: []
+  oathTracker: []
 }
 
 export const useAppStore = defineStore('app', () => {
@@ -28,6 +29,7 @@ export const useAppStore = defineStore('app', () => {
 
   const playerTracker = computed(() => data.value?.playerTracker || [])
   const activityData = computed(() => data.value?.activityTracker || [])
+  const oathTracker = computed(() => data.value?.oathTracker || [])
 
-  return { data, isLoading, fetchChallengeData, playerTracker, activityData }
+  return { data, isLoading, fetchChallengeData, playerTracker, activityData, oathTracker }
 })
