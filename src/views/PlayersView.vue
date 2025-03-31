@@ -22,7 +22,8 @@
               template(v-else-if="header.key === 'level'")
                 | {{ player.level }}
               template(v-else-if="header.key === 'avatar'")
-                img(v-if="player", :src="`/avatars/${player.playerPng}`", alt="Player Avatar")
+                img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar")
+                img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
               template(v-else)
                 | {{ player[header.key] }}
 
@@ -62,7 +63,6 @@ export default defineComponent({
         .filter((activity: any) => activity.playerId === player.playerId)
         .map((activity: any) => activity.date)
       if (player.playerId == 'U03EBQ5M40M') {
-        console.log('playerActivity', playerActivity)
       }
 
       const monthlyCounts = {}
@@ -168,7 +168,6 @@ export default defineComponent({
         if (totalXp >= minXp && totalXp < maxXp) {
           playerLevel = parseInt(level)
           levelPercent = ((totalXp - minXp) / (maxXp - minXp)) * 100
-          console.log('levelPercent', levelPercent)
         }
       })
       return { totalXp, playerLevel, levelPercent, successRate }
@@ -250,14 +249,6 @@ export default defineComponent({
           padding: 0.5rem 0.4em;
           text-align: center;
           overflow: hidden;
-          // &:first-child {
-          //   border-top-left-radius: 10px;
-          //   border-bottom-left-radius: 10px;
-          // }
-          // &:last-child {
-          //   border-top-right-radius: 10px;
-          //   border-bottom-right-radius: 10px;
-          // }
         }
       }
     }
@@ -279,8 +270,12 @@ export default defineComponent({
   }
   .col-avatar {
     width: 5%;
+    img {
+      // width: 20px;
+      height: 30px;
+    }
   }
-  .col-name {
+  .col-charName {
     width: 12%;
   }
   .col-level {
