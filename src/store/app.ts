@@ -30,12 +30,68 @@ export const useAppStore = defineStore('app', () => {
   }
 
   const computePlayerStats = (player: any) => {
-    const goalPerWeek = findGoalPerWeek(player.playerId)
+    // const goalPerWeek = findGoalPerWeek(player.playerId)
+    const goalPerWeek = findGoalPerWeek(player)
 
     // Filter activity data for the current player
-    const playerActivity = activityData.value
-      .filter((activity: any) => activity.playerId === player.playerId)
-      .map((activity: any) => activity.date)
+    // const playerActivity = activityData.value
+    //   .filter((activity: any) => activity.playerId === player.playerId)
+    //   .map((activity: any) => activity.date)
+    let playerActivity = activityData.value
+      .filter((activity: any) => {
+        if (player.isShadow) {
+          return (
+            activity.playerId === player.playerId && activity.questType.includes('Personal Oath')
+          )
+        }
+        return activity.playerId === player.playerId && activity.questType.includes('GS Oath')
+      })
+      .map((activity: any) => activity)
+
+    // Merge activities with the same date
+    playerActivity = playerActivity.reduce((acc: any[], activity: any) => {
+      const existingActivity = acc.find((a) => a.date === activity.date)
+      if (existingActivity) {
+        if (typeof existingActivity.questType === 'string') {
+          existingActivity.questType = existingActivity.questType
+            .split(',')
+            .map((item: string) => item.trim())
+        }
+        if (typeof activity.questType === 'string') {
+          activity.questType = activity.questType.split(',').map((item: string) => item.trim())
+        }
+        if (player.playerId == 'test123') {
+          console.log('BEFORE existingActivity.questType', existingActivity.questType)
+          console.log('BEFORE activity.questType', activity.questType)
+        }
+        existingActivity.questType = Array.from(
+          new Set([...existingActivity.questType, ...activity.questType]),
+        )
+        if (player.playerId == 'test123') {
+          console.log('MERGED existingActivity.questType', existingActivity.questType)
+        }
+      } else {
+        if (player.playerId == 'test123') {
+          console.log('ELSE activity', activity)
+          console.log('ELSE activity.questType', activity.questType)
+        }
+        if (activity.questType == null) {
+          activity.questType = []
+        }
+        if (typeof activity.questType === 'string') {
+          activity.questType = activity.questType.split(',').map((item: string) => item.trim())
+        }
+        if (player.playerId == 'test123') {
+          console.log('ELSE AFTER activity', activity)
+          console.log('ALSER AFTER activity.questType', activity.questType)
+        }
+        acc.push({ ...activity, questType: [...activity.questType] })
+      }
+      if (player.playerId == 'test123') {
+        console.log('END acc', acc)
+      }
+      return acc
+    }, [])
 
     const monthlyCounts = {}
 
@@ -48,7 +104,8 @@ export const useAppStore = defineStore('app', () => {
     }
 
     // Calculate weekly and monthly counts
-    playerActivity.forEach((date) => {
+    playerActivity.forEach((activity) => {
+      const date = activity.date
       const startOfWeekDate = moment(date).startOf('week') // Find the first day of the given date's week
       const endOfWeekDate = moment(date).endOf('week') // Find the last day of the given date's week
       const weekForDay =
@@ -90,9 +147,18 @@ export const useAppStore = defineStore('app', () => {
     7: [1000, 1300],
   }
 
-  const findGoalPerWeek = (playerId: string) => {
+  const findGoalPerWeek = (player: any) => {
     // TODO - update to handle changing oaths/goalPerWeek .. yikes
-    const playerOath = oathTracker.value.find((oath) => oath.playerId == playerId)
+    // const playerOath = oathTracker.value.find((oath) => oath.playerId == playerId)
+    // return playerOath ? playerOath.xPerWeek : 0
+    const playerId = player.playerId
+    const playerOath = oathTracker.value.find(
+      (oath) =>
+        oath.playerId == playerId && (player.isShadow ? oath.isShadow : oath.isShadow == false),
+    )
+    if (playerId == 'test123') {
+      console.log('playerOath', playerOath)
+    }
     return playerOath ? playerOath.xPerWeek : 0
   }
 
@@ -144,7 +210,9 @@ export const useAppStore = defineStore('app', () => {
     }
     Object.entries(monthlyCounts).forEach(([_, weeks]) => {
       Object.entries(weeks).forEach(([week, { count }]) => {
-        if (count > goalPerWeek && goalPerWeek > 0) {
+        if (goalPerWeek == 7 && count == goalPerWeek) {
+          totalXp += 38.5
+        } else if (count > goalPerWeek && goalPerWeek > 0) {
           totalXp += 38.5
         } else if (count == goalPerWeek) {
           totalXp += 35
@@ -175,6 +243,13 @@ export const useAppStore = defineStore('app', () => {
         levelPercent = ((totalXp - minXp) / (maxXp - minXp)) * 100
       }
     })
+
+    if (playerId == 'test123') {
+      console.log('totalXp', totalXp)
+      console.log('playerLevel', playerLevel)
+      console.log('levelPercent', levelPercent)
+      console.log('successRate', successRate)
+    }
 
     return { totalXp, playerLevel, levelPercent, successRate }
   }
