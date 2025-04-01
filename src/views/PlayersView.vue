@@ -18,7 +18,9 @@
               template(v-else-if="header.key === 'adventure'")
                 | {{ player.successRate }}%
               template(v-else-if="header.key === 'achievements'")
-                | {{ player[header.key] }}
+                template(v-if="player.achievements != '' ")
+                  .achievements-wrapper
+                    img(:src="`/achievements/${player.achievements}.svg`", alt="Achievements", width="20px", height="20px", title="First Sound Off Complete")
               template(v-else-if="header.key === 'level'")
                 | {{ player.level }}
               template(v-else-if="header.key === 'avatar'")
@@ -184,6 +186,12 @@ export default defineComponent({
   }
   .col-adventure {
     width: 10%;
+  }
+  .achievements-wrapper {
+    img {
+      filter: brightness(0) saturate(100%) invert(18%) sepia(22%) saturate(746%) hue-rotate(10deg)
+        brightness(92%) contrast(89%);
+    }
   }
 }
 </style>

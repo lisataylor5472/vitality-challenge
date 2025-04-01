@@ -28,7 +28,7 @@
       .adventure-wrapper
         p JULY
         p Jun 29 - Aug 2
-        p.unrevealed ...Yet to be reveale...
+        p.unrevealed ...Yet to be revealed...
       .adventure-wrapper
         p AUGUST
         p Aug 3 - Aug 30
