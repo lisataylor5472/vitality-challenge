@@ -59,6 +59,7 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { useAppStore } from '@/store/app'
 import PlayerLeaderboard from '@/components/PlayerLeaderboard.vue'
 import SvgLeaderboard from '@/components/SvgLeaderboard.vue'
+import moment from 'moment'
 
 export default defineComponent({
   name: 'App',
@@ -74,21 +75,15 @@ export default defineComponent({
 
     const dateAfter = (month: string) => {
       const monthMap = {
-        jan: 0,
-        feb: 1,
-        mar: 2,
-        apr: 3,
-        may: 4,
-        jun: 5,
-        jul: 6,
-        aug: 7,
-        sep: 8,
-        oct: 9,
-        nov: 10,
-        dec: 11,
+        apr: moment('2025-03-31'),
+        may: moment('2025-05-03'),
+        jun: moment('2025-05-31'),
+        jul: moment('2025-06-28'),
+        aug: moment('2025-08-02'),
+        sep: moment('2025-08-30'),
       }
-      const currentMonth = new Date().getMonth()
-      return monthMap[month] <= currentMonth
+      const currentDay = moment()
+      return monthMap[month] <= currentDay
     }
 
     const topPlayers = ref([

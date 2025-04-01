@@ -15,7 +15,7 @@
               template(v-if="header.key === 'xp'")
                 .player-xp-bar
                   .player-xp(:style="{ width: player.xpBar + '%' }")
-              template(v-else-if="header.key === 'dungeon'")
+              template(v-else-if="header.key === 'adventure'")
                 | {{ player.successRate }}%
               template(v-else-if="header.key === 'achievements'")
                 | {{ player[header.key] }}
@@ -24,6 +24,8 @@
               template(v-else-if="header.key === 'avatar'")
                 img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
                 img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
+              template(v-else-if="header.key === 'hp'")
+                | {{ player[header.key] }}
               template(v-else)
                 | {{ player[header.key] }}
 
@@ -48,10 +50,11 @@ export default defineComponent({
     const playerColumns = ref([
       { name: '', key: 'avatar' },
       { name: 'name', key: 'charName' },
-      { name: 'class', key: 'class' },
       { name: 'level', key: 'level' },
+      { name: 'class', key: 'class' },
+      { name: 'hp', key: 'hp' },
+      { name: 'adventure', key: 'adventure' },
       { name: 'xp', key: 'xp' },
-      { name: 'dungeon', key: 'dungeon' },
       { name: 'achievements', key: 'achievements' },
     ])
 
@@ -62,8 +65,6 @@ export default defineComponent({
       const playerActivity = activityData.value
         .filter((activity: any) => activity.playerId === player.playerId)
         .map((activity: any) => activity.date)
-      if (player.playerId == 'U03EBQ5M40M') {
-      }
 
       const monthlyCounts = {}
 
@@ -248,6 +249,20 @@ export default defineComponent({
           padding: 0.2rem 0.4em;
           text-align: center;
           overflow: hidden;
+          &.col-charName {
+            font-weight: 600;
+            color: var(--theme-col-blurple);
+          }
+          &.col-hp {
+            font-weight: 600;
+            // color: var(--theme-col-blurple);
+          }
+          &.col-level {
+            font-weight: 500;
+          }
+          &.col-adventure {
+            font-weight: 500;
+          }
         }
       }
     }
@@ -292,7 +307,7 @@ export default defineComponent({
   .col-achievements {
     width: 20%;
   }
-  .col-dungeon {
+  .col-adventure {
     width: 10%;
   }
 }
