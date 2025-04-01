@@ -32,9 +32,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import { useAppStore } from '@/store/app'
-import moment from 'moment'
+// import moment from 'moment'
 
 export default defineComponent({
   name: 'PlayersView',
@@ -43,8 +43,8 @@ export default defineComponent({
   setup() {
     const appStore = useAppStore()
     const players = computed(() => appStore.playerTracker)
-    const activityData = computed(() => appStore.activityData)
-    const oathTracker = computed(() => appStore.oathTracker)
+    // const activityData = computed(() => appStore.activityData)
+    // const oathTracker = computed(() => appStore.oathTracker)
     const isLoading = computed(() => appStore.isLoading)
 
     const playerColumns = ref([
@@ -57,131 +57,6 @@ export default defineComponent({
       { name: 'xp', key: 'xp' },
       { name: 'achievements', key: 'achievements' },
     ])
-
-    const computePlayerStats = (player: any) => {
-      const goalPerWeek = findGoalPerWeek(player.playerId)
-
-      // Filter activity data for the current player
-      const playerActivity = activityData.value
-        .filter((activity: any) => activity.playerId === player.playerId)
-        .map((activity: any) => activity.date)
-
-      const monthlyCounts = {}
-
-      for (let week = 1; week <= 52; week++) {
-        const weekKey = `W${week}`
-        const date = moment().month(0).startOf('month').week(week)
-        const monthKey = date.format('MM')
-        monthlyCounts[monthKey] = monthlyCounts[monthKey] || {}
-        monthlyCounts[monthKey][weekKey] = { count: 0, successRate: 0 }
-      }
-
-      // Calculate weekly and monthly counts
-      playerActivity.forEach((date) => {
-        const startOfWeekDate = moment(date).startOf('week') // Find the first day of the given date's week
-        const endOfWeekDate = moment(date).endOf('week') // Find the last day of the given date's week
-        const weekForDay =
-          startOfWeekDate.month() < endOfWeekDate.month() ? startOfWeekDate : endOfWeekDate
-
-        const week = weekForDay.week()
-        const weekKey = `W${week}`
-        const monthKey = Object.keys(monthlyCounts).find((month) =>
-          Object.keys(monthlyCounts[month]).includes(weekKey),
-        )
-        monthlyCounts[monthKey][weekKey].count += 1
-        monthlyCounts[monthKey][weekKey].successRate = Math.min(
-          1,
-          monthlyCounts[monthKey][weekKey].count / goalPerWeek,
-        )
-      })
-      // Calculate total XP and level based on weekly counts
-      const { totalXp, playerLevel, levelPercent, successRate } = findPlayerXp(
-        goalPerWeek,
-        monthlyCounts,
-      )
-
-      // Calculate success rate based on monthly counts
-      // const monthlySuccessRate = findPlayerSuccessRate(goalPerWeek, monthlyCounts)
-      player.totalXp = totalXp
-      player.xpBar = levelPercent
-      player.level = playerLevel
-      player.successRate = successRate
-    }
-
-    const levelThresholds = {
-      1: [0, 100],
-      2: [100, 225],
-      3: [225, 375],
-      4: [375, 550],
-      5: [550, 750],
-      6: [750, 1000],
-      7: [1000, 1300],
-    }
-
-    const findGoalPerWeek = (playerId: string) => {
-      // TODO - update to handle changing oaths/goalPerWeek .. yikes
-      const playerOath = oathTracker.value.find((oath) => oath.playerId == playerId)
-      return playerOath ? playerOath.xPerWeek : 0
-    }
-
-    const findPlayerXp = (goalPerWeek: int, monthlyCounts: any) => {
-      let totalXp = 0
-      let playerLevel = 1
-      let levelPercent = 0
-
-      const currentMonth = moment().format('MM')
-      const currentWeek = moment().isoWeek()
-      let currentAdventureProgress = 0
-
-      // Calculate current adventure progress
-      if (monthlyCounts[currentMonth]) {
-        const weekKeys = Object.keys(monthlyCounts[currentMonth])
-        const currentWeekIndex = weekKeys.indexOf(`W${currentWeek}`) + 1
-
-        currentAdventureProgress = currentWeekIndex / weekKeys.length
-      }
-
-      const weeks = monthlyCounts[currentMonth]
-      const weeklyRates = Object.entries(weeks).map(([week, { successRate }]) => successRate)
-
-      Object.entries(monthlyCounts).forEach(([_, weeks]) => {
-        Object.entries(weeks).forEach(([week, { count }]) => {
-          if (count > goalPerWeek && goalPerWeek > 0) {
-            totalXp += 38.5
-          } else if (count == goalPerWeek) {
-            totalXp += 35
-          } else if (count < goalPerWeek && count > 0) {
-            totalXp += (count / goalPerWeek) * 35
-          } else {
-            totalXp += 0
-          }
-        })
-      })
-
-      // Calculate player success rate
-      const totalSuccessRate = weeklyRates.reduce((sum, rate) => sum + rate, 0) / weeklyRates.length
-      const successRate = Math.round(totalSuccessRate * currentAdventureProgress * 100)
-
-      // Find level XP based on total XP
-      Object.entries(levelThresholds).forEach(([level, thresholds]) => {
-        const [minXp, maxXp] = thresholds
-        if (totalXp >= minXp && totalXp < maxXp) {
-          playerLevel = parseInt(level)
-          levelPercent = ((totalXp - minXp) / (maxXp - minXp)) * 100
-        }
-      })
-      return { totalXp, playerLevel, levelPercent, successRate }
-    }
-
-    watch(
-      players,
-      (newVal) => {
-        newVal.forEach((player) => {
-          computePlayerStats(player)
-        })
-      },
-      { immediate: true },
-    )
 
     return {
       players,

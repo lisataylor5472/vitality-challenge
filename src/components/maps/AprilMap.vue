@@ -31,16 +31,22 @@ export default defineComponent({
     const appStore = useAppStore()
     const _players = computed(() => appStore.playerTracker)
     const playersWithPaths = computed(() => {
-      return _players.value.map((player: any) => {
+      return _players.value.map((player: any, ix: number, arr: any) => {
         return {
           ...player,
           playerPng: player.playerPng ? `/avatars/${player.playerPng}` : '/avatars/default.svg',
-          pathPoints: d3.range(11).map((i) => {
-            return {
-              x: i * 10,
-              y: Math.random() * 100,
-            }
-          }),
+          pathPoints: [
+            {
+              x: 0,
+              y: (ix - 1) * 3,
+            },
+            ...d3.range(10).map((i) => {
+              return {
+                x: (i + 1) * 10,
+                y: Math.random() * 100,
+              }
+            }),
+          ],
         }
       })
     })
@@ -107,6 +113,7 @@ export default defineComponent({
       ro.observe(mapRef.value)
     })
     onUnmounted(() => {
+      if (!mapRef.value) return
       ro.unobserve(mapRef.value)
     })
 
