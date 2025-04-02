@@ -39,10 +39,13 @@ export const useAppStore = defineStore('app', () => {
     //   .map((activity: any) => activity.date)
     let playerActivity = activityData.value
       .filter((activity: any) => {
-        if (player.isShadow) {
+        if (player.isShadow || player.isPersonalOnly) {
           return (
             activity.playerId === player.playerId && activity.questType.includes('Personal Oath')
           )
+        }
+        if (activity.playerId === 'U071Z9NCX09') {
+          console.log('activity', activity)
         }
         return activity.playerId === player.playerId && activity.questType.includes('GS Oath')
       })
@@ -135,6 +138,7 @@ export const useAppStore = defineStore('app', () => {
     player.xpBar = levelPercent
     player.level = playerLevel
     player.successRate = successRate
+    player.achievements = player.achievements.split(',')
   }
 
   const levelThresholds = {

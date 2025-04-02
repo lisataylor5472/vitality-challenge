@@ -75,7 +75,7 @@ export default defineComponent({
       display: flex;
       justify-content: left;
       h1 {
-        font-size: 3rem;
+        font-size: 2rem;
         color: var(--theme-col-blurple);
         // text-align: center;
       }

@@ -1,80 +1,839 @@
 <template>
   <svg
-    width="300"
-    height="670"
-    viewBox="0 0 300 670"
+    width="301"
+    height="716"
+    viewBox="0 0 301 716"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      d="M43.25 141H278.75C282.202 141 285 143.798 285 147.25C285 150.702 282.202 153.5 278.75 153.5H43.25C39.7982 153.5 37 150.702 37 147.25C37 143.798 39.7982 141 43.25 141Z"
+      d="M40.25 94H275.75C279.202 94 282 96.7982 282 100.25C282 103.702 279.202 106.5 275.75 106.5H40.25C36.7982 106.5 34 103.702 34 100.25C34 96.7982 36.7982 94 40.25 94Z"
       fill="#815F5F"
       stroke="#644545"
       stroke-width="2"
     />
-    <g filter="url(#filter0_d_67_19)">
+    <g filter="url(#filter0_d_2_6)">
       <path
-        d="M278 658V156.897V139H252.5V156.897H173.5V139H145.5V156.897H68.5V139H43V156.897V658L158 533.283L278 658Z"
+        d="M276 703V115V94H250.5V115H171.5V94H143.5V115H66.5V94H41V115V703L156 556.656L276 703Z"
         fill="#D4BCFE"
       />
       <path
-        d="M278 658V156.897V139H252.5V156.897H173.5V139H145.5V156.897H68.5V139H43V156.897V658L158 533.283L278 658Z"
+        d="M276 703V115V94H250.5V115H171.5V94H143.5V115H66.5V94H41V115V703L156 556.656L276 703Z"
         stroke="#A47CDB"
         stroke-width="3"
       />
     </g>
     <path
-      d="M44.1254 625.251L157.625 509.25L157.625 531.75L44.1255 655L44.1254 625.251Z"
+      d="M42.1253 670.251L155.625 528.5L155.625 556L42.1255 700L42.1253 670.251Z"
       fill="#804EC5"
     />
     <path
-      d="M44.1254 625.251L157.625 509.25L157.625 531.75L44.1255 655L44.1254 625.251Z"
+      d="M42.1253 670.251L155.625 528.5L155.625 556L42.1255 700L42.1253 670.251Z"
       fill="#804EC5"
     />
     <path
-      d="M276.125 625.135L157.626 509.134L157.626 531.634L276.125 655.5L276.125 625.135Z"
+      d="M274.124 670.137L155.625 528.999L155.625 556L274.124 700.502L274.124 670.137Z"
       fill="#804EC5"
     />
     <path
-      d="M276.125 625.135L157.626 509.134L157.626 531.634L276.125 655.5L276.125 625.135Z"
+      d="M274.124 670.137L155.625 528.999L155.625 556L274.124 700.502L274.124 670.137Z"
       fill="#804EC5"
     />
     <path
-      d="M261.731 202.32L264.744 228.862L241.998 227.51L241.916 227.505L241.834 227.507L218.654 228.027L218.637 228.028L148.753 229L91.8658 228.027L91.8242 228.027L91.7827 228.028L54 228.951V217.404L55.7526 192.068L57.1217 190.749L58.656 189.271L57.0844 187.833L55.7307 186.595L54.1938 170H264.461L261.833 180.906L260.48 183.463L259.942 184.479L260.55 185.456L261.718 187.333V202.094V202.207L261.731 202.32Z"
+      d="M260.745 503.599L263.624 520.902L240.96 519.982L240.904 519.98L240.848 519.981L217.663 520.336L217.651 520.336L147.752 521L90.8549 520.336L90.8266 520.336L90.7982 520.336L53 520.966V513.774L54.7044 496.957L55.8329 496.215L58.4405 494.501L55.7937 492.848L54.6661 492.144L53.2897 482H263.173L260.94 488.325L259.667 489.967L258.635 491.297L259.77 492.541L260.718 493.58V503.271V503.436L260.745 503.599Z"
       fill="#FFF5E9"
       stroke="#DFDFDF"
       stroke-width="4"
     />
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="40"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="59" y="517.039">8</tspan>
+    </text>
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="Space Grotesk"
+      font-size="15"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="81" y="497.69">{{ rankings[7].charName }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="225" y="517.52">{{ rankings[7].totalXp }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="147.883" y="517.52">{{ rankings[7].achievements }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="98.7656" y="517.52">{{ rankings[7].successRate }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="167" y="517.264">Total XP:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="133" y="516.264">*:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="80" y="516.264">%:</tspan>
+    </text>
     <path
-      d="M236.514 120.448L243.486 135.552C244.66 138.096 242.802 141 240 141V141C237.198 141 235.34 138.096 236.514 135.552L243.486 120.448C244.66 117.904 242.802 115 240 115V115C237.198 115 235.34 117.904 236.514 120.448Z"
-      stroke="#FCC036"
-      stroke-width="2"
+      d="M260.745 456.599L263.624 473.902L240.96 472.982L240.904 472.98L240.848 472.981L217.663 473.336L217.651 473.336L147.752 474L90.8549 473.336L90.8266 473.336L90.7982 473.336L53 473.966V466.774L54.7044 449.957L55.8329 449.215L58.4405 447.501L55.7937 445.848L54.6661 445.144L53.2897 435H263.173L260.94 441.325L259.667 442.967L258.635 444.297L259.77 445.541L260.718 446.58V456.271V456.436L260.745 456.599Z"
+      fill="#FFF5E9"
+      stroke="#DFDFDF"
+      stroke-width="4"
     />
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="40"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="59" y="470.039">7</tspan>
+    </text>
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="Space Grotesk"
+      font-size="15"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="81" y="450.69">{{ rankings[6].charName }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="225" y="470.52">{{ rankings[6].totalXp }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="147.883" y="470.52">{{ rankings[6].achievements }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="98.7656" y="470.52">{{ rankings[6].successRate }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="167" y="470.264">Total XP:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="133" y="469.264">*:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="80" y="469.264">%:</tspan>
+    </text>
     <path
-      d="M236.514 28.4478L243.486 43.5522C244.66 46.096 242.802 49 240 49V49C237.198 49 235.34 46.096 236.514 43.5522L243.486 28.4478C244.66 25.904 242.802 23 240 23V23C237.198 23 235.34 25.904 236.514 28.4478Z"
-      stroke="#FCC036"
-      stroke-width="2"
+      d="M260.745 410.599L263.624 427.902L240.96 426.982L240.904 426.98L240.848 426.981L217.663 427.336L217.651 427.336L147.752 428L90.8549 427.336L90.8266 427.336L90.7982 427.336L53 427.966V420.774L54.7044 403.957L55.8329 403.215L58.4405 401.501L55.7937 399.848L54.6661 399.144L53.2897 389H263.173L260.94 395.325L259.667 396.967L258.635 398.297L259.77 399.541L260.718 400.58V410.271V410.436L260.745 410.599Z"
+      fill="#FFF5E9"
+      stroke="#DFDFDF"
+      stroke-width="4"
     />
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="40"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="59" y="424.039">6</tspan>
+    </text>
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="Space Grotesk"
+      font-size="15"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="81" y="404.69">{{ rankings[5].charName }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="225" y="424.52">{{ rankings[5].totalXp }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="147.883" y="424.52">{{ rankings[5].achievements }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="98.7656" y="424.52">{{ rankings[5].successRate }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="167" y="424.264">Total XP:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="133" y="423.264">*:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="80" y="423.264">%:</tspan>
+    </text>
     <path
-      d="M79.5144 120.448L86.4857 135.552C87.6597 138.096 85.8017 141 83 141V141C80.1983 141 78.3403 138.096 79.5144 135.552L86.4857 120.448C87.6597 117.904 85.8017 115 83 115V115C80.1983 115 78.3403 117.904 79.5144 120.448Z"
-      stroke="#FCC036"
-      stroke-width="2"
+      d="M260.745 363.599L263.624 380.902L240.96 379.982L240.904 379.98L240.848 379.981L217.663 380.336L217.651 380.336L147.752 381L90.8549 380.336L90.8266 380.336L90.7982 380.336L53 380.966V373.774L54.7044 356.957L55.8329 356.215L58.4405 354.501L55.7937 352.848L54.6661 352.144L53.2897 342H263.173L260.94 348.325L259.667 349.967L258.635 351.297L259.77 352.541L260.718 353.58V363.271V363.436L260.745 363.599Z"
+      fill="#FFF5E9"
+      stroke="#DFDFDF"
+      stroke-width="4"
     />
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="40"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="59" y="377.039">5</tspan>
+    </text>
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="Space Grotesk"
+      font-size="15"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="81" y="357.69">{{ rankings[4].charName }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="225" y="377.52">{{ rankings[4].totalXp }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="147.883" y="377.52">{{ rankings[4].achievements }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="98.7656" y="377.52">{{ rankings[4].successRate }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="167" y="377.264">Total XP:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="133" y="376.264">*:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="80" y="376.264">%:</tspan>
+    </text>
     <path
-      d="M79.5144 28.4478L86.4857 43.5522C87.6597 46.096 85.8017 49 83 49V49C80.1983 49 78.3403 46.096 79.5144 43.5522L86.4857 28.4478C87.6597 25.904 85.8017 23 83 23V23C80.1983 23 78.3403 25.904 79.5144 28.4478Z"
-      stroke="#FCC036"
-      stroke-width="2"
+      d="M260.745 317.599L263.624 334.902L240.96 333.982L240.904 333.98L240.848 333.981L217.663 334.336L217.651 334.336L147.752 335L90.8549 334.336L90.8266 334.336L90.7982 334.336L53 334.966V327.774L54.7044 310.957L55.8329 310.215L58.4405 308.501L55.7937 306.848L54.6661 306.144L53.2897 296H263.173L260.94 302.325L259.667 303.967L258.635 305.297L259.77 306.541L260.718 307.58V317.271V317.436L260.745 317.599Z"
+      fill="#FFF5E9"
+      stroke="#DFDFDF"
+      stroke-width="4"
     />
-    <rect
-      x="-1.5"
-      y="1.5"
-      width="233"
-      height="63"
-      transform="matrix(-1 0 0 1 276 49)"
-      fill="#804EC5"
-      stroke="#D4BCFE"
-      stroke-width="3"
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="40"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="59" y="331.039">4</tspan>
+    </text>
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="Space Grotesk"
+      font-size="15"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="81" y="311.69">{{ rankings[3].charName }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="225" y="331.52">{{ rankings[3].totalXp }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="147.883" y="331.52">{{ rankings[3].achievements }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="98.7656" y="331.52">{{ rankings[3].successRate }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="167" y="331.264">Total XP:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="133" y="330.264">*:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="80" y="330.264">%:</tspan>
+    </text>
+    <path
+      d="M260.745 270.599L263.624 287.902L240.96 286.982L240.904 286.98L240.848 286.981L217.663 287.336L217.651 287.336L147.752 288L90.8549 287.336L90.8266 287.336L90.7982 287.336L53 287.966V280.774L54.7044 263.957L55.8329 263.215L58.4405 261.501L55.7937 259.848L54.6661 259.144L53.2897 249H263.173L260.94 255.325L259.667 256.967L258.635 258.297L259.77 259.541L260.718 260.58V270.271V270.436L260.745 270.599Z"
+      fill="#FFF5E9"
+      stroke="#DFDFDF"
+      stroke-width="4"
     />
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="40"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="57" y="284.039">3</tspan>
+    </text>
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="Space Grotesk"
+      font-size="15"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="81" y="264.69">{{ rankings[2].charName }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="225" y="284.52">{{ rankings[2].totalXp }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="147.883" y="284.52">{{ rankings[2].achievements }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="98.7656" y="284.52">{{ rankings[2].successRate }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="167" y="284.264">Total XP:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="133" y="283.264">*:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="80" y="283.264">%:</tspan>
+    </text>
+    <path
+      d="M260.745 224.599L263.624 241.902L240.96 240.982L240.904 240.98L240.848 240.981L217.663 241.336L217.651 241.336L147.752 242L90.8549 241.336L90.8266 241.336L90.7982 241.336L53 241.966V234.774L54.7044 217.957L55.8329 217.215L58.4405 215.501L55.7937 213.848L54.6661 213.144L53.2897 203H263.173L260.94 209.325L259.667 210.967L258.635 212.297L259.77 213.541L260.718 214.58V224.271V224.436L260.745 224.599Z"
+      fill="#FFF5E9"
+      stroke="#DFDFDF"
+      stroke-width="4"
+    />
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="40"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="57" y="238.039">2</tspan>
+    </text>
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="Space Grotesk"
+      font-size="15"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="81" y="218.69">{{ rankings[1].charName }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="225" y="238.52">{{ rankings[1].totalXp }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="147.883" y="238.52">{{ rankings[1].achievements }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="98.7656" y="238.52">{{ rankings[1].successRate }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="167" y="238.264">Total XP:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="133" y="237.264">*:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="80" y="237.264">%:</tspan>
+    </text>
+    <path
+      d="M260.745 177.599L263.624 194.902L240.96 193.982L240.904 193.98L240.848 193.981L217.663 194.336L217.651 194.336L147.752 195L90.8549 194.336L90.8266 194.336L90.7982 194.336L53 194.966V187.774L54.7044 170.957L55.8329 170.215L58.4405 168.501L55.7937 166.848L54.6661 166.144L53.2897 156H263.173L260.94 162.325L259.667 163.967L258.635 165.297L259.77 166.541L260.718 167.58V177.271V177.436L260.745 177.599Z"
+      fill="#FFF5E9"
+      stroke="#DFDFDF"
+      stroke-width="4"
+    />
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="40"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="59" y="191.039">1</tspan>
+    </text>
+    <text
+      fill="#F46546"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="Space Grotesk"
+      font-size="15"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="81" y="171.69">{{ rankings[0].charName }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="225" y="191.52">{{ rankings[0].totalXp }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="147.883" y="191.52">{{ rankings[0].achievements }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="20"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="98.7656" y="191.52">{{ rankings[0].successRate }}</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="167" y="191.264">Total XP:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="133" y="190.264">*:</tspan>
+    </text>
+    <text
+      fill="#777777"
+      xml:space="preserve"
+      style="white-space: pre"
+      font-family="UnifrakturCook"
+      font-size="14"
+      font-weight="bold"
+      letter-spacing="0em"
+    >
+      <tspan x="80" y="190.264">%:</tspan>
+    </text>
+    <g filter="url(#filter1_d_2_6)" @click="toggleSortBy('totalXp')" class="clickable">
+      <rect x="200" y="126" width="48" height="21" rx="10.5" fill="#5555F2" />
+      <text
+        fill="white"
+        xml:space="preserve"
+        style="white-space: pre"
+        font-family="UnifrakturCook"
+        font-size="16"
+        font-weight="bold"
+        letter-spacing="0em"
+      >
+        <tspan x="214" y="142.516">XP</tspan>
+      </text>
+    </g>
+
+    <g filter="url(#filter2_d_2_6)" @click="toggleSortBy('achievements')" class="clickable">
+      <rect x="134" y="126" width="48" height="21" rx="10.5" fill="#5555F2" />
+      <text
+        fill="white"
+        xml:space="preserve"
+        style="white-space: pre"
+        font-family="UnifrakturCook"
+        font-size="24"
+        font-weight="bold"
+        letter-spacing="0em"
+      >
+        <tspan x="151" y="143.523">*</tspan>
+      </text>
+    </g>
+    <g filter="url(#filter3_d_2_6)" @click="toggleSortBy('successRate')" class="clickable">
+      <rect x="66" y="126" width="48" height="21" rx="10.5" fill="#5555F2" />
+      <text
+        fill="white"
+        xml:space="preserve"
+        style="white-space: pre"
+        font-family="UnifrakturCook"
+        font-size="20"
+        font-weight="bold"
+        letter-spacing="0em"
+      >
+        <tspan x="81" y="142.52">%</tspan>
+      </text>
+    </g>
     <rect
       x="-1.5"
       y="1.5"
@@ -85,388 +844,54 @@
       stroke="#644545"
       stroke-width="3"
     />
+    <path
+      d="M78.9047 84.5555L83.0953 89.4445C84.6296 91.2345 83.3577 94 81 94V94C78.6423 94 77.3704 91.2345 78.9047 89.4445L83.0953 84.5555C84.6296 82.7655 83.3577 80 81 80V80C78.6423 80 77.3704 82.7655 78.9047 84.5555Z"
+      stroke="#FCC036"
+      stroke-width="2"
+    />
+    <path
+      d="M235.905 84.5555L240.095 89.4445C241.63 91.2345 240.358 94 238 94V94C235.642 94 234.37 91.2345 235.905 89.4445L240.095 84.5555C241.63 82.7655 240.358 80 238 80V80C235.642 80 234.37 82.7655 235.905 84.5555Z"
+      stroke="#FCC036"
+      stroke-width="2"
+    />
+    <path
+      d="M78.9047 25.5555L83.0953 30.4445C84.6296 32.2345 83.3577 35 81 35V35C78.6423 35 77.3704 32.2345 78.9047 30.4445L83.0953 25.5555C84.6296 23.7655 83.3577 21 81 21V21C78.6423 21 77.3704 23.7655 78.9047 25.5555Z"
+      stroke="#FCC036"
+      stroke-width="2"
+    />
+    <path
+      d="M235.905 26.5555L240.095 31.4445C241.63 33.2345 240.358 36 238 36V36C235.642 36 234.37 33.2345 235.905 31.4445L240.095 26.5555C241.63 24.7655 240.358 22 238 22V22C235.642 22 234.37 24.7655 235.905 26.5555Z"
+      stroke="#FCC036"
+      stroke-width="2"
+    />
+    <rect
+      x="-1.5"
+      y="1.5"
+      width="233"
+      height="42"
+      transform="matrix(-1 0 0 1 274 35)"
+      fill="#804EC5"
+      stroke="#D4BCFE"
+      stroke-width="3"
+    />
     <text
       fill="white"
       xml:space="preserve"
       style="white-space: pre"
-      font-family="Grenze Gotisch"
-      font-size="40"
-      letter-spacing="0em"
-    >
-      <tspan x="97" y="94.9">eaderboard</tspan>
-    </text>
-    <text
-      fill="white"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="68"
+      font-family="Pixelify Sans"
+      font-size="32"
       font-weight="bold"
       letter-spacing="0em"
     >
-      <tspan x="59" y="107.066">L</tspan>
-    </text>
-    <text
-      fill="#F46546"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="48"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="62" y="214.547">1</tspan>
-    </text>
-    <text
-      fill="#F46546"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="Grenze Gotisch"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="96" y="196.64">{{ firstPlace.name }}</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="218" y="220.523">{{ firstPlace.xp }}</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="127.859" y="220.523">{{ firstPlace.achievements }}</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="14"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="160" y="220.264">Total XP:</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="14"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="111" y="220.264">*:</tspan>
-    </text>
-    <path
-      d="M262.716 270.321L265.743 296.863L242.88 295.51L242.799 295.505L242.717 295.507L219.429 296.027L219.412 296.028L149.203 297L92.0509 296.028L92.0095 296.027L91.9682 296.028L54 296.951V285.404L55.7606 260.071L57.1357 258.752L58.6805 257.271L57.0983 255.83L55.7386 254.592L54.1947 238H265.458L262.819 248.903L261.459 251.46L260.917 252.48L261.53 253.459L262.703 255.335V270.094V270.208L262.716 270.321Z"
-      fill="#FFF5E9"
-      stroke="#DFDFDF"
-      stroke-width="4"
-    />
-    <text
-      fill="#F46546"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="48"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="62" y="282.547">2</tspan>
-    </text>
-    <text
-      fill="#F46546"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="Grenze Gotisch"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="96" y="264.64">{{ secondPlace.name }}</tspan>
-    </text>
-    <path
-      d="M262.716 338.321L265.743 364.863L242.88 363.51L242.799 363.505L242.717 363.507L219.429 364.027L219.412 364.028L149.203 365L92.0509 364.027L92.0095 364.027L91.9682 364.028L54 364.951V353.404L55.7606 328.071L57.1357 326.752L58.6806 325.271L57.0983 323.83L55.7386 322.592L54.1947 306H265.458L262.819 316.903L261.459 319.46L260.917 320.48L261.53 321.459L262.703 323.335V338.094V338.208L262.716 338.321Z"
-      fill="#FFF5E9"
-      stroke="#DFDFDF"
-      stroke-width="4"
-    />
-    <text
-      fill="#F46546"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="48"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="62" y="350.547">3</tspan>
-    </text>
-    <text
-      fill="#F46546"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="Grenze Gotisch"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="96" y="332.64">{{ thirdPlace.name }}</tspan>
-    </text>
-    <path
-      d="M262.731 406.32L265.744 432.862L242.998 431.51L242.916 431.505L242.834 431.507L219.654 432.027L219.637 432.028L149.753 433L92.8658 432.028L92.8242 432.027L92.7827 432.028L55 432.951V421.404L56.7526 396.068L58.1217 394.749L59.656 393.271L58.0844 391.833L56.7307 390.595L55.1938 374H265.461L262.833 384.906L261.48 387.463L260.942 388.479L261.55 389.456L262.718 391.333V406.094V406.207L262.731 406.32Z"
-      fill="#FFF5E9"
-      stroke="#DFDFDF"
-      stroke-width="4"
-    />
-    <text
-      fill="#F46546"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="48"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="63" y="418.547">4</tspan>
-    </text>
-    <text
-      fill="#F46546"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="Grenze Gotisch"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="97" y="400.64">{{ fourthPlace.name }}</tspan>
-    </text>
-    <path
-      d="M262.731 474.32L265.744 500.862L242.998 499.51L242.916 499.505L242.834 499.507L219.654 500.027L219.637 500.028L149.753 501L92.8658 500.027L92.8242 500.027L92.7827 500.028L55 500.951V489.404L56.7526 464.068L58.1217 462.749L59.656 461.271L58.0844 459.833L56.7307 458.595L55.1938 442H265.461L262.833 452.906L261.48 455.463L260.942 456.479L261.55 457.456L262.718 459.333V474.094V474.207L262.731 474.32Z"
-      fill="#FFF5E9"
-      stroke="#DFDFDF"
-      stroke-width="4"
-    />
-    <text
-      fill="#F46546"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="48"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="63" y="486.547">5</tspan>
-    </text>
-    <text
-      fill="#F46546"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="Grenze Gotisch"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="97" y="468.64">{{ fifthPlace.name }}</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="218" y="289.523">{{ fifthPlace.xp }}</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="127.859" y="289.523">0</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="14"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="160" y="289.264">Total XP:</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="14"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="111" y="289.264">*:</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="218" y="357.523">{{ fifthPlace.xp }}</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="127.859" y="357.523">0</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="14"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="160" y="357.264">Total XP:</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="14"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="111" y="357.264">*:</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="218" y="425.523">{{ fifthPlace.xp }}</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="127.859" y="425.523">0</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="14"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="160" y="425.264">Total XP:</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="14"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="111" y="425.264">*:</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="218" y="493.523">{{ fifthPlace.xp }}</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="24"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="127.859" y="493.523">0</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="14"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="160" y="493.264">Total XP:</tspan>
-    </text>
-    <text
-      fill="#777777"
-      xml:space="preserve"
-      style="white-space: pre"
-      font-family="UnifrakturCook"
-      font-size="14"
-      font-weight="bold"
-      letter-spacing="0em"
-    >
-      <tspan x="111" y="493.264">*:</tspan>
+      <tspan x="53" y="67.24">{{ signText }}</tspan>
     </text>
     <defs>
       <filter
-        id="filter0_d_67_19"
-        x="37.5"
-        y="137.5"
+        id="filter0_d_2_6"
+        x="35.5"
+        y="92.5"
         width="246"
-        height="532.34"
+        height="622.836"
         filterUnits="userSpaceOnUse"
         color-interpolation-filters="sRGB"
       >
@@ -481,38 +906,194 @@
         <feGaussianBlur stdDeviation="2" />
         <feComposite in2="hardAlpha" operator="out" />
         <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_67_19" />
-        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_67_19" result="shape" />
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_6" />
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_6" result="shape" />
+      </filter>
+      <filter
+        id="filter1_d_2_6"
+        x="200"
+        y="126"
+        width="50"
+        height="23"
+        filterUnits="userSpaceOnUse"
+        color-interpolation-filters="sRGB"
+      >
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dx="2" dy="2" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0.690952 0 0 0 0 0.0240572 0 0 0 0 1 0 0 0 0.25 0"
+        />
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_6" />
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_6" result="shape" />
+      </filter>
+      <filter
+        id="filter2_d_2_6"
+        x="134"
+        y="126"
+        width="50"
+        height="23"
+        filterUnits="userSpaceOnUse"
+        color-interpolation-filters="sRGB"
+      >
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dx="2" dy="2" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0.690952 0 0 0 0 0.0240572 0 0 0 0 1 0 0 0 0.25 0"
+        />
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_6" />
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_6" result="shape" />
+      </filter>
+      <filter
+        id="filter3_d_2_6"
+        x="66"
+        y="126"
+        width="50"
+        height="23"
+        filterUnits="userSpaceOnUse"
+        color-interpolation-filters="sRGB"
+      >
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dx="2" dy="2" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0.690952 0 0 0 0 0.0240572 0 0 0 0 1 0 0 0 0.25 0"
+        />
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_2_6" />
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_2_6" result="shape" />
       </filter>
     </defs>
   </svg>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, watch, computed, ref } from 'vue'
+import { useAppStore } from '@/store/app'
+
 export default defineComponent({
   name: 'SvgLeaderboard',
-  props: {
-    topPlayers: {
-      type: Array,
-      required: true,
-    },
-  },
-  setup(props) {
-    const topsPlayers = props.topPlayers
-    const firstPlace = topsPlayers[0]
-    const secondPlace = topsPlayers[1]
-    const thirdPlace = topsPlayers[2]
-    const fourthPlace = topsPlayers[3]
-    const fifthPlace = topsPlayers[4]
+  components: {},
+  props: {},
+  setup() {
+    const appStore = useAppStore()
+    const players = computed(() => appStore.playerTracker)
+    const isLoading = computed(() => appStore.isLoading)
+
+    const sortByKey = ref('totalXp')
+
+    const topPlayers = computed(() => {
+      if (sortByKey.value == 'totalXp') {
+        return [...players.value].sort((a, b) => {
+          // Primary sort by name (alphabetical order)
+          if (a.totalXp < b.totalXp) return 1
+          if (a.totalXp > b.totalXp) return -1
+
+          // Secondary sort by quantity (ascending order)
+          return b.successRate - a.successRate
+        })
+      }
+      if (sortByKey.value == 'achievements') {
+        return [...players.value].sort((a, b) => {
+          // Primary sort by name (alphabetical order)
+          if (a.achievements < b.achievements) return 1
+          if (a.achievements > b.achievements) return -1
+
+          // Secondary sort by quantity (ascending order)
+          return b.totalXp - a.totalXp
+        })
+        // return [...players.value].sort((a, b) => b.achievements.length - a.achievements.length)
+      }
+      if (sortByKey.value == 'successRate') {
+        return [...players.value].sort((a, b) => {
+          // Primary sort by name (alphabetical order)
+          if (a.successRate < b.successRate) return 1
+          if (a.successRate > b.successRate) return -1
+
+          // Secondary sort by quantity (ascending order)
+          return b.totalXp - a.totalXp
+        })
+      }
+      return players.value
+    })
+    const signText = computed(() => {
+      if (isLoading.value) {
+        return '. . . LOADING . . .'
+      }
+      if (topPlayers.value.length === 0) {
+        return '>>>>>ERROR<<<<<'
+      }
+      return 'LEADERBOARD'
+    })
+
+    const rankings = ref(
+      Array(8).fill({
+        charName: '...',
+        totalXp: '---',
+        achievements: '-',
+        successRate: '--',
+      }),
+    )
+
+    const toggleSortBy = (type: string) => {
+      console.log('sortByAchievements')
+      sortByKey.value = type
+    }
+
+    watch(
+      topPlayers,
+      (newVal) => {
+        console.log('topPlayers changed', newVal)
+        if (newVal.length > 0) {
+          rankings.value.forEach((ranking, index) => {
+            if (newVal[index]) {
+              rankings.value[index] = {
+                ...newVal[index],
+                achievements: newVal[index].achievements.length,
+                totalXp: Math.round(Number(newVal[index].totalXp)).toString(),
+                charName:
+                  newVal[index].charName.length > 22
+                    ? newVal[index].charName.slice(0, 20) + '...'
+                    : newVal[index].charName,
+              }
+            }
+          })
+        }
+      },
+      { immediate: true },
+    )
 
     return {
-      firstPlace,
-      secondPlace,
-      thirdPlace,
-      fourthPlace,
-      fifthPlace,
+      signText,
+      rankings,
+      toggleSortBy,
     }
   },
 })
 </script>
+<style scoped lang="scss">
+.clickable {
+  cursor: pointer;
+}
+</style>

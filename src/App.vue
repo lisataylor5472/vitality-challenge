@@ -32,16 +32,19 @@
             img(v-if="dateAfter('sep')" src="@/assets/flags/final-flag-large.svg")
             img(v-else src="@/assets/flags/rolled-flag-final.svg" alt="Future Dungeon Flag")
       .nav-wrapper
-        button.nav-button
-          RouterLink(to="/") dashboard
-        button.nav-button
-          RouterLink(to="/map") map
-        button.nav-button
-          RouterLink(to="/campaign") campaign
+        RouterLink.nav-button(to="/" custom v-slot="{ navigate}")
+          button(@click="navigate")
+            | dashboard
+        RouterLink.nav-button(to="/map" custom v-slot="{ navigate}")
+          button(@click="navigate")
+            | map
+        RouterLink.nav-button(to="/campaign" custom v-slot="{ navigate}")
+          button(@click="navigate")
+            | campaign
 
   .main-content
     .left-column
-      SvgLeaderboard(:topPlayers="topPlayers")
+      SvgLeaderboard
       //- PlayerLeaderboard
       //- .fountain
       //-   img(src="@/assets/fountain.svg" alt="Fountain")
@@ -55,9 +58,8 @@
 </template>
 <script lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import { useAppStore } from '@/store/app'
-import PlayerLeaderboard from '@/components/PlayerLeaderboard.vue'
 import SvgLeaderboard from '@/components/SvgLeaderboard.vue'
 import moment from 'moment'
 
@@ -66,7 +68,6 @@ export default defineComponent({
   components: {
     RouterLink,
     RouterView,
-    PlayerLeaderboard,
     SvgLeaderboard,
   },
 
@@ -86,21 +87,6 @@ export default defineComponent({
       return monthMap[month] <= currentDay
     }
 
-    const topPlayers = ref([
-      {
-        name: 'Example Character',
-        playerId: 'U03EBQ5M40M',
-        class: 'Warrior',
-        level: 1,
-        xp: 100,
-        achievements: 3,
-      },
-      { name: '...', class: 'Mage', level: 1, xp: '---', achievements: 1 },
-      { name: '...', class: 'Rogue', level: 1, xp: '---', achievements: 2 },
-      { name: '...', class: 'Rogue', level: 1, xp: '---', achievements: 2 },
-      { name: '...', class: 'Rogue', level: 1, xp: '---', achievements: 2 },
-    ])
-
     onMounted(() => {
       appStore.fetchChallengeData()
     })
@@ -108,7 +94,6 @@ export default defineComponent({
     return {
       appStore,
       dateAfter,
-      topPlayers,
     }
   },
 })
@@ -159,42 +144,14 @@ export default defineComponent({
         .rolled-up-flag {
           width: 100px;
         }
-        // .rolled-up-flag-css {
-        //   width: 100px;
-        //   height: 20px;
-        //   border-top-left-radius: 8px;
-        //   border-bottom-left-radius: 8px;
-        //   border-bottom-right-radius: 8px;
-        //   box-shadow: 4px 0px 0px 0px #676767;
-        // }
-        // .snail {
-        //   background-color: #3df0fa;
-        //   border: 2px solid #17c2ce;
-        // }
-        // .ladder {
-        //   background-color: #17c2ce;
-        //   border: 2px solid #3df0fa;
-        // }
-        // .feast {
-        //   background-color: #d4bcfe;
-        //   border: 2px solid #a47cdb;
-        // }
-        // .benny {
-        //   background-color: #a47cdb;
-        //   border: 2px solid #d4bcfe;
-        // }
-        // .final {
-        //   background-color: #fc795c;
-        //   border: 2px solid #fec5b2;
-        // }
       }
     }
     .nav-wrapper {
       height: 10vh;
       display: flex;
-      justify-content: space-between;
-      padding: 1rem;
-      margin-right: 25rem;
+      justify-content: flex-start;
+      padding: 1rem 0.5rem;
+      margin-right: 20rem;
       align-items: end;
       .nav-button {
         border-radius: 37px;
@@ -204,16 +161,25 @@ export default defineComponent({
         background: #d0ffe0;
         box-shadow: 4px 4px 0px -1px #29f36e;
         font-size: 1.5rem;
-        font-weight: bold;
         color: #005d20;
         font-family: 'Grenze Gotisch', serif;
         display: flex;
         justify-content: center;
+        margin-left: 1rem;
         align-items: center;
         padding-bottom: 4px;
+        cursor: pointer;
         a {
           text-decoration: none;
           color: #005d20;
+        }
+        &:hover {
+          background: #29f36e;
+          color: #fff;
+
+          box-shadow:
+            4px 4px 0px -1px #d0ffe0,
+            0px 0px 0px 1px #d0ffe0;
         }
       }
     }
