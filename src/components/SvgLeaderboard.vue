@@ -1057,14 +1057,12 @@ export default defineComponent({
     )
 
     const toggleSortBy = (type: string) => {
-      console.log('sortByAchievements')
       sortByKey.value = type
     }
 
     watch(
       topPlayers,
       (newVal) => {
-        console.log('topPlayers changed', newVal)
         if (newVal.length > 0) {
           rankings.value.forEach((ranking, index) => {
             if (newVal[index]) {

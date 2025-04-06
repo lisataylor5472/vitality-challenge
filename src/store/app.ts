@@ -34,18 +34,12 @@ export const useAppStore = defineStore('app', () => {
     const goalPerWeek = findGoalPerWeek(player)
 
     // Filter activity data for the current player
-    // const playerActivity = activityData.value
-    //   .filter((activity: any) => activity.playerId === player.playerId)
-    //   .map((activity: any) => activity.date)
     let playerActivity = activityData.value
       .filter((activity: any) => {
         if (player.isShadow || player.isPersonalOnly) {
           return (
             activity.playerId === player.playerId && activity.questType.includes('Personal Oath')
           )
-        }
-        if (activity.playerId === 'U071Z9NCX09') {
-          console.log('activity', activity)
         }
         return activity.playerId === player.playerId && activity.questType.includes('GS Oath')
       })
@@ -63,35 +57,17 @@ export const useAppStore = defineStore('app', () => {
         if (typeof activity.questType === 'string') {
           activity.questType = activity.questType.split(',').map((item: string) => item.trim())
         }
-        if (player.playerId == 'test123') {
-          console.log('BEFORE existingActivity.questType', existingActivity.questType)
-          console.log('BEFORE activity.questType', activity.questType)
-        }
         existingActivity.questType = Array.from(
           new Set([...existingActivity.questType, ...activity.questType]),
         )
-        if (player.playerId == 'test123') {
-          console.log('MERGED existingActivity.questType', existingActivity.questType)
-        }
       } else {
-        if (player.playerId == 'test123') {
-          console.log('ELSE activity', activity)
-          console.log('ELSE activity.questType', activity.questType)
-        }
         if (activity.questType == null) {
           activity.questType = []
         }
         if (typeof activity.questType === 'string') {
           activity.questType = activity.questType.split(',').map((item: string) => item.trim())
         }
-        if (player.playerId == 'test123') {
-          console.log('ELSE AFTER activity', activity)
-          console.log('ALSER AFTER activity.questType', activity.questType)
-        }
         acc.push({ ...activity, questType: [...activity.questType] })
-      }
-      if (player.playerId == 'test123') {
-        console.log('END acc', acc)
       }
       return acc
     }, [])
@@ -132,8 +108,6 @@ export const useAppStore = defineStore('app', () => {
       player.playerId,
     )
 
-    // Calculate success rate based on monthly counts
-    // const monthlySuccessRate = findPlayerSuccessRate(goalPerWeek, monthlyCounts)
     player.totalXp = totalXp
     player.xpBar = levelPercent
     player.level = playerLevel
@@ -153,8 +127,6 @@ export const useAppStore = defineStore('app', () => {
 
   const findGoalPerWeek = (player: any) => {
     // TODO - update to handle changing oaths/goalPerWeek .. yikes
-    // const playerOath = oathTracker.value.find((oath) => oath.playerId == playerId)
-    // return playerOath ? playerOath.xPerWeek : 0
     const playerId = player.playerId
     const playerOath = oathTracker.value.find(
       (oath) =>
@@ -182,13 +154,6 @@ export const useAppStore = defineStore('app', () => {
       Object.keys(monthlyCounts[month]).includes(currentWeek),
     )
 
-    // const currentMonth = moment().format('MM')
-    // const currentMonth = moment().month(2).format('MM')
-    // const currentWeek = moment().isoWeek()
-    if (playerId == 'test123') {
-      console.log('currentWeek', currentWeek)
-      console.log('currentMonth', currentMonth)
-    }
     let currentAdventureProgress = 0
 
     // Calculate current adventure progress
@@ -197,21 +162,19 @@ export const useAppStore = defineStore('app', () => {
       const currentWeekIndex = weekKeys.indexOf(`${currentWeek}`) + 1
 
       currentAdventureProgress = currentWeekIndex / weekKeys.length
-      if (playerId == 'test123') {
-        console.log('currentWeekIndex', currentWeekIndex)
-        console.log('weekKeys', weekKeys)
-        console.log('monthlyCounts)', monthlyCounts)
-        console.log('index', weekKeys.indexOf(`W${currentWeek}`))
-      }
+    }
+
+    // IF the current week is not in the monthlyCounts, add it
+    // Occurs on Sunday when the week changes - and no events have been logged yet
+    if (monthlyCounts[currentMonth][currentWeek].successRate == null) {
+      console.log('zero successRate')
+      monthlyCounts[currentMonth][currentWeek].successRate = 0
     }
 
     const weeks = monthlyCounts[currentMonth]
     const weeklyRates = Object.entries(weeks)
       .filter(([week, { successRate }]) => successRate != null)
       .map(([week, { successRate }]) => successRate)
-    if (playerId == 'test123') {
-      console.log('weeklyRates', weeklyRates)
-    }
     Object.entries(monthlyCounts).forEach(([_, weeks]) => {
       Object.entries(weeks).forEach(([week, { count }]) => {
         if (goalPerWeek == 7 && count == goalPerWeek) {
@@ -233,10 +196,11 @@ export const useAppStore = defineStore('app', () => {
       weeklyRates.length == 0
         ? 0
         : weeklyRates.reduce((sum, rate) => sum + rate, 0) / weeklyRates.length
-    if (playerId == 'test123') {
-      console.log('currentAdventureProgress', currentAdventureProgress)
-    }
+
     console.log('currentAdventureProgress', currentAdventureProgress)
+    if (playerId == 'U071Z9NCX09' || playerId == 'U0BLP15EJ') {
+      console.log('weeklyRates', weeklyRates)
+    }
     const successRate = Math.round(totalSuccessRate * currentAdventureProgress * 100)
 
     // Find level XP based on total XP
@@ -248,7 +212,12 @@ export const useAppStore = defineStore('app', () => {
       }
     })
 
-    if (playerId == 'test123') {
+    if (playerId == 'U071Z9NCX09' || playerId == 'U0BLP15EJ') {
+      console.log('playerId', playerId)
+      console.log('goalPerWeek', goalPerWeek)
+      console.log('monthlyCounts', monthlyCounts)
+      console.log('currentMonth', currentMonth)
+      console.log('currentWeek', currentWeek)
       console.log('totalXp', totalXp)
       console.log('playerLevel', playerLevel)
       console.log('levelPercent', levelPercent)
