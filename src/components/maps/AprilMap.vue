@@ -5,14 +5,11 @@
     image(href="@/assets/maps/rat_dungeon_overlay.svg", x="0", y="-35%", width="100%", preserveAspectRatio="none")
     template(v-for="(player, playerIx) in players")
       path(ref="playerPathsRef", :d="getPlayerPath(player, playerIx)", fill="none", :stroke="debug ? player.pathColor : 'none'", stroke-width="2")
-      //- foreignObject.avatar-wrapper(:x="xScale(player.successRate)", :y="yScale(player.successRate)", width="100", height="100")
-      //- foreignObject.avatar-wrapper(:x="getPlayerX(player, playerIx)", :y="getPlayerY(player, playerIx)", width="100", height="100", style="overflow: visible")
-      //-   img.avatar(:src="player.playerPng", :alt="player.charName", :title="player.charName", :class="player.isShadow ? 'shadow' : ''")
       image.avatar(:href="player.playerPng", :alt="player.charName", :title="player.charName", :x="getPlayerX(player, playerIx) - 50", :y="getPlayerY(player, playerIx) - 50", width="100", height="100", :class="{'shadow': player.isShadow}")
   input(v-if="debug", type="range", v-model="successRate", min="0", max="100", step="0.1")
 </template>
 <script lang="ts">
-import { computed, defineComponent, onMounted, onUnmounted, ref } from 'vue'
+import { computed, defineComponent, nextTick, onMounted, onUnmounted, ref } from 'vue'
 
 import * as d3 from 'd3'
 import { useAppStore } from '@/store/app'
@@ -25,8 +22,8 @@ export default defineComponent({
     /** Shows the paths in red along with a slider to test success rate */
     const debug = ref(false)
 
-    const mapWidth = ref(1000)
-    const mapHeight = ref(1000)
+    const mapWidth = ref(924)
+    const mapHeight = ref(461)
     const viewBox = computed(() => `0 0 ${mapWidth.value} ${mapHeight.value}`)
 
     const successRate = ref(0)
