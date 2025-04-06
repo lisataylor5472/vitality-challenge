@@ -4,10 +4,11 @@
     image(href="@/assets/maps/rat_dungeon_map.svg", x="0", y="-30%", width="100%", preserveAspectRatio="none")
     image(href="@/assets/maps/rat_dungeon_overlay.svg", x="0", y="-35%", width="100%", preserveAspectRatio="none")
     template(v-for="(player, playerIx) in players")
-      path(ref="playerPathsRef", :d="line(player.pathPoints)", fill="none", :stroke="debug ? 'red' : 'none'", stroke-width="2")
+      path(ref="playerPathsRef", :d="getPlayerPath(player, playerIx)", fill="none", :stroke="debug ? player.pathColor : 'none'", stroke-width="2")
       //- foreignObject.avatar-wrapper(:x="xScale(player.successRate)", :y="yScale(player.successRate)", width="100", height="100")
-      foreignObject.avatar-wrapper(:x="getPlayerX(player, playerIx)", :y="getPlayerY(player, playerIx)", width="100", height="100", style="overflow: visible")
-        img.avatar(:src="player.playerPng", :alt="player.charName", :title="player.charName", :class="player.isShadow ? 'shadow' : ''")
+      //- foreignObject.avatar-wrapper(:x="getPlayerX(player, playerIx)", :y="getPlayerY(player, playerIx)", width="100", height="100", style="overflow: visible")
+      //-   img.avatar(:src="player.playerPng", :alt="player.charName", :title="player.charName", :class="player.isShadow ? 'shadow' : ''")
+      image.avatar(:href="player.playerPng", :alt="player.charName", :title="player.charName", :x="getPlayerX(player, playerIx) - 50", :y="getPlayerY(player, playerIx) - 50", width="100", height="100", :class="{'shadow': player.isShadow}")
   input(v-if="debug", type="range", v-model="successRate", min="0", max="100", step="0.1")
 </template>
 <script lang="ts">
@@ -30,22 +31,37 @@ export default defineComponent({
 
     const successRate = ref(0)
 
+    const totalMapPoints = ref(5)
+
     const appStore = useAppStore()
     const _players = computed(() => appStore.playerTracker)
     const playersWithPaths = computed(() => {
-      return _players.value.map((player: any, ix: number, arr: any) => {
+      return _players.value.map((player: any, ix: number, arr: any[]) => {
+        const mapPath: number[]|null = !!player.mapPath
+          // if a player has a pre-defined path, use that
+          ? player.mapPath.split(',').map((y: string)=>{
+            return parseFloat(y.trim())
+          })
+          // otherwise, generate a random path
+          : d3.range(1, totalMapPoints.value + 1).map(() => {
+            return Math.random() * 100
+          })
         return {
           ...player,
           playerPng: player.playerPng ? `/avatars/${player.playerPng}` : '/avatars/default.svg',
-          pathPoints: [
+          pathColor: player.mapPath ? 'blue': 'red', // for debugging
+          mapPath: [
+            // create an initial point at the left side of the map
+            // that spaces out the points evenly on the y axis
             {
               x: 0,
-              y: (ix - 1) * 3,
+              y: ix * (100 / arr.length),
             },
-            ...d3.range(10).map((i) => {
+            // then add the rest of the points
+            ...(mapPath ?? []).map((y: number, i: number) => {
               return {
-                x: (i + 1) * 10,
-                y: Math.random() * 100,
+                x: (i + 1) * (100 / (totalMapPoints.value)),
+                y,
               }
             }),
           ],
@@ -62,7 +78,7 @@ export default defineComponent({
     })
 
     const yScale = computed(() => {
-      return d3.scaleLinear().domain([0, 100]).range([0, mapHeight.value])
+      return d3.scaleLinear().domain([100, 0]).range([0, mapHeight.value])
     })
 
     const xScale = computed(() => {
@@ -76,6 +92,14 @@ export default defineComponent({
         .y((d: any) => yScale.value(d.y))
         .curve(d3.curveMonotoneX)
     })
+
+    const getPlayerPath = (player: any, playerIx: number) => {
+      const playerPath = player.mapPath
+      if (playerPath == null) return 'M0,0'
+
+      const path = line.value(playerPath)
+      return path
+    }
 
     const getPlayerX = (player: any, playerIx: number) => {
       const playerPath = playerPathsRef.value?.[playerIx]
@@ -133,6 +157,7 @@ export default defineComponent({
       successRate,
       getPlayerX,
       getPlayerY,
+      getPlayerPath,
     }
   },
 })
@@ -151,17 +176,9 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     overflow: visible;
-    .avatar-wrapper {
-      .avatar {
-        width: auto;
-        height: 100%;
-        transform: translate(-50%, -50%);
-        &.shadow {
-          filter: grayscale(10);
-        }
-        // border-radius: 50%;
-        // position: absolute;
-        // transform: translate(-50%, -50%);
+    .avatar {
+      &.shadow {
+        filter: grayscale(10);
       }
     }
   }
