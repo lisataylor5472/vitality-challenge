@@ -32,14 +32,24 @@
             img(v-if="dateAfter('sep')" src="@/assets/flags/final-flag-large.svg")
             img(v-else src="@/assets/flags/rolled-flag-final.svg" alt="Future Dungeon Flag")
       .nav-wrapper
-        RouterLink.nav-button(to="/" custom v-slot="{ navigate}")
-          button(@click="navigate")
+        //- RouterLink.nav-button(
+        //-   to="/"
+        //-   custom
+        //-   v-slot="{ navigate, isActive }"
+        //-   :class="{ active: isActive }"
+        //- )
+        RouterLink.nav-button(
+          to="/"
+          custom
+          v-slot="{ navigate, isActive }"
+        )
+          button(@click="navigate", :class="{ active: isActive }")
             | dashboard
-        RouterLink.nav-button(to="/map" custom v-slot="{ navigate}")
-          button(@click="navigate")
+        RouterLink.nav-button(to="/map" custom v-slot="{ navigate, isActive }")
+          button(@click="navigate", :class="{ active: isActive }")
             | map
-        RouterLink.nav-button(to="/campaign" custom v-slot="{ navigate}")
-          button(@click="navigate")
+        RouterLink.nav-button(to="/campaign" custom v-slot="{ navigate, isActive }")
+          button(@click="navigate", :class="{ active: isActive }")
             | campaign
 
   .main-content
@@ -158,10 +168,10 @@ export default defineComponent({
         border: 2px solid #29f36e;
         width: 120px;
         height: 35px;
-        background: #d0ffe0;
-        box-shadow: 4px 4px 0px -1px #29f36e;
+        // background: #d0ffe0;
+        // box-shadow: 4px 4px 0px -1px #29f36e;
+        // color: #005d20;
         font-size: 1.5rem;
-        color: #005d20;
         font-family: 'Grenze Gotisch', serif;
         display: flex;
         justify-content: center;
@@ -169,17 +179,29 @@ export default defineComponent({
         align-items: center;
         padding-bottom: 4px;
         cursor: pointer;
+        transition:
+          transform 0.1s ease,
+          box-shadow 0.1s ease;
+        &:not(.active) {
+          background: #d0ffe0;
+          color: #005d20;
+          box-shadow: 2px 2px 0px 1px #29f36e;
+        }
+        &.active {
+          background: #005d20;
+          color: #fff;
+          box-shadow:
+            2px 2px 0px 1px #29f36e,
+            2px -1px 16px 0px var(--theme-col-med-blurple);
+        }
         a {
           text-decoration: none;
           color: #005d20;
         }
         &:hover {
-          background: #29f36e;
+          background: #005d20;
           color: #fff;
-
-          box-shadow:
-            4px 4px 0px -1px #d0ffe0,
-            0px 0px 0px 1px #d0ffe0;
+          box-shadow: 2px -1px 16px 0px var(--theme-col-med-blurple);
         }
       }
     }

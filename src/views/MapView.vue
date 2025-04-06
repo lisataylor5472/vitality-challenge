@@ -2,6 +2,8 @@
 .map-view
   .map-view-header
     img(src="@/assets/MapText.svg" alt="Map")
+    h1
+      | [ WORK IN PROGRESS ]
   .map-view-content
     AprilMap
 
@@ -27,6 +29,9 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   .map-view-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     img {
       height: 10rem;
     }

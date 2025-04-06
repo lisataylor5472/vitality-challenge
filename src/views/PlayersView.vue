@@ -2,6 +2,8 @@
   .players-dashboard
     .players-view-header
       img(src="@/assets/PlayersText.svg" alt="Players")
+      h2
+        | NOTE: Adventure progress has been reset for official start
     .loading-text(v-if="isLoading")
       h1 Loading...
     .table-wrapper(v-if="!isLoading")
@@ -86,6 +88,9 @@ export default defineComponent({
     color: var(--theme-col-blurple);
   }
   .players-view-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     img {
       height: 9rem;
     }
