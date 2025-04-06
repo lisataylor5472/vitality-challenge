@@ -1,6 +1,8 @@
 <template lang="pug">
 .month-map.april-map(ref="mapRef")
-  svg(:viewBox.camel="viewBox", :width="mapWidth", :height="mapHeight", xmlns="http://www.w3.org/2000/svg", fill="none", preserveAspectRatio="xMidYMid meet")
+  svg(:viewBox.camel="viewBox", :width="mapWidth", :height="mapHeight", xmlns="http://www.w3.org/2000/svg", fill="none", preserveAspectRatio="none")
+    image(href="@/assets/maps/rat_dungeon_map.svg", x="0", y="-30%", width="100%", preserveAspectRatio="none")
+    image(href="@/assets/maps/rat_dungeon_overlay.svg", x="0", y="-35%", width="100%", preserveAspectRatio="none")
     template(v-for="(player, playerIx) in players")
       path(ref="playerPathsRef", :d="line(player.pathPoints)", fill="none", :stroke="debug ? 'red' : 'none'", stroke-width="2")
       //- foreignObject.avatar-wrapper(:x="xScale(player.successRate)", :y="yScale(player.successRate)", width="100", height="100")
@@ -142,7 +144,8 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   border-radius: 20px;
-  background-color: black;
+  background-color: #222222;
+  // background-image: url('@/assets/maps/rat_dungeon_map.svg');
   padding: 5em 2em;
   svg {
     width: 100%;

@@ -10,7 +10,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import AprilMap from '@/components/maps/AprilMap.vue';
+import AprilMap from '@/components/maps/AprilMap.vue'
 export default defineComponent({
   name: 'MapView',
   components: {
@@ -38,7 +38,7 @@ export default defineComponent({
     // justify-content: center;
     height: 100%;
     overflow: hidden;
-    padding-bottom: 1em;
+    // padding-bottom: 1em;
     h1 {
       font-size: 3rem;
       color: var(--theme-col-blurple);
