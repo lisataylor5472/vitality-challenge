@@ -6,6 +6,7 @@ interface challengeData {
   playerTracker: []
   activityTracker: []
   oathTracker: []
+  achievementTracker: []
 }
 
 export const useAppStore = defineStore('app', () => {
@@ -108,11 +109,24 @@ export const useAppStore = defineStore('app', () => {
       player.playerId,
     )
 
+    // Find players achievements
+    const playerAchievements = achievementsData.value
+      .filter((ach: any) => {
+        if (player.isShadow) {
+          return ach.playerId === player.playerId && ach.isShadow
+        } else if (player.isPersonalOnly) {
+          return ach.playerId === player.playerId && ach.isPersonalOnly
+        }
+        return ach.playerId === player.playerId && ach.isShadow == false
+      })
+      .map((ach: any) => ach)
+
+    console.log('playerAchievements', playerAchievements)
     player.totalXp = totalXp
     player.xpBar = levelPercent
     player.level = playerLevel
     player.successRate = successRate
-    player.achievements = player.achievements.split(',')
+    player.achievements = playerAchievements
   }
 
   const levelThresholds = {
@@ -167,9 +181,12 @@ export const useAppStore = defineStore('app', () => {
     // IF the current week is not in the monthlyCounts, add it
     // Occurs on Sunday when the week changes - and no events have been logged yet
     if (monthlyCounts[currentMonth][currentWeek].successRate == null) {
-      console.log('zero successRate')
       monthlyCounts[currentMonth][currentWeek].successRate = 0
     }
+
+    // Set the first week of April W14 to a successRate of null ---
+    // this was tutorial week and should not count
+    monthlyCounts['04']['W14'].successRate = null
 
     const weeks = monthlyCounts[currentMonth]
     const weeklyRates = Object.entries(weeks)
@@ -197,10 +214,6 @@ export const useAppStore = defineStore('app', () => {
         ? 0
         : weeklyRates.reduce((sum, rate) => sum + rate, 0) / weeklyRates.length
 
-    console.log('currentAdventureProgress', currentAdventureProgress)
-    if (playerId == 'U071Z9NCX09' || playerId == 'U0BLP15EJ') {
-      console.log('weeklyRates', weeklyRates)
-    }
     const successRate = Math.round(totalSuccessRate * currentAdventureProgress * 100)
 
     // Find level XP based on total XP
@@ -212,24 +225,13 @@ export const useAppStore = defineStore('app', () => {
       }
     })
 
-    if (playerId == 'U071Z9NCX09' || playerId == 'U0BLP15EJ') {
-      console.log('playerId', playerId)
-      console.log('goalPerWeek', goalPerWeek)
-      console.log('monthlyCounts', monthlyCounts)
-      console.log('currentMonth', currentMonth)
-      console.log('currentWeek', currentWeek)
-      console.log('totalXp', totalXp)
-      console.log('playerLevel', playerLevel)
-      console.log('levelPercent', levelPercent)
-      console.log('successRate', successRate)
-    }
-
     return { totalXp, playerLevel, levelPercent, successRate }
   }
 
   const playerTracker = computed(() => data.value?.playerTracker || [])
   const activityData = computed(() => data.value?.activityTracker || [])
   const oathTracker = computed(() => data.value?.oathTracker || [])
+  const achievementsData = computed(() => data.value?.achievementTracker || [])
 
   watch(
     playerTracker,
@@ -242,5 +244,13 @@ export const useAppStore = defineStore('app', () => {
     { immediate: true },
   )
 
-  return { data, isLoading, fetchChallengeData, playerTracker, activityData, oathTracker }
+  return {
+    data,
+    isLoading,
+    fetchChallengeData,
+    playerTracker,
+    activityData,
+    oathTracker,
+    achievementsData,
+  }
 })
