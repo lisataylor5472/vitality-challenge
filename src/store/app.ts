@@ -146,9 +146,6 @@ export const useAppStore = defineStore('app', () => {
       (oath) =>
         oath.playerId == playerId && (player.isShadow ? oath.isShadow : oath.isShadow == false),
     )
-    if (playerId == 'test123') {
-      console.log('playerOath', playerOath)
-    }
     return playerOath ? playerOath.xPerWeek : 0
   }
 
@@ -172,7 +169,15 @@ export const useAppStore = defineStore('app', () => {
 
     // Calculate current adventure progress
     if (monthlyCounts[currentMonth]) {
-      const weekKeys = Object.keys(monthlyCounts[currentMonth])
+      let weekKeys = Object.keys(monthlyCounts[currentMonth])
+
+      // Do not count the first week of April (W14) in the progress calculation
+      // This was tutorial week and should not count
+      if (currentMonth == '04') {
+        weekKeys = weekKeys.splice(1, 4)
+        console.log('weekKeys after', weekKeys)
+      }
+
       const currentWeekIndex = weekKeys.indexOf(`${currentWeek}`) + 1
 
       currentAdventureProgress = currentWeekIndex / weekKeys.length
