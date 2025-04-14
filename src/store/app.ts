@@ -121,7 +121,7 @@ export const useAppStore = defineStore('app', () => {
       })
       .map((ach: any) => ach)
 
-    console.log('playerAchievements', playerAchievements)
+    player.activity = playerActivity
     player.totalXp = totalXp
     player.xpBar = levelPercent
     player.level = playerLevel

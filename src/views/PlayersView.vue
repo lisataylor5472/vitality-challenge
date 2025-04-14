@@ -2,21 +2,20 @@
   .players-dashboard
     .players-view-header
       img(src="@/assets/PlayersText.svg" alt="Players")
-      h2
-        | NOTE: Adventure progress has been reset for official start
+      h1(v-if="selectedPlayer != null") {{ selectedPlayer.charName }}
     .loading-text(v-if="isLoading")
       h1 Loading...
-    .table-wrapper(v-if="!isLoading")
+    .table-wrapper(v-if="!isLoading && selectedPlayer == null")
       table
         thead
           tr.players-header-wrapper
             th(v-for="(header, index) in playerColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
         tbody.scrollable-table
-          tr.player-wrapper(v-for="(player, playerIndex) in players" :key="playerIndex")
+          tr.player-wrapper(v-for="(player, playerIndex) in players" :key="playerIndex", @click="selectedPlayer = player")
             td(v-for="(header, index) in playerColumns" :class="`col-${header.key}`" :key="index")
               template(v-if="header.key === 'xp'")
                 .player-xp-bar
-                  .player-xp(:style="{ width: player.xpBar + '%' }")
+                  .player-xp(:style="{ width: player.xpBar + '%' }", v-tooltip="`${Math.round(player.xpBar)}%`")
               template(v-else-if="header.key === 'adventure'")
                 | {{ player.successRate }}%
               template(v-else-if="header.key === 'achievements'")
@@ -34,16 +33,27 @@
               template(v-else)
                 | {{ player[header.key] }}
 
+    .player-view-wrapper(v-if="selectedPlayer != null")
+      .button-wrapper(v-tooltip="`Back to players`")
+        button.back-button(@click="selectedPlayer = null")
+          h1 <
+      CharacterSheet(:player="selectedPlayer")
+        //- img(src="@/assets/close.svg", alt="Close", width="20px", height="20px")
+
+
+
 </template>
 
 <script lang="ts">
 import { defineComponent, computed, ref } from 'vue'
 import { useAppStore } from '@/store/app'
-// import moment from 'moment'
+import CharacterSheet from '@/components/characterSheet.vue'
 
 export default defineComponent({
   name: 'PlayersView',
-  components: {},
+  components: {
+    CharacterSheet,
+  },
 
   setup() {
     const appStore = useAppStore()
@@ -51,6 +61,8 @@ export default defineComponent({
     // const activityData = computed(() => appStore.activityData)
     // const oathTracker = computed(() => appStore.oathTracker)
     const isLoading = computed(() => appStore.isLoading)
+
+    const selectedPlayer = ref(null)
 
     const playerColumns = ref([
       { name: '', key: 'avatar' },
@@ -67,6 +79,7 @@ export default defineComponent({
       players,
       playerColumns,
       isLoading,
+      selectedPlayer,
     }
   },
 })
@@ -93,6 +106,16 @@ export default defineComponent({
     justify-content: space-between;
     img {
       height: 9rem;
+    }
+  }
+  .button-wrapper {
+    .back-button {
+      font-size: 1.5rem;
+      color: var(--theme-col-blurple);
+      cursor: pointer;
+      border-radius: 20px;
+      border: none;
+      background-color: var(--theme-col-parchment);
     }
   }
   table {
@@ -122,12 +145,19 @@ export default defineComponent({
       overflow-y: overlay;
       width: 100%;
       font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
       tr {
         display: table;
         width: 100%;
         table-layout: auto;
         background-color: var(--theme-col-parchment-light);
         border-bottom: 4px solid var(--theme-col-parchment);
+        // .player-wrapper {
+        //   cursor: pointer;
+        //   &:hover {
+        //     box-shadow: inset 0px 0px 0px 1px var(--theme-col-dark-red);
+        //   }
+        // }
         td {
           padding: 0.2rem 0.4em;
           text-align: center;
@@ -150,6 +180,10 @@ export default defineComponent({
       }
     }
   }
+  .player-view-wrapper {
+    display: flex;
+    // height: 100%;
+  }
   .player-xp-bar {
     background-color: var(--theme-col-parchment-dark);
     height: 1em;
@@ -169,14 +203,14 @@ export default defineComponent({
     width: 5%;
     padding: 0;
     img {
-      height: 40px;
+      height: 30px;
       &.shadow {
         filter: grayscale(10);
       }
     }
   }
   .col-charName {
-    width: 12%;
+    width: 20%;
   }
   .col-level {
     width: 8%;
@@ -185,7 +219,7 @@ export default defineComponent({
     width: 10%;
   }
   .col-xp {
-    width: 25%;
+    width: 20%;
   }
   .col-achievements {
     width: 20%;
@@ -202,6 +236,12 @@ export default defineComponent({
     img {
       filter: brightness(0) saturate(100%) invert(18%) sepia(22%) saturate(746%) hue-rotate(10deg)
         brightness(92%) contrast(89%);
+    }
+  }
+  .player-wrapper {
+    cursor: pointer;
+    &:hover {
+      color: var(--theme-col-blurple);
     }
   }
 }
