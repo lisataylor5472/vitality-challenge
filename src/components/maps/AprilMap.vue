@@ -1,8 +1,8 @@
 <template lang="pug">
 .month-map.april-map(ref="mapRef")
   svg(:viewBox.camel="viewBox", :width="mapWidth", :height="mapHeight", xmlns="http://www.w3.org/2000/svg", fill="none", preserveAspectRatio="none")
-    image(href="@/assets/maps/rat_dungeon_map.svg", x="0", y="-30%", width="100%", preserveAspectRatio="none")
-    image(href="@/assets/maps/rat_dungeon_overlay.svg", x="0", y="-35%", width="100%", preserveAspectRatio="none")
+    image(href="@/assets/maps/rat_dungeon_map.svg", x="0", y="-230px", width="100%", preserveAspectRatio="none")
+
     template(v-for="(player, playerIx) in players")
       path(ref="playerPathsRef", :d="getPlayerPath(player, playerIx)", fill="none", :stroke="debug ? player.pathColor : 'none'", stroke-width="2")
       image.avatar(:href="player.playerPng", :alt="player.charName", :title="player.charName", :x="getPlayerX(player, playerIx) - 50", :y="getPlayerY(player, playerIx) - 50", width="100", height="100", :class="{'shadow': player.isShadow}")
@@ -34,19 +34,19 @@ export default defineComponent({
     const _players = computed(() => appStore.playerTracker)
     const playersWithPaths = computed(() => {
       return _players.value.map((player: any, ix: number, arr: any[]) => {
-        const mapPath: number[]|null = !!player.mapPath
-          // if a player has a pre-defined path, use that
-          ? player.mapPath.split(',').map((y: string)=>{
-            return parseFloat(y.trim())
-          })
-          // otherwise, generate a random path
-          : d3.range(1, totalMapPoints.value + 1).map(() => {
-            return Math.random() * 100
-          })
+        const mapPath: number[] | null = !!player.mapPath
+          ? // if a player has a pre-defined path, use that
+            player.mapPath.split(',').map((y: string) => {
+              return parseFloat(y.trim())
+            })
+          : // otherwise, generate a random path
+            d3.range(1, totalMapPoints.value + 1).map(() => {
+              return Math.random() * 100
+            })
         return {
           ...player,
           playerPng: player.playerPng ? `/avatars/${player.playerPng}` : '/avatars/default.svg',
-          pathColor: player.mapPath ? 'blue': 'red', // for debugging
+          pathColor: player.mapPath ? 'blue' : 'red', // for debugging
           mapPath: [
             // create an initial point at the left side of the map
             // that spaces out the points evenly on the y axis
@@ -57,7 +57,7 @@ export default defineComponent({
             // then add the rest of the points
             ...(mapPath ?? []).map((y: number, i: number) => {
               return {
-                x: (i + 1) * (100 / (totalMapPoints.value)),
+                x: (i + 1) * (100 / totalMapPoints.value),
                 y,
               }
             }),
@@ -173,6 +173,7 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     overflow: visible;
+    align-items: center;
     .avatar {
       &.shadow {
         filter: grayscale(10);

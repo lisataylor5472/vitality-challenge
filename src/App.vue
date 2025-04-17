@@ -9,8 +9,8 @@
       .flag-pole
       .flags-wrapper
         .adventure-flag.rat
-          img(v-if="dateAfter('apr')" src="@/assets/flags/rat-large.svg" alt="Rat Dungeon Flag")
-          img(v-else src="@/assets/flags/rolled-flag-rat.svg" alt="Rat Dungeon Flag")
+          img(v-if="dateAfter('apr')" src="@/assets/flags/flexibility-flag.svg" alt="Flexibility Dungeon Flag")
+          img(v-else src="@/assets/flags/rolled-flag-rat.svg" alt="Flexibility Dungeon Flag")
         .adventure-flag
           .rolled-up-flag.snail
             img(v-if="dateAfter('may')" src="@/assets/flags/snail-flag-large.svg" alt="Snail Dungeon Flag")

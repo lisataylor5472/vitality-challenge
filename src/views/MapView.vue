@@ -2,8 +2,6 @@
 .map-view
   .map-view-header
     img(src="@/assets/MapText.svg" alt="Map")
-    h1
-      | [ WORK IN PROGRESS ]
   .map-view-content
     AprilMap
 
