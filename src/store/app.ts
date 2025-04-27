@@ -103,7 +103,7 @@ export const useAppStore = defineStore('app', () => {
       )
     })
     // Calculate total XP and level based on weekly counts
-    const { totalXp, playerLevel, levelPercent, successRate } = findPlayerXp(
+    const { totalXp, playerLevel, levelPercent, successRate, currentSuccessRate } = findPlayerXp(
       goalPerWeek,
       monthlyCounts,
       player.playerId,
@@ -125,7 +125,8 @@ export const useAppStore = defineStore('app', () => {
     player.totalXp = totalXp
     player.xpBar = levelPercent
     player.level = playerLevel
-    player.successRate = successRate
+    player.monthProgressRate = successRate
+    player.successRate = currentSuccessRate
     player.achievements = playerAchievements
   }
 
@@ -219,6 +220,13 @@ export const useAppStore = defineStore('app', () => {
         ? 0
         : weeklyRates.reduce((sum, rate) => sum + rate, 0) / weeklyRates.length
 
+    const currentSuccessRate =
+      weeklyRates.length == 0
+        ? 0
+        : weeklyRates
+            .slice(0, -1) // Exclude the last (incomplete) week
+            .reduce((sum, rate) => sum + rate, 0) / (weeklyRates.length - 1 || 1)
+
     const successRate = Math.round(totalSuccessRate * currentAdventureProgress * 100)
 
     // Find level XP based on total XP
@@ -230,7 +238,7 @@ export const useAppStore = defineStore('app', () => {
       }
     })
 
-    return { totalXp, playerLevel, levelPercent, successRate }
+    return { totalXp, playerLevel, levelPercent, successRate, currentSuccessRate }
   }
 
   const playerTracker = computed(() => data.value?.playerTracker || [])

@@ -1,23 +1,38 @@
 <template lang="pug">
   .players-dashboard
-    .players-view-header
-      img(src="@/assets/PlayersText.svg" alt="Players")
-      h1(v-if="selectedPlayer != null") {{ selectedPlayer.charName }}
+    .players-view-header(v-if="selectedPlayer == null")
+      .view-options-wrapper
+        .month-controls(v-if="!showPlayerDetails")
+          button(@click="prevMonth", v-if="currentAdventureMonth != 'apr'")
+            .month-title <
+          .month-title {{ currentMonthName[currentAdventureMonth] }}
+          button(@click="nextMonth", v-if="currentAdventureMonth != 'sep'")
+            .month-title >
+        .details-wrapper
+          .title view character:
+          .view-options
+            button(@click="showPlayerDetails = true", :class="{ active: showPlayerDetails }") details
+            button(@click="showPlayerDetails = false", :class="{ active: !showPlayerDetails }") activity
+        .details-wrapper
+          .title filter:
+          .view-options
+            button(@click="toggleCharacterType('all')", :class="{ active: showAllCharacters }") all
+            button(@click="toggleCharacterType('light')", :class="{ active: showLightOnly }") light
+            button(@click="toggleCharacterType('shadow')", :class="{ active: showShadowOnly }") shadow
+
     .loading-text(v-if="isLoading")
       h1 Loading...
     .table-wrapper(v-if="!isLoading && selectedPlayer == null")
-      table
+      table(v-if="showPlayerDetails")
         thead
           tr.players-header-wrapper
             th(v-for="(header, index) in playerColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
-        tbody.scrollable-table
+        tbody.scrollable-table(v-if="showPlayerDetails")
           tr.player-wrapper(v-for="(player, playerIndex) in players" :key="playerIndex", @click="selectedPlayer = player")
             td(v-for="(header, index) in playerColumns" :class="`col-${header.key}`" :key="index")
               template(v-if="header.key === 'xp'")
                 .player-xp-bar
-                  .player-xp(:style="{ width: player.xpBar + '%' }", v-tooltip="`${Math.round(player.xpBar)}%`")
-              template(v-else-if="header.key === 'adventure'")
-                | {{ player.successRate }}%
+                  .player-xp(:style="{ width: player.xpBar + '%' }", v-tooltip="`${Math.round(player.xpBar)}% towards next level`")
               template(v-else-if="header.key === 'achievements'")
                 template(v-if="player.achievements != '' ")
                   .achievements-wrapper
@@ -32,54 +47,191 @@
                 | {{ player[header.key] }}
               template(v-else)
                 | {{ player[header.key] }}
+      table(v-if="!showPlayerDetails")
+        thead
+          tr.players-header-wrapper
+            th(v-for="(header, index) in progressColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
+        tbody.scrollable-table
+          tr.player-wrapper(v-for="(player, playerIndex) in players" :key="playerIndex", @click="selectedPlayer = player")
+            td(v-for="(header, index) in progressColumns" :class="`col-${header.key}`" :key="index")
+              template(v-if="header.key === 'avatar'")
+                img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
+                img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
+              //- template(v-else-if="header.key === 'progress'")
+              //-   | {{ player.monthProgressRate }}%
+              //- template(v-else-if="header.key === 'success'")
+              //-   | {{ player.successRate }}%
+              template(v-else-if="header.key === 'activity'")
+                linearTracker(:activityData="player.activity", :currentMonthRange="currentMonthRange")
+              template(v-else)
+                | {{ player[header.key] }}
 
     .player-view-wrapper(v-if="selectedPlayer != null")
-      .button-wrapper(v-tooltip="`Back to players`")
-        button.back-button(@click="selectedPlayer = null")
+      .char-header-wrapper(v-tooltip="`Back to players`")
+        button.back-button(@click="selectedPlayer = null", v-tooltip="`Back to players`")
           h1 <
+        h1(v-if="selectedPlayer != null") {{ selectedPlayer.charName }}
       CharacterSheet(:player="selectedPlayer")
-        //- img(src="@/assets/close.svg", alt="Close", width="20px", height="20px")
-
-
+          //- img(src="@/assets/close.svg", alt="Close", width="20px", height="20px")
 
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue'
+import { defineComponent, computed, ref, watch } from 'vue'
 import { useAppStore } from '@/store/app'
 import CharacterSheet from '@/components/characterSheet.vue'
+import LinearTracker from '@/components/linearTracker.vue'
+import moment from 'moment'
 
 export default defineComponent({
   name: 'PlayersView',
   components: {
     CharacterSheet,
+    LinearTracker,
   },
 
   setup() {
     const appStore = useAppStore()
-    const players = computed(() => appStore.playerTracker)
-    // const activityData = computed(() => appStore.activityData)
-    // const oathTracker = computed(() => appStore.oathTracker)
+
+    const showPlayerDetails = ref(true)
+    const showAllCharacters = ref(true)
+    const showShadowOnly = ref(false)
+    const showLightOnly = ref(false)
+
+    const players = computed(() => {
+      return appStore.playerTracker.filter((player) => {
+        if (showAllCharacters.value) {
+          return true
+        } else if (showShadowOnly.value) {
+          return player.isShadow
+        } else if (showLightOnly.value) {
+          return !player.isShadow
+        }
+        return false
+      })
+    })
+
     const isLoading = computed(() => appStore.isLoading)
 
     const selectedPlayer = ref(null)
 
+    const toggleCharacterType = (type: string) => {
+      if (type === 'all') {
+        showAllCharacters.value = true
+        showShadowOnly.value = false
+        showLightOnly.value = false
+      } else if (type === 'light') {
+        showAllCharacters.value = false
+        showShadowOnly.value = false
+        showLightOnly.value = true
+      } else if (type === 'shadow') {
+        showAllCharacters.value = false
+        showShadowOnly.value = true
+        showLightOnly.value = false
+      }
+    }
+
     const playerColumns = ref([
       { name: '', key: 'avatar' },
       { name: 'name', key: 'charName' },
-      { name: 'level', key: 'level' },
       { name: 'class', key: 'class' },
       { name: 'hp', key: 'hp' },
-      { name: 'adventure', key: 'adventure' },
+      { name: 'level', key: 'level' },
       { name: 'xp', key: 'xp' },
       { name: 'achievements', key: 'achievements' },
     ])
 
+    const progressColumns = ref([
+      { name: '', key: 'avatar' },
+      { name: 'name', key: 'charName' },
+      // { name: 'progress', key: 'progress' },
+      // { name: 'success', key: 'success' },
+      { name: 'activity', key: 'activity' },
+    ])
+
+    const adventureMonthMap = {
+      apr: [moment.utc('2025-03-30'), moment.utc('2025-05-03')],
+      may: [moment.utc('2025-05-04'), moment.utc('2025-05-31')],
+      jun: [moment.utc('2025-06-01'), moment.utc('2025-06-28')],
+      jul: [moment.utc('2025-06-29'), moment.utc('2025-08-02')],
+      aug: [moment.utc('2025-08-03'), moment.utc('2025-08-30')],
+      sep: [moment.utc('2025-08-31'), moment.utc('2025-09-27')],
+    } as any
+
+    const currentMonthName = {
+      apr: 'Apr',
+      may: 'May',
+      jun: 'Jun',
+      jul: 'Jul',
+      aug: 'Aug',
+      sep: 'Sep',
+    }
+
+    const currentDate = ref(moment.utc())
+
+    const currentAdventureMonth = computed(() => {
+      const monthKey = months[currentMonthIndex.value]
+      return monthKey
+    })
+    // const currentAdventureMonth = computed(() => {
+    //   const currentMonth = Object.keys(adventureMonthMap).find((key) => {
+    //     const [start, end] = adventureMonthMap[key]
+    //     return currentDate.value >= start && currentDate.value <= end
+    //   })
+    //   return currentMonth || 'apr'
+    // })
+
+    // const currentMonthIndex = computed(()=>{
+
+    // })
+    const currentMonthIndex = ref(0)
+
+    const months = ['apr', 'may', 'jun', 'jul', 'aug', 'sep']
+
+    const currentMonthRange = computed(() => {
+      const monthKey = months[currentMonthIndex.value]
+      return adventureMonthMap[monthKey]
+    })
+
+    watch(
+      currentDate,
+      (val) => {
+        const monthIndex = months.findIndex((key) => {
+          const [start, end] = adventureMonthMap[key]
+          return currentDate.value >= start && currentDate.value <= end
+        })
+        currentMonthIndex.value = monthIndex
+      },
+      { immediate: true },
+    )
+
+    const prevMonth = () => {
+      currentMonthIndex.value -= 1
+      // + 1 to the currentMonthRange
+    }
+
+    const nextMonth = () => {
+      currentMonthIndex.value += 1
+    }
+
     return {
       players,
       playerColumns,
+      progressColumns,
       isLoading,
       selectedPlayer,
+      showPlayerDetails,
+      toggleCharacterType,
+      showAllCharacters,
+      showLightOnly,
+      showShadowOnly,
+      prevMonth,
+      nextMonth,
+      currentAdventureMonth,
+      currentMonthName,
+      currentMonthRange,
+      currentDate,
+      months,
     }
   },
 })
@@ -101,14 +253,101 @@ export default defineComponent({
     color: var(--theme-col-blurple);
   }
   .players-view-header {
+    height: 9rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    img {
-      height: 9rem;
+  }
+  .month-controls {
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    button {
+      background-color: var(--theme-col-parchment-lights);
+      border: none;
+      color: var(--theme-col-blurple);
+      font-size: 1.5rem;
+      cursor: pointer;
+      margin: 0 1rem;
     }
   }
-  .button-wrapper {
+  .month-title {
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 1.5rem;
+    color: var(--theme-col-blurple);
+  }
+  .view-options-wrapper {
+    background-color: var(--theme-col-parchment-light);
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 3rem;
+    // margin-top: 1rem;
+    // margin-bottom: 1rem;
+    width: 100%;
+    .details-wrapper {
+      // display: flex;
+      // width: 50%;
+      display: flex;
+      align-items: center;
+      .title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 600;
+        color: var(--theme-col-blurple);
+        font-size: 1rem;
+        margin-right: 1rem;
+        margin-left: 1rem;
+      }
+    }
+    .view-options {
+      button {
+        border: 2px solid var(--theme-col-blurple);
+        width: 85px;
+        height: 25px;
+        font-size: 0.9rem;
+        font-family: 'Space Grotesk', serif;
+        // display: flex;
+        // justify-content: center;
+        // margin-left: 1rem;
+        // align-items: center;
+        padding-bottom: 4px;
+        cursor: pointer;
+        transition:
+          transform 0.1s ease,
+          box-shadow 0.1s ease;
+        &:not(.active) {
+          background: #d0d6ff;
+          color: var(--theme-col-blurple);
+          box-shadow: 1px 1px 0px 1px var(--theme-col-blurple);
+        }
+        &.active {
+          background: var(--theme-col-blurple);
+          color: #fff;
+          box-shadow: 1px 1px 0px 1px var(--theme-col-blurple);
+        }
+
+        &:first-of-type {
+          border-radius: 37px 0 0 37px;
+          &:only-of-type {
+            border-radius: 37px 37px 37px 37px;
+          }
+        }
+
+        &:last-of-type {
+          border-radius: 0 37px 37px 0;
+          &:only-of-type {
+            border-radius: 37px 37px 37px 37px;
+          }
+        }
+      }
+    }
+  }
+  .char-header-wrapper {
+    display: flex;
+    margin-top: 4em;
+    margin-bottom: 2em;
     .back-button {
       font-size: 1.5rem;
       color: var(--theme-col-blurple);
@@ -116,6 +355,7 @@ export default defineComponent({
       border-radius: 20px;
       border: none;
       background-color: var(--theme-col-parchment);
+      margin-right: 1em;
     }
   }
   table {
@@ -141,7 +381,7 @@ export default defineComponent({
     }
     .scrollable-table {
       display: block;
-      max-height: 48vh; /* Adjust height */
+      max-height: 58vh; /* Adjust height */
       overflow-y: overlay;
       width: 100%;
       font-family: 'Space Grotesk', sans-serif;
@@ -152,12 +392,7 @@ export default defineComponent({
         table-layout: auto;
         background-color: var(--theme-col-parchment-light);
         border-bottom: 4px solid var(--theme-col-parchment);
-        // .player-wrapper {
-        //   cursor: pointer;
-        //   &:hover {
-        //     box-shadow: inset 0px 0px 0px 1px var(--theme-col-dark-red);
-        //   }
-        // }
+
         td {
           padding: 0.2rem 0.4em;
           text-align: center;
@@ -173,7 +408,7 @@ export default defineComponent({
           &.col-level {
             font-weight: 500;
           }
-          &.col-adventure {
+          &.col-success {
             font-weight: 500;
           }
         }
@@ -181,7 +416,7 @@ export default defineComponent({
     }
   }
   .player-view-wrapper {
-    display: flex;
+    // display: flex;
     // height: 100%;
   }
   .player-xp-bar {
@@ -200,7 +435,7 @@ export default defineComponent({
     }
   }
   .col-avatar {
-    width: 5%;
+    width: 4%;
     padding: 0;
     img {
       height: 30px;
@@ -222,10 +457,16 @@ export default defineComponent({
     width: 20%;
   }
   .col-achievements {
-    width: 20%;
+    width: 30%;
   }
-  .col-adventure {
-    width: 10%;
+  .col-success {
+    width: 8%;
+  }
+  .col-progress {
+    width: 8%;
+  }
+  .col-activity {
+    width: 60%;
   }
   .achievements-wrapper {
     .achievement-icon {

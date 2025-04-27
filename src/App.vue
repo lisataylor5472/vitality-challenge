@@ -32,12 +32,6 @@
             img(v-if="dateAfter('sep')" src="@/assets/flags/final-flag-large.svg")
             img(v-else src="@/assets/flags/rolled-flag-final.svg" alt="Future Dungeon Flag")
       .nav-wrapper
-        //- RouterLink.nav-button(
-        //-   to="/"
-        //-   custom
-        //-   v-slot="{ navigate, isActive }"
-        //-   :class="{ active: isActive }"
-        //- )
         RouterLink.nav-button(
           to="/"
           custom
@@ -111,7 +105,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .header-wrapper {
-  height: 22vh;
+  height: 18vh;
   display: flex;
   align-items: center;
   position: relative;
@@ -129,8 +123,6 @@ export default defineComponent({
     .title-svg {
       height: 28vh;
       z-index: 5;
-      // width: 100%;
-      // height: auto;
     }
   }
   .header-details {
@@ -157,7 +149,7 @@ export default defineComponent({
       }
     }
     .nav-wrapper {
-      height: 10vh;
+      height: 7vh;
       display: flex;
       justify-content: flex-start;
       padding: 1rem 0.5rem;
@@ -211,26 +203,18 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   padding: 0 2rem 2rem 0;
-  height: 73vh;
+  height: 80vh;
   .left-column {
-    width: 25%;
+    width: 20%;
+    padding-top: 4rem;
   }
   .right-column {
-    width: 75%;
+    width: 85%;
   }
   .parchment-page {
     width: 100%;
     height: 100%;
     background-image: url('@/assets/parchment.svg'); /* Adjust path as needed */
   }
-  // .fountain {
-  //   img {
-  //     padding: 0 0 0 2rem;
-  //     position: absolute;
-  //     bottom: 1rem;
-  //     height: 25vh;
-  //     z-index: -1;
-  //   }
-  // }
 }
 </style>

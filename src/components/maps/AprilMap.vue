@@ -161,14 +161,15 @@ export default defineComponent({
 </script>
 <style lang="scss">
 .april-map {
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  height: 50vh;
   display: flex;
   flex-direction: column;
   border-radius: 20px;
   background-color: #222222;
+  overflow: hidden;
   // background-image: url('@/assets/maps/rat_dungeon_map.svg');
-  padding: 5em 2em;
+  padding: 5em 1em;
   svg {
     width: 100%;
     height: 100%;
