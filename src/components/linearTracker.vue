@@ -89,6 +89,27 @@ export default defineComponent({
   background-color: var(--theme-col-parchment);
   color: var(--theme-col-parchment);
   margin-left: 0.1rem;
+  position: relative;
+  // display: flex;
+  &:nth-child(7n) {
+    margin-right: 0.3rem;
+    &::after {
+      content: '';
+      display: block;
+      width: 1px;
+      height: 90%;
+      background-color: var(--theme-col-brown-light);
+      position: absolute;
+      top: 0px;
+      right: -3px;
+    }
+  }
+  &:last-child {
+    &::after {
+      display: none;
+    }
+  }
+
   // color: var(--theme-col-brown);
 }
 

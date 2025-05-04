@@ -102,10 +102,6 @@ export const useAppStore = defineStore('app', () => {
         Object.keys(monthlyCounts[month].weeks).includes(weekKey),
       )
       monthlyCounts[monthKey].weeks[weekKey].count += 1
-      // monthlyCounts[monthKey].weeks[weekKey].successRate = Math.min(
-      //   1,
-      //   monthlyCounts[monthKey].weeks[weekKey].count / monthlyCounts[monthKey].goalPerWeek,
-      // )
       monthlyCounts[monthKey].weeks[weekKey].successRate =
         monthlyCounts[monthKey].weeks[weekKey].count / monthlyCounts[monthKey].goalPerWeek
     })

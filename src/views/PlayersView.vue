@@ -145,7 +145,7 @@ export default defineComponent({
       { name: '', key: 'avatar' },
       { name: 'name', key: 'charName' },
       { name: 'success rate', key: 'successRate' },
-      { name: 'Goal per week', key: 'goalPerWeek' },
+      { name: 'goal per week', key: 'goalPerWeek' },
       { name: 'activity', key: 'activity' },
     ])
 
@@ -180,8 +180,6 @@ export default defineComponent({
 
     const currentMonthRange = computed(() => {
       const monthKey = months[currentMonthIndex.value]
-      console.log('monthKey', monthKey)
-      console.log('current adventure month', adventureMonthMap[monthKey])
       return adventureMonthMap[monthKey]
     })
 
@@ -192,8 +190,6 @@ export default defineComponent({
         const monthIndex = months.findIndex((key) => {
           console.log('watch current date months key', key)
           const [start, end] = adventureMonthMap[key]
-          console.log('first Condition', currentDate.value.isSameOrAfter(start))
-          console.log('second Condition', currentDate.value.isSameOrBefore(end))
           return currentDate.value.isSameOrAfter(start) && currentDate.value.isSameOrBefore(end)
         })
         console.log('monthIndex', monthIndex)
@@ -399,7 +395,6 @@ export default defineComponent({
           }
           &.col-hp {
             font-weight: 600;
-            // color: var(--theme-col-blurple);
           }
           &.col-level {
             font-weight: 500;
@@ -430,6 +425,7 @@ export default defineComponent({
       box-shadow: inset -2px -2px 0em 1px var(--theme-col-ml-green);
     }
   }
+  // BOTH TABLES //
   .col-avatar {
     width: 4%;
     padding: 0;
@@ -441,28 +437,36 @@ export default defineComponent({
     }
   }
   .col-charName {
-    width: 20%;
+    width: 23%;
+  }
+  // Table 1 //
+  .col-class {
+    width: 10%;
+  }
+  .col-hp {
+    width: 8%;
+  }
+  .col-totalXp {
+    width: 8%;
   }
   .col-level {
     width: 8%;
-  }
-  .col-class {
-    width: 10%;
   }
   .col-xp {
     width: 20%;
   }
   .col-achievements {
-    width: 30%;
+    width: 20%;
   }
-  .col-success {
+  // Table 2 //
+  .col-successRate {
     width: 8%;
   }
-  .col-progress {
+  .col-goalPerWeek {
     width: 8%;
   }
   .col-activity {
-    width: 60%;
+    width: 50%;
   }
   .achievements-wrapper {
     .achievement-icon {

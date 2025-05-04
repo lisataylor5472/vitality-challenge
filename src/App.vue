@@ -48,16 +48,10 @@
 
   .main-content
     .left-column
-      SvgLeaderboard
-      //- PlayerLeaderboard
-      //- .fountain
-      //-   img(src="@/assets/fountain.svg" alt="Fountain")
+      SvgLeaderboard(:currentAdventureMonth="currentAdventureMonth")
     .right-column
-      //- .parchment-wrapper
-      //-   img(src="@/assets/parchment1.svg" alt="Parchment")
       .parchment-page
         RouterView
-      //- ParchmentPage
 .right-panel
 </template>
 <script lang="ts">

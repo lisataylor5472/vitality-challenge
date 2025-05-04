@@ -1006,7 +1006,6 @@ export default defineComponent({
     const topPlayers = computed(() => {
       if (sortByKey.value == 'totalXp') {
         return [...players.value].sort((a, b) => {
-          // Primary sort by name (alphabetical order)
           if (a.totalXp < b.totalXp) return 1
           if (a.totalXp > b.totalXp) return -1
 
@@ -1016,20 +1015,21 @@ export default defineComponent({
       }
       if (sortByKey.value == 'achievements') {
         return [...players.value].sort((a, b) => {
-          // Primary sort by name (alphabetical order)
           if (a.achievements < b.achievements) return 1
           if (a.achievements > b.achievements) return -1
 
           // Secondary sort by quantity (ascending order)
           return b.totalXp - a.totalXp
         })
-        // return [...players.value].sort((a, b) => b.achievements.length - a.achievements.length)
       }
       if (sortByKey.value == 'successRate') {
         return [...players.value].sort((a, b) => {
-          // Primary sort by name (alphabetical order)
-          if (a.successRate < b.successRate) return 1
-          if (a.successRate > b.successRate) return -1
+          const aAvg =
+            Object.values(a.successRates).reduce((sum, rate) => sum + rate, 0) / values.length
+          const bAvg =
+            Object.values(b.successRates).reduce((sum, rate) => sum + rate, 0) / values.length
+          if (aAvg < bAvg) return 1
+          if (aAvg > bAvg) return -1
 
           // Secondary sort by quantity (ascending order)
           return b.totalXp - a.totalXp
