@@ -57,22 +57,21 @@
               template(v-if="header.key === 'avatar'")
                 img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
                 img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
-              //- template(v-else-if="header.key === 'progress'")
-              //-   | {{ player.monthProgressRate }}%
-              //- template(v-else-if="header.key === 'success'")
-              //-   | {{ player.successRate }}%
+              template(v-else-if="header.key === 'successRate'")
+                | {{ player?.successRates[currentAdventureMonth] }}%
+              template(v-else-if="header.key === 'goalPerWeek'")
+                | {{ player?.goalPerWeekByMonth[currentAdventureMonth] > 0 ? player?.goalPerWeekByMonth[currentAdventureMonth] : '-'}}
               template(v-else-if="header.key === 'activity'")
                 linearTracker(:activityData="player.activity", :currentMonthRange="currentMonthRange")
               template(v-else)
                 | {{ player[header.key] }}
 
     .player-view-wrapper(v-if="selectedPlayer != null")
-      .char-header-wrapper(v-tooltip="`Back to players`")
+      .char-header-wrapper
         button.back-button(@click="selectedPlayer = null", v-tooltip="`Back to players`")
           h1 <
         h1(v-if="selectedPlayer != null") {{ selectedPlayer.charName }}
       CharacterSheet(:player="selectedPlayer")
-          //- img(src="@/assets/close.svg", alt="Close", width="20px", height="20px")
 
 </template>
 
@@ -136,21 +135,22 @@ export default defineComponent({
       { name: 'name', key: 'charName' },
       { name: 'class', key: 'class' },
       { name: 'hp', key: 'hp' },
-      { name: 'level', key: 'level' },
-      { name: 'xp', key: 'xp' },
+      { name: 'total xp', key: 'totalXp' },
+      { name: 'lvl', key: 'level' },
+      { name: 'lvl progress', key: 'xp' },
       { name: 'achievements', key: 'achievements' },
     ])
 
     const progressColumns = ref([
       { name: '', key: 'avatar' },
       { name: 'name', key: 'charName' },
-      // { name: 'progress', key: 'progress' },
-      // { name: 'success', key: 'success' },
+      { name: 'success rate', key: 'successRate' },
+      { name: 'Goal per week', key: 'goalPerWeek' },
       { name: 'activity', key: 'activity' },
     ])
 
     const adventureMonthMap = {
-      apr: [moment.utc('2025-03-30'), moment.utc('2025-05-03')],
+      apr: [moment.utc('2025-04-06'), moment.utc('2025-05-03')],
       may: [moment.utc('2025-05-04'), moment.utc('2025-05-31')],
       jun: [moment.utc('2025-06-01'), moment.utc('2025-06-28')],
       jul: [moment.utc('2025-06-29'), moment.utc('2025-08-02')],
@@ -173,33 +173,30 @@ export default defineComponent({
       const monthKey = months[currentMonthIndex.value]
       return monthKey
     })
-    // const currentAdventureMonth = computed(() => {
-    //   const currentMonth = Object.keys(adventureMonthMap).find((key) => {
-    //     const [start, end] = adventureMonthMap[key]
-    //     return currentDate.value >= start && currentDate.value <= end
-    //   })
-    //   return currentMonth || 'apr'
-    // })
 
-    // const currentMonthIndex = computed(()=>{
-
-    // })
     const currentMonthIndex = ref(0)
 
     const months = ['apr', 'may', 'jun', 'jul', 'aug', 'sep']
 
     const currentMonthRange = computed(() => {
       const monthKey = months[currentMonthIndex.value]
+      console.log('monthKey', monthKey)
+      console.log('current adventure month', adventureMonthMap[monthKey])
       return adventureMonthMap[monthKey]
     })
 
     watch(
       currentDate,
       (val) => {
+        console.log('currentDate change', currentDate)
         const monthIndex = months.findIndex((key) => {
+          console.log('watch current date months key', key)
           const [start, end] = adventureMonthMap[key]
-          return currentDate.value >= start && currentDate.value <= end
+          console.log('first Condition', currentDate.value.isSameOrAfter(start))
+          console.log('second Condition', currentDate.value.isSameOrBefore(end))
+          return currentDate.value.isSameOrAfter(start) && currentDate.value.isSameOrBefore(end)
         })
+        console.log('monthIndex', monthIndex)
         currentMonthIndex.value = monthIndex
       },
       { immediate: true },
@@ -207,7 +204,6 @@ export default defineComponent({
 
     const prevMonth = () => {
       currentMonthIndex.value -= 1
-      // + 1 to the currentMonthRange
     }
 
     const nextMonth = () => {

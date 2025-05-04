@@ -13,7 +13,7 @@
           img(v-else src="@/assets/flags/rolled-flag-rat.svg" alt="Flexibility Dungeon Flag")
         .adventure-flag
           .rolled-up-flag.snail
-            img(v-if="dateAfter('may')" src="@/assets/flags/snail-flag-large.svg" alt="Snail Dungeon Flag")
+            img(v-if="dateAfter('may')" src="@/assets/flags/hydration-flag.svg" alt="Snail Dungeon Flag")
             img(v-else src="@/assets/flags/rolled-flag-snail.svg" alt="Future Dungeon Flag")
         .adventure-flag
           .rolled-up-flag.ladder

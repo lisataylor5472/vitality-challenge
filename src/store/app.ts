@@ -25,15 +25,11 @@ export const useAppStore = defineStore('app', () => {
       isLoading.value = false
       console.error('Failed to fetch data:', error)
     } finally {
-      console.log('Data fetched:', data.value)
       isLoading.value = false
     }
   }
 
   const computePlayerStats = (player: any) => {
-    // const goalPerWeek = findGoalPerWeek(player.playerId)
-    const goalPerWeek = findGoalPerWeek(player)
-
     // Filter activity data for the current player
     let playerActivity = activityData.value
       .filter((activity: any) => {
@@ -75,13 +71,22 @@ export const useAppStore = defineStore('app', () => {
 
     const monthlyCounts = {}
 
-    for (let week = 1; week <= 52; week++) {
+    for (let week = 14; week <= 39; week++) {
       const weekKey = `W${week}`
       const date = moment().month(0).startOf('month').week(week)
-      const monthKey = date.format('MM')
-      monthlyCounts[monthKey] = monthlyCounts[monthKey] || {}
-      monthlyCounts[monthKey][weekKey] = { count: 0, successRate: null }
+      const monthKey = date.format('MMM').toLowerCase()
+      monthlyCounts[monthKey] = monthlyCounts[monthKey] || {
+        goalPerWeek: findGoalPerWeek(player, monthKey),
+        weeks: {},
+      }
+      monthlyCounts[monthKey].weeks[weekKey] = { count: 0, successRate: 0 }
     }
+
+    const goalPerWeekByMonth = {}
+
+    Object.keys(monthlyCounts).map((month) => {
+      goalPerWeekByMonth[month] = monthlyCounts[month].goalPerWeek
+    })
 
     // Calculate weekly and monthly counts
     playerActivity.forEach((activity) => {
@@ -94,22 +99,225 @@ export const useAppStore = defineStore('app', () => {
       const week = weekForDay.week()
       const weekKey = `W${week}`
       const monthKey = Object.keys(monthlyCounts).find((month) =>
-        Object.keys(monthlyCounts[month]).includes(weekKey),
+        Object.keys(monthlyCounts[month].weeks).includes(weekKey),
       )
-      monthlyCounts[monthKey][weekKey].count += 1
-      monthlyCounts[monthKey][weekKey].successRate = Math.min(
-        1,
-        monthlyCounts[monthKey][weekKey].count / goalPerWeek,
-      )
+      monthlyCounts[monthKey].weeks[weekKey].count += 1
+      // monthlyCounts[monthKey].weeks[weekKey].successRate = Math.min(
+      //   1,
+      //   monthlyCounts[monthKey].weeks[weekKey].count / monthlyCounts[monthKey].goalPerWeek,
+      // )
+      monthlyCounts[monthKey].weeks[weekKey].successRate =
+        monthlyCounts[monthKey].weeks[weekKey].count / monthlyCounts[monthKey].goalPerWeek
     })
-    // Calculate total XP and level based on weekly counts
-    const { totalXp, playerLevel, levelPercent, successRate, currentSuccessRate } = findPlayerXp(
-      goalPerWeek,
-      monthlyCounts,
-      player.playerId,
-    )
 
-    // Find players achievements
+    const findSuccessRates = (monthlyCounts) => {
+      const currentWeekNumber = moment().week()
+
+      const ratesByMonth = {}
+
+      Object.keys(monthlyCounts).forEach((month) => {
+        const weeks = Object.fromEntries(
+          // Filter out any FUTURE weeks
+          Object.entries(monthlyCounts[month].weeks).filter(([weekKey]) => {
+            const weekNumber = parseInt(weekKey.slice(1), 10)
+            return weekNumber <= currentWeekNumber
+          }),
+        )
+        // Map all the rates in our current selection
+        const successRates = Object.values(weeks).map((week) => week.successRate)
+
+        if (successRates.length > 0) {
+          ratesByMonth[month] = Math.round(
+            (successRates.reduce((sum, rate) => sum + rate, 0) / successRates.length) * 100,
+          )
+        }
+      })
+
+      Object.keys(ratesByMonth).forEach((month) => {
+        if (ratesByMonth[month] === null) {
+          delete ratesByMonth[month]
+        }
+      })
+
+      // console.log('findSuccessRates', ratesByMonth)
+
+      return ratesByMonth
+    }
+
+    const findProgressRates = (successRatesByMonth, monthlyCounts) => {
+      const currentWeekNumber = moment().week()
+
+      const ratesByMonth = {}
+
+      // Find how many weeks are in each month, and determine how many weeks are 'complete'(in the past)
+      Object.keys(successRatesByMonth).forEach((month) => {
+        const weeks = monthlyCounts[month].weeks
+        const totalWeeks = Object.keys(weeks).length
+        const completedWeeks = Object.keys(weeks).filter(
+          (week) => parseInt(week.slice(1)) < currentWeekNumber,
+        ).length
+
+        const adventureProgress = completedWeeks / totalWeeks
+        ratesByMonth[month] = Math.round(adventureProgress * successRatesByMonth[month])
+      })
+
+      // console.log('findProgressRates', ratesByMonth)
+
+      return ratesByMonth
+    }
+
+    // Calculate their total success rate for the month
+    const successRatesByMonth = findSuccessRates(monthlyCounts)
+
+    // Calculate how far along the adventure path the character is
+    const progressRatesByMonth = findProgressRates(successRatesByMonth, monthlyCounts)
+
+    // Calculate total XP and level based on weekly counts
+    const { totalXp, playerLevel, levelPercent } = findPlayerXp(monthlyCounts, player.playerId)
+
+    // monthly counts
+    //     "apr": {
+    //         "successRate": null,
+    //         "progressRate": null,
+    //         "weeks": {
+    //             "W14": {
+    //                 "count": 5,
+    //                 "successRate": 1
+    //             },
+    //             "W15": {
+    //                 "count": 6,
+    //                 "successRate": 1
+    //             },
+    //             "W16": {
+    //                 "count": 5,
+    //                 "successRate": 1
+    //             },
+    //             "W17": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W18": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             }
+    //         }
+    //     },
+    //     "may": {
+    //         "successRate": null,
+    //         "progressRate": null,
+    //         "weeks": {
+    //             "W19": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W20": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W21": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W22": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             }
+    //         }
+    //     },
+    //     "jun": {
+    //         "successRate": null,
+    //         "progressRate": null,
+    //         "weeks": {
+    //             "W23": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W24": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W25": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W26": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             }
+    //         }
+    //     },
+    //     "jul": {
+    //         "successRate": null,
+    //         "progressRate": null,
+    //         "weeks": {
+    //             "W27": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W28": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W29": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W30": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W31": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             }
+    //         }
+    //     },
+    //     "aug": {
+    //         "successRate": null,
+    //         "progressRate": null,
+    //         "weeks": {
+    //             "W32": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W33": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W34": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W35": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             }
+    //         }
+    //     },
+    //     "sep": {
+    //         "successRate": null,
+    //         "progressRate": null,
+    //         "weeks": {
+    //             "W36": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W37": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W38": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             },
+    //             "W39": {
+    //                 "count": 0,
+    //                 "successRate": null
+    //             }
+    //         }
+    //     },
+
+    // Collect all achievements
     const playerAchievements = achievementsData.value
       .filter((ach: any) => {
         if (player.isShadow) {
@@ -125,8 +333,9 @@ export const useAppStore = defineStore('app', () => {
     player.totalXp = totalXp
     player.xpBar = levelPercent
     player.level = playerLevel
-    player.monthProgressRate = successRate
-    player.successRate = currentSuccessRate
+    player.progressRates = progressRatesByMonth
+    player.successRates = successRatesByMonth
+    player.goalPerWeekByMonth = goalPerWeekByMonth
     player.achievements = playerAchievements
   }
 
@@ -140,94 +349,44 @@ export const useAppStore = defineStore('app', () => {
     7: [1000, 1300],
   }
 
-  const findGoalPerWeek = (player: any) => {
-    // TODO - update to handle changing oaths/goalPerWeek .. yikes
+  const findGoalPerWeek = (player: any, month: any) => {
     const playerId = player.playerId
-    const playerOath = oathTracker.value.find(
-      (oath) =>
-        oath.playerId == playerId && (player.isShadow ? oath.isShadow : oath.isShadow == false),
-    )
+    const playerOath = oathTracker.value
+      .filter(
+        (oath) =>
+          oath.playerId == playerId && (player.isShadow ? oath.isShadow : oath.isShadow == false),
+      )
+      .find((oath) => oath.month == month)
     return playerOath ? playerOath.xPerWeek : 0
   }
 
-  const findPlayerXp = (goalPerWeek: int, monthlyCounts: any, playerId: any) => {
+  const findPlayerXp = (monthlyCounts: any) => {
+    const currentWeekNumber = moment().week()
     let totalXp = 0
     let playerLevel = 1
     let levelPercent = 0
 
-    const startOfWeekDate = moment().startOf('week') // Find the first day of the given date's week
-    const endOfWeekDate = moment().endOf('week') // Find the last day of the given date's week
-    const weekForDay =
-      startOfWeekDate.month() < endOfWeekDate.month() ? startOfWeekDate : endOfWeekDate
-
-    const week = weekForDay.week()
-    const currentWeek = `W${week}`
-    const currentMonth = Object.keys(monthlyCounts).find((month) =>
-      Object.keys(monthlyCounts[month]).includes(currentWeek),
-    )
-
-    let currentAdventureProgress = 0
-
-    // Calculate current adventure progress
-    if (monthlyCounts[currentMonth]) {
-      let weekKeys = Object.keys(monthlyCounts[currentMonth])
-
-      // Do not count the first week of April (W14) in the progress calculation
-      // This was tutorial week and should not count
-      if (currentMonth == '04') {
-        weekKeys = weekKeys.splice(1, 4)
-        console.log('weekKeys after', weekKeys)
-      }
-
-      const currentWeekIndex = weekKeys.indexOf(`${currentWeek}`) + 1
-
-      currentAdventureProgress = currentWeekIndex / weekKeys.length
-    }
-
-    // IF the current week is not in the monthlyCounts, add it
-    // Occurs on Sunday when the week changes - and no events have been logged yet
-    if (monthlyCounts[currentMonth][currentWeek].successRate == null) {
-      monthlyCounts[currentMonth][currentWeek].successRate = 0
-    }
-
-    // Set the first week of April W14 to a successRate of null ---
-    // this was tutorial week and should not count
-    monthlyCounts['04']['W14'].successRate = null
-
-    const weeks = monthlyCounts[currentMonth]
-    const weeklyRates = Object.entries(weeks)
-      .filter(([week, { successRate }]) => successRate != null)
-      .map(([week, { successRate }]) => successRate)
-    Object.entries(monthlyCounts).forEach(([_, weeks]) => {
-      Object.entries(weeks).forEach(([week, { count }]) => {
-        if (goalPerWeek == 7 && count == goalPerWeek) {
-          totalXp += 38.5
-        } else if (count > goalPerWeek && goalPerWeek > 0) {
-          totalXp += 38.5
-        } else if (count == goalPerWeek) {
-          totalXp += 35
-        } else if (count < goalPerWeek && count > 0) {
-          totalXp += (count / goalPerWeek) * 35
-        } else {
-          totalXp += 0
+    Object.keys(monthlyCounts).forEach((month) => {
+      Object.keys(monthlyCounts[month].weeks).forEach((weekKey) => {
+        const weekNumber = parseInt(weekKey.slice(1), 10)
+        if (weekNumber < currentWeekNumber) {
+          const successRate = monthlyCounts[month].weeks[weekKey].successRate
+          if (successRate > 1) {
+            totalXp += 35 * successRate
+          } else if (successRate == 1) {
+            // If they upheld their oath - they will have a successRate of 1 - give 35 xp
+            totalXp += 35
+          } else if (successRate < 1 && successRate > 0) {
+            // If they partially upheld their oath, give them a partial week's credit
+            totalXp += 35 * successRate
+          } else if (successRate == 0) {
+            // No succes, no xp
+            totalXp += 0
+          }
         }
       })
     })
-
-    // Calculate player success rate
-    const totalSuccessRate =
-      weeklyRates.length == 0
-        ? 0
-        : weeklyRates.reduce((sum, rate) => sum + rate, 0) / weeklyRates.length
-
-    const currentSuccessRate =
-      weeklyRates.length == 0
-        ? 0
-        : weeklyRates
-            .slice(0, -1) // Exclude the last (incomplete) week
-            .reduce((sum, rate) => sum + rate, 0) / (weeklyRates.length - 1 || 1)
-
-    const successRate = Math.round(totalSuccessRate * currentAdventureProgress * 100)
+    console.log(totalXp)
 
     // Find level XP based on total XP
     Object.entries(levelThresholds).forEach(([level, thresholds]) => {
@@ -238,8 +397,102 @@ export const useAppStore = defineStore('app', () => {
       }
     })
 
-    return { totalXp, playerLevel, levelPercent, successRate, currentSuccessRate }
+    totalXp = Math.round(totalXp)
+
+    console.log('totalXp - 2nd Time', totalXp)
+
+    return { totalXp, playerLevel, levelPercent }
   }
+  // const findPlayerXp = (goalPerWeek: int, monthlyCounts: any, playerId: any) => {
+  //   let totalXp = 0
+  //   let playerLevel = 1
+  //   let levelPercent = 0
+
+  //   const startOfWeekDate = moment().startOf('week') // Find the first day of the given date's week
+  //   const endOfWeekDate = moment().endOf('week') // Find the last day of the given date's week
+  //   const weekForDay =
+  //     startOfWeekDate.month() < endOfWeekDate.month() ? startOfWeekDate : endOfWeekDate
+
+  //   const week = weekForDay.week()
+  //   const currentWeek = `W${week}`
+  //   const currentMonth = Object.keys(monthlyCounts).find((month) =>
+  //     Object.keys(monthlyCounts[month]).includes(currentWeek),
+  //   )
+
+  //   let currentAdventureProgress = 0
+
+  //   // Calculate current adventure progress
+  //   if (monthlyCounts[currentMonth]) {
+  //     let weekKeys = Object.keys(monthlyCounts[currentMonth])
+
+  //     // Do not count the first week of April (W14) in the progress calculation
+  //     // This was tutorial week and should not count
+  //     if (currentMonth == 'apr') {
+  //       weekKeys = weekKeys.splice(1, 4)
+  //     }
+
+  //     const currentWeekIndex = weekKeys.indexOf(`${currentWeek}`) + 1
+
+  //     currentAdventureProgress = currentWeekIndex / weekKeys.length
+  //   }
+
+  //   // IF the current week is not in the monthlyCounts, add it
+  //   // Occurs on Sunday when the week changes - and no events have been logged yet
+  //   if (monthlyCounts[currentMonth][currentWeek].successRate == null) {
+  //     monthlyCounts[currentMonth][currentWeek].successRate = 0
+  //   }
+
+  //   // Set the first week of April W14 to a successRate of null ---
+  //   // this was tutorial week and should not count
+  //   monthlyCounts['apr']['W14'].successRate = null
+
+  //   const weeks = monthlyCounts[currentMonth]
+  //   const weeklyRates = Object.entries(weeks)
+  //     .filter(([week, { successRate }]) => successRate != null)
+  //     .map(([week, { successRate }]) => successRate)
+  //   Object.entries(monthlyCounts).forEach(([_, weeks]) => {
+  //     Object.entries(weeks).forEach(([week, { count }]) => {
+  //       if (goalPerWeek == 7 && count == goalPerWeek) {
+  //         totalXp += 38.5
+  //       } else if (count > goalPerWeek && goalPerWeek > 0) {
+  //         totalXp += 38.5
+  //       } else if (count == goalPerWeek) {
+  //         totalXp += 35
+  //       } else if (count < goalPerWeek && count > 0) {
+  //         totalXp += (count / goalPerWeek) * 35
+  //       } else {
+  //         totalXp += 0
+  //       }
+  //     })
+  //   })
+
+  //   // Calculate player success rate
+  //   const totalSuccessRate =
+  //     weeklyRates.length == 0
+  //       ? 0
+  //       : weeklyRates.reduce((sum, rate) => sum + rate, 0) / weeklyRates.length
+
+  //   const currentSuccessRate =
+  //     weeklyRates.length == 0
+  //       ? 0
+  //       : weeklyRates
+  //           .slice(0, -1) // Exclude the last (incomplete) week
+  //           .reduce((sum, rate) => sum + rate, 0) / (weeklyRates.length - 1 || 1)
+
+  //   const successRate = Math.round(totalSuccessRate * currentAdventureProgress * 100)
+
+  //   // Find level XP based on total XP
+  //   Object.entries(levelThresholds).forEach(([level, thresholds]) => {
+  //     console.log(monthlyCounts)
+  //     const [minXp, maxXp] = thresholds
+  //     if (totalXp >= minXp && totalXp < maxXp) {
+  //       playerLevel = parseInt(level)
+  //       levelPercent = ((totalXp - minXp) / (maxXp - minXp)) * 100
+  //     }
+  //   })
+
+  //   return { totalXp, playerLevel, levelPercent, successRate, currentSuccessRate }
+  // }
 
   const playerTracker = computed(() => data.value?.playerTracker || [])
   const activityData = computed(() => data.value?.activityTracker || [])

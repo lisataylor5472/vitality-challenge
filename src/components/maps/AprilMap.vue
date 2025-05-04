@@ -69,7 +69,7 @@ export default defineComponent({
       return playersWithPaths.value.map((player: any) => {
         return {
           ...player,
-          successRate: debug.value ? successRate.value : (player.successRate ?? 0),
+          successRate: debug.value ? successRate.value : (player.progressRates['apr'] ?? 0),
         }
       })
     })
@@ -107,7 +107,7 @@ export default defineComponent({
         [0, playerPathsRef.value?.[playerIx].getTotalLength() ?? 100],
       )
       const playerPoint = playerPathsRef.value?.[playerIx].getPointAtLength(
-        scale(player.successRate),
+        scale(player.progressRates['apr']),
       )
       return playerPoint?.x ?? 0
     }
@@ -120,7 +120,7 @@ export default defineComponent({
         [0, playerPathsRef.value?.[playerIx].getTotalLength() ?? 100],
       )
       const playerPoint = playerPathsRef.value?.[playerIx].getPointAtLength(
-        scale(player.successRate),
+        scale(player.progressRates['apr']),
       )
       return playerPoint?.y ?? 0
     }

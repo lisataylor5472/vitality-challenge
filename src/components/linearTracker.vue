@@ -28,32 +28,22 @@ export default defineComponent({
       type: Object,
       required: true,
     },
-    // currentDate: {
-    //   type: Date,
-    //   required: true,
-    // },
   },
   setup(props) {
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
     const calendar = computed(() => {
-      // console.log('current adventure month ', props.currentAdventureMonth)
-      // console.log('current Month Range', props.currentMonthRange)
-      // console.log('type current Month Range', typeof props.currentMonthRange)
-      // console.log('type 0 current Month Range', typeof props.currentMonthRange[0])
-
+      console.log(props.currentMonthRange)
       const startOfMonth = props.currentMonthRange[0].startOf('day')
       const endOfMonth = props.currentMonthRange[1].endOf('day')
       const days: Day[] = []
       const currentDay = startOfMonth.clone()
 
-      // console.log('currentDay', currentDay)
       while (currentDay.isSameOrBefore(endOfMonth)) {
         const day: Day = {
           day: currentDay.date(),
           month: currentDay.month(),
         }
-        // console.log(day)
 
         days.push(day)
 
