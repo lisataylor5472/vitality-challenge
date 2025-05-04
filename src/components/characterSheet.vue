@@ -94,6 +94,7 @@ export default defineComponent({
       align-items: center;
       height: 100%;
       .achievement-icon {
+        width: 30px;
         margin: 0.5rem;
       }
     }

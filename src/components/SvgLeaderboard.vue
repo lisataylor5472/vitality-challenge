@@ -98,7 +98,7 @@
       font-weight="bold"
       letter-spacing="0em"
     >
-      <tspan x="98.7656" y="517.52">{{ rankings[7].successRate }}</tspan>
+      <tspan x="98.7656" y="517.52">{{ rankings[7].successAvg }}</tspan>
     </text>
     <text
       fill="#777777"
@@ -192,7 +192,7 @@
       font-weight="bold"
       letter-spacing="0em"
     >
-      <tspan x="98.7656" y="470.52">{{ rankings[6].successRate }}</tspan>
+      <tspan x="98.7656" y="470.52">{{ rankings[6].successAvg }}</tspan>
     </text>
     <text
       fill="#777777"
@@ -286,7 +286,7 @@
       font-weight="bold"
       letter-spacing="0em"
     >
-      <tspan x="98.7656" y="424.52">{{ rankings[5].successRate }}</tspan>
+      <tspan x="98.7656" y="424.52">{{ rankings[5].successAvg }}</tspan>
     </text>
     <text
       fill="#777777"
@@ -380,7 +380,7 @@
       font-weight="bold"
       letter-spacing="0em"
     >
-      <tspan x="98.7656" y="377.52">{{ rankings[4].successRate }}</tspan>
+      <tspan x="98.7656" y="377.52">{{ rankings[4].successAvg }}</tspan>
     </text>
     <text
       fill="#777777"
@@ -474,7 +474,7 @@
       font-weight="bold"
       letter-spacing="0em"
     >
-      <tspan x="98.7656" y="331.52">{{ rankings[3].successRate }}</tspan>
+      <tspan x="98.7656" y="331.52">{{ rankings[3].successAvg }}</tspan>
     </text>
     <text
       fill="#777777"
@@ -568,7 +568,7 @@
       font-weight="bold"
       letter-spacing="0em"
     >
-      <tspan x="98.7656" y="284.52">{{ rankings[2].successRate }}</tspan>
+      <tspan x="98.7656" y="284.52">{{ rankings[2].successAvg }}</tspan>
     </text>
     <text
       fill="#777777"
@@ -662,7 +662,7 @@
       font-weight="bold"
       letter-spacing="0em"
     >
-      <tspan x="98.7656" y="238.52">{{ rankings[1].successRate }}</tspan>
+      <tspan x="98.7656" y="238.52">{{ rankings[1].successAvg }}</tspan>
     </text>
     <text
       fill="#777777"
@@ -756,7 +756,7 @@
       font-weight="bold"
       letter-spacing="0em"
     >
-      <tspan x="98.7656" y="191.52">{{ rankings[0].successRate }}</tspan>
+      <tspan x="98.7656" y="191.52">{{ rankings[0].successAvg }}</tspan>
     </text>
     <text
       fill="#777777"
@@ -1010,7 +1010,7 @@ export default defineComponent({
           if (a.totalXp > b.totalXp) return -1
 
           // Secondary sort by quantity (ascending order)
-          return b.successRate - a.successRate
+          return b.successAvg - a.successAvg
         })
       }
       if (sortByKey.value == 'achievements') {
@@ -1024,12 +1024,8 @@ export default defineComponent({
       }
       if (sortByKey.value == 'successRate') {
         return [...players.value].sort((a, b) => {
-          const aAvg =
-            Object.values(a.successRates).reduce((sum, rate) => sum + rate, 0) / values.length
-          const bAvg =
-            Object.values(b.successRates).reduce((sum, rate) => sum + rate, 0) / values.length
-          if (aAvg < bAvg) return 1
-          if (aAvg > bAvg) return -1
+          if (a.successAvg < b.successAvg) return 1
+          if (a.successAvg > b.successAvg) return -1
 
           // Secondary sort by quantity (ascending order)
           return b.totalXp - a.totalXp
@@ -1052,7 +1048,7 @@ export default defineComponent({
         charName: '...',
         totalXp: '---',
         achievements: '-',
-        successRate: '--',
+        successAvg: '--',
       }),
     )
 

@@ -115,16 +115,22 @@ export const useAppStore = defineStore('app', () => {
         const weeks = Object.fromEntries(
           // Filter out any FUTURE weeks
           Object.entries(monthlyCounts[month].weeks).filter(([weekKey]) => {
-            const weekNumber = parseInt(weekKey.slice(1), 10)
+            const weekNumber = parseInt(weekKey.slice(1))
             return weekNumber <= currentWeekNumber
           }),
         )
+        console.log('weeks', weeks)
+        if (weeks['W14']) {
+          delete weeks['W14']
+        }
         // Map all the rates in our current selection
         const successRates = Object.values(weeks).map((week) => week.successRate)
 
+        console.log('successRates', successRates)
+
         if (successRates.length > 0) {
           ratesByMonth[month] = Math.round(
-            (successRates.reduce((sum, rate) => sum + rate, 0) / successRates.length) * 100,
+            (successRates.reduce((sum, rate) => sum + rate) / successRates.length) * 100,
           )
         }
       })
@@ -135,7 +141,9 @@ export const useAppStore = defineStore('app', () => {
         }
       })
 
-      // console.log('findSuccessRates', ratesByMonth)
+      if (ratesByMonth['apr'] == 100) {
+        console.log('findSuccessRates', ratesByMonth)
+      }
 
       return ratesByMonth
     }
@@ -157,7 +165,7 @@ export const useAppStore = defineStore('app', () => {
         ratesByMonth[month] = Math.round(adventureProgress * successRatesByMonth[month])
       })
 
-      // console.log('findProgressRates', ratesByMonth)
+      console.log('findProgressRates', ratesByMonth)
 
       return ratesByMonth
     }
@@ -325,12 +333,17 @@ export const useAppStore = defineStore('app', () => {
       })
       .map((ach: any) => ach)
 
+    const successAvg =
+      Object.values(successRatesByMonth).reduce((sum, rate) => sum + rate, 0) /
+        Object.values(successRatesByMonth).length || 0
+
     player.activity = playerActivity
     player.totalXp = totalXp
     player.xpBar = levelPercent
     player.level = playerLevel
     player.progressRates = progressRatesByMonth
     player.successRates = successRatesByMonth
+    player.successAvg = successAvg
     player.goalPerWeekByMonth = goalPerWeekByMonth
     player.achievements = playerAchievements
   }
@@ -368,7 +381,10 @@ export const useAppStore = defineStore('app', () => {
         if (weekNumber < currentWeekNumber) {
           const successRate = monthlyCounts[month].weeks[weekKey].successRate
           if (successRate > 1) {
-            totalXp += 35 * successRate
+            totalXp += 36
+            if (successRate > 1.5) {
+              totalXp += 2
+            }
           } else if (successRate == 1) {
             // If they upheld their oath - they will have a successRate of 1 - give 35 xp
             totalXp += 35
@@ -382,7 +398,7 @@ export const useAppStore = defineStore('app', () => {
         }
       })
     })
-    console.log(totalXp)
+    // console.log(totalXp)
 
     // Find level XP based on total XP
     Object.entries(levelThresholds).forEach(([level, thresholds]) => {
@@ -395,7 +411,7 @@ export const useAppStore = defineStore('app', () => {
 
     totalXp = Math.round(totalXp)
 
-    console.log('totalXp - 2nd Time', totalXp)
+    // console.log('totalXp - 2nd Time', totalXp)
 
     return { totalXp, playerLevel, levelPercent }
   }

@@ -33,7 +33,6 @@ export default defineComponent({
     const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
     const calendar = computed(() => {
-      console.log(props.currentMonthRange)
       const startOfMonth = props.currentMonthRange[0].startOf('day')
       const endOfMonth = props.currentMonthRange[1].endOf('day')
       const days: Day[] = []

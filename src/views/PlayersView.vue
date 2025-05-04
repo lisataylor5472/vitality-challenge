@@ -469,15 +469,21 @@ export default defineComponent({
     width: 50%;
   }
   .achievements-wrapper {
+    display: flex;
+    justify-content: center;
+    height: 20px;
     .achievement-icon {
-      width: 20px;
-      height: 20px;
+      // width: 20px;
+      height: 100%;
       margin-right: 0.5em;
     }
     img {
-      filter: brightness(0) saturate(100%) invert(18%) sepia(22%) saturate(746%) hue-rotate(10deg)
-        brightness(92%) contrast(89%);
+      width: 30px;
     }
+    // img {
+    //   filter: brightness(0) saturate(100%) invert(18%) sepia(22%) saturate(746%) hue-rotate(10deg)
+    //     brightness(92%) contrast(89%);
+    // }
   }
   .player-wrapper {
     cursor: pointer;
