@@ -324,6 +324,7 @@ export const useAppStore = defineStore('app', () => {
     // Collect all achievements
     const playerAchievements = achievementsData.value
       .filter((ach: any) => {
+        console.log(ach.flag)
         if (player.isShadow) {
           return ach.playerId === player.playerId && ach.isShadow
         } else if (player.isPersonalOnly) {

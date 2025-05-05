@@ -37,7 +37,8 @@
                 template(v-if="player.achievements != '' ")
                   .achievements-wrapper
                     template(v-for="achievement in player.achievements")
-                      img.achievement-icon(:src="`/achievements/${achievement.icon}.svg`", alt="Achievements", width="20px", height="20px", v-tooltip="`${achievement.title}`")
+                      img.achievement-icon(:src="`/achievements/${achievement.icon}.svg`", alt="Achievements", :class="{ flag: achievement.flag == 'flag' }", v-tooltip="`${achievement.title}`", :data-flag="achievement.flag")
+
               template(v-else-if="header.key === 'level'")
                 | {{ player.level }}
               template(v-else-if="header.key === 'avatar'")
@@ -472,10 +473,15 @@ export default defineComponent({
     display: flex;
     justify-content: center;
     height: 20px;
+    align-items: center;
     .achievement-icon {
       // width: 20px;
-      height: 100%;
+      height: 20px;
+      // height: 100%;
       margin-right: 0.5em;
+      &.flag {
+        height: 35px;
+      }
     }
     img {
       width: 30px;
