@@ -2,17 +2,23 @@
   .players-dashboard
     .players-view-header(v-if="selectedPlayer == null")
       .view-options-wrapper
-        .month-controls(v-if="!showPlayerDetails")
-          button(@click="prevMonth", v-if="currentAdventureMonth != 'apr'")
-            .month-title <
-          .month-title {{ currentMonthName[currentAdventureMonth] }}
+        .deep-lore-button
+          button(v-tooltip="'Coming Back Soon'") campaign lore
+        //-   button(v-if="!showDashboard", @click="showDashboard = true") dashboards
+        .month-controls()
+          template(@click="prevMonth", v-if="currentAdventureMonth != 'apr'")
+            button(@click="prevMonth", v-if="currentAdventureMonth != 'apr'")
+              .month-title <
+          .month-title.month-name {{ currentMonthName[currentAdventureMonth] }}
           button(@click="nextMonth", v-if="currentAdventureMonth != 'sep'")
             .month-title >
         .details-wrapper
-          .title view character:
+          .title view player:
           .view-options
-            button(@click="showPlayerDetails = true", :class="{ active: showPlayerDetails }") details
-            button(@click="showPlayerDetails = false", :class="{ active: !showPlayerDetails }") activity
+            button(@click="onViewOption('details')", :class="{ active: showDetails }") details
+            button(@click="onViewOption('activity')", :class="{ active: showActivity}") activity
+            button(@click="onViewOption('progress')", :class="{ active: showProgress }") progress
+
         .details-wrapper
           .title filter:
           .view-options
@@ -20,59 +26,79 @@
             button(@click="toggleCharacterType('light')", :class="{ active: showLightOnly }") light
             button(@click="toggleCharacterType('shadow')", :class="{ active: showShadowOnly }") shadow
 
-    .loading-text(v-if="isLoading")
-      h1 Loading...
-    .table-wrapper(v-if="!isLoading && selectedPlayer == null")
-      table(v-if="showPlayerDetails")
-        thead
-          tr.players-header-wrapper
-            th(v-for="(header, index) in playerColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
-        tbody.scrollable-table(v-if="showPlayerDetails")
-          tr.player-wrapper(v-for="(player, playerIndex) in players" :key="playerIndex", @click="selectedPlayer = player")
-            td(v-for="(header, index) in playerColumns" :class="`col-${header.key}`" :key="index")
-              template(v-if="header.key === 'xp'")
-                .player-xp-bar
-                  .player-xp(:style="{ width: player.xpBar + '%' }", v-tooltip="`${Math.round(player.xpBar)}% towards next level`")
-              template(v-else-if="header.key === 'achievements'")
-                template(v-if="player.achievements != '' ")
-                  .achievements-wrapper
-                    template(v-for="achievement in player.achievements")
-                      img.achievement-icon(:src="`/achievements/${achievement.icon}.svg`", alt="Achievements", :class="{ flag: achievement.flag == 'flag' }", v-tooltip="`${achievement.title}`", :data-flag="achievement.flag")
 
-              template(v-else-if="header.key === 'level'")
-                | {{ player.level }}
-              template(v-else-if="header.key === 'avatar'")
-                img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
-                img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
-              template(v-else-if="header.key === 'hp'")
-                | {{ player[header.key] }}
-              template(v-else)
-                | {{ player[header.key] }}
-      table(v-if="!showPlayerDetails")
-        thead
-          tr.players-header-wrapper
-            th(v-for="(header, index) in progressColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
-        tbody.scrollable-table
-          tr.player-wrapper(v-for="(player, playerIndex) in players" :key="playerIndex", @click="selectedPlayer = player")
-            td(v-for="(header, index) in progressColumns" :class="`col-${header.key}`" :key="index")
-              template(v-if="header.key === 'avatar'")
-                img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
-                img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
-              template(v-else-if="header.key === 'successRate'")
-                | {{ player?.successRates[currentAdventureMonth] }}%
-              template(v-else-if="header.key === 'goalPerWeek'")
-                | {{ player?.goalPerWeekByMonth[currentAdventureMonth] > 0 ? player?.goalPerWeekByMonth[currentAdventureMonth] : '-'}}
-              template(v-else-if="header.key === 'activity'")
-                linearTracker(:activityData="player.activity", :currentMonthRange="currentMonthRange")
-              template(v-else)
-                | {{ player[header.key] }}
+    .parchment-page
+      .loading-text(v-if="isLoading")
+        h1 Conjuring the Data...
+      .dashboard(v-if="showDashboard")
+        template(v-if="!isLoading && selectedPlayer == null")
+          .table-wrapper
+            table(v-if="showDetails")
+              thead
+                tr.players-header-wrapper
+                  th(v-for="(header, index) in playerColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
+              tbody.scrollable-table(v-if="showDetails")
+                tr.player-wrapper(v-for="(player, playerIndex) in players" :key="playerIndex", @click="selectedPlayer = player")
+                  td(v-for="(header, index) in playerColumns" :class="`col-${header.key}`" :key="index")
+                    template(v-if="header.key === 'xp'")
+                      .player-xp-bar
+                        .player-xp(:style="{ width: player.xpBar + '%' }", v-tooltip="`${Math.round(player.xpBar)}% towards next level`")
+                    template(v-else-if="header.key === 'achievements'")
+                      template(v-if="player.achievements != '' ")
+                        .achievements-wrapper
+                          template(v-for="achievement in player.achievements")
+                            img.achievement-icon(:src="`/achievements/${achievement.icon}.svg`", alt="Achievements", :class="{ flag: achievement.flag == 'flag' }", v-tooltip="`${achievement.title}`")
 
-    .player-view-wrapper(v-if="selectedPlayer != null")
-      .char-header-wrapper
-        button.back-button(@click="selectedPlayer = null", v-tooltip="`Back to players`")
-          h1 <
-        h1(v-if="selectedPlayer != null") {{ selectedPlayer.charName }}
-      CharacterSheet(:player="selectedPlayer")
+                    template(v-else-if="header.key === 'level'")
+                      | {{ player.level }}
+                    template(v-else-if="header.key === 'avatar'")
+                      img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
+                      img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
+                    template(v-else-if="header.key === 'hp'")
+                      | {{ player[header.key] }}
+                    template(v-else)
+                      | {{ player[header.key] }}
+        template(v-if="showActivity")
+          .table-wrapper
+            table
+              thead
+                tr.players-header-wrapper
+                  th(v-for="(header, index) in activityColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
+              tbody.scrollable-table
+                tr.player-wrapper(v-for="(player, playerIndex) in players" :key="playerIndex", @click="selectedPlayer = player")
+                  td(v-for="(header, index) in activityColumns" :class="`col-${header.key}`" :key="index")
+                    template(v-if="header.key === 'avatar'")
+                      img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
+                      img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
+                    template(v-else-if="header.key === 'successRate'")
+                      | {{ player?.successRates[currentAdventureMonth] }}%
+                    template(v-else-if="header.key === 'goalPerWeek'")
+                      | {{ player?.goalPerWeekByMonth[currentAdventureMonth] > 0 ? player?.goalPerWeekByMonth[currentAdventureMonth] : '-'}}
+                    template(v-else-if="header.key === 'activity'")
+                      linearTracker(:activityData="player.activity", :currentMonthRange="currentMonthRange")
+                    template(v-else)
+                      | {{ player[header.key] }}
+        template(v-if="showProgress")
+          .table-wrapper
+            table
+              thead
+                tr.players-header-wrapper
+                  th(v-for="(header, index) in progressColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
+              tbody.scrollable-table
+                tr.player-wrapper(v-for="(player, playerIndex) in players" :key="playerIndex", @click="selectedPlayer = player")
+                  td(v-for="(header, index) in progressColumns" :class="`col-${header.key}`" :key="index")
+                    template(v-if="header.key === 'avatar'")
+                      img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
+                      img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
+                    template(v-else)
+                      | {{ player[header.key] }}
+
+      .player-view-wrapper(v-if="selectedPlayer != null")
+        .char-header-wrapper
+          button.back-button(@click="selectedPlayer = null", v-tooltip="`Back to players`")
+            h1 <
+          h1(v-if="selectedPlayer != null") {{ selectedPlayer.charName }}
+        CharacterSheet(:player="selectedPlayer")
 
 </template>
 
@@ -93,6 +119,7 @@ export default defineComponent({
   setup() {
     const appStore = useAppStore()
 
+    const showDashboard = ref(true)
     const showPlayerDetails = ref(true)
     const showAllCharacters = ref(true)
     const showShadowOnly = ref(false)
@@ -142,12 +169,17 @@ export default defineComponent({
       { name: 'achievements', key: 'achievements' },
     ])
 
-    const progressColumns = ref([
+    const activityColumns = ref([
       { name: '', key: 'avatar' },
       { name: 'name', key: 'charName' },
       { name: 'success rate', key: 'successRate' },
       { name: 'goal per week', key: 'goalPerWeek' },
       { name: 'activity', key: 'activity' },
+    ])
+    const progressColumns = ref([
+      { name: '', key: 'avatar' },
+      { name: 'name', key: 'charName' },
+      { name: 'adventure progress [a work in ... ʘ‿ʘ ... progress ... ]', key: 'progress' },
     ])
 
     const adventureMonthMap = {
@@ -184,16 +216,23 @@ export default defineComponent({
       return adventureMonthMap[monthKey]
     })
 
+    const showDetails = ref(true)
+    const showActivity = ref(false)
+    const showProgress = ref(false)
+
+    const onViewOption = (type: string) => {
+      showDetails.value = type == 'details' ? true : false
+      showActivity.value = type == 'activity' ? true : false
+      showProgress.value = type == 'progress' ? true : false
+    }
+
     watch(
       currentDate,
       (val) => {
-        console.log('currentDate change', currentDate)
         const monthIndex = months.findIndex((key) => {
-          console.log('watch current date months key', key)
           const [start, end] = adventureMonthMap[key]
           return currentDate.value.isSameOrAfter(start) && currentDate.value.isSameOrBefore(end)
         })
-        console.log('monthIndex', monthIndex)
         currentMonthIndex.value = monthIndex
       },
       { immediate: true },
@@ -208,8 +247,14 @@ export default defineComponent({
     }
 
     return {
+      onViewOption,
+      showDashboard,
+      showDetails,
+      showActivity,
+      showProgress,
       players,
       playerColumns,
+      activityColumns,
       progressColumns,
       isLoading,
       selectedPlayer,
@@ -246,19 +291,24 @@ export default defineComponent({
     color: var(--theme-col-blurple);
   }
   .players-view-header {
-    height: 9rem;
+    // height: 1rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 1em;
   }
   .month-controls {
+    width: 175px;
     border-radius: 20px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    background-color: var(--theme-col-blurple);
+    margin-left: 2em;
     button {
-      background-color: var(--theme-col-parchment-lights);
+      background-color: var(--theme-col-blurple);
       border: none;
-      color: var(--theme-col-blurple);
+      color: #d0d6ff;
       font-size: 1.5rem;
       cursor: pointer;
       margin: 0 1rem;
@@ -267,22 +317,58 @@ export default defineComponent({
   .month-title {
     font-family: 'Pixelify Sans', sans-serif;
     font-size: 1.5rem;
-    color: var(--theme-col-blurple);
+    color: #d0d6ff;
+    width: 30px;
+    &.month-name {
+      width: 50px;
+    }
+  }
+  .deep-lore-button {
+    button {
+      border-radius: 37px;
+      border: 2px solid #29f36e;
+      width: 175px;
+      height: 35px;
+      font-size: 1.5rem;
+      font-family: 'Grenze Gotisch', serif;
+      display: flex;
+      justify-content: center;
+      margin-left: 1rem;
+      align-items: center;
+      padding-bottom: 4px;
+      cursor: pointer;
+      transition:
+        transform 0.1s ease,
+        box-shadow 0.1s ease;
+      &:not(.active) {
+        background: #d0ffe0;
+        color: #005d20;
+        box-shadow: 2px 2px 0px 1px #29f36e;
+      }
+      a {
+        text-decoration: none;
+        color: #005d20;
+      }
+      &:hover {
+        background: #005d20;
+        color: #fff;
+        box-shadow: 2px -1px 16px 0px var(--theme-col-med-blurple);
+      }
+    }
   }
   .view-options-wrapper {
-    background-color: var(--theme-col-parchment-light);
+    // background-color: var(--theme-col-light-blurple);
+    background-color: var(--theme-col-parchment);
     border-radius: 20px;
-    padding: 0.5rem 1rem;
+    border: 3px solid #a59696;
+    padding: 0.5rem 3rem;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    height: 3rem;
-    // margin-top: 1rem;
-    // margin-bottom: 1rem;
+    height: 3.5rem;
     width: 100%;
+
     .details-wrapper {
-      // display: flex;
-      // width: 50%;
       display: flex;
       align-items: center;
       .title {
@@ -301,10 +387,63 @@ export default defineComponent({
         height: 25px;
         font-size: 0.9rem;
         font-family: 'Space Grotesk', serif;
-        // display: flex;
-        // justify-content: center;
-        // margin-left: 1rem;
-        // align-items: center;
+        padding-bottom: 4px;
+        cursor: pointer;
+        transition:
+          transform 0.1s ease,
+          box-shadow 0.1s ease;
+        &:not(.active) {
+          background: #d0d6ff;
+          color: var(--theme-col-blurple);
+          box-shadow: 1px 1px 0px 1px var(--theme-col-blurple);
+        }
+        &.active {
+          background: var(--theme-col-blurple);
+          color: #fff;
+          box-shadow: 1px 1px 0px 1px var(--theme-col-blurple);
+        }
+
+        &:first-of-type {
+          border-radius: 37px 0 0 37px;
+          &:only-of-type {
+            border-radius: 37px 37px 37px 37px;
+          }
+        }
+
+        &:last-of-type {
+          border-radius: 0 37px 37px 0;
+          &:only-of-type {
+            border-radius: 37px 37px 37px 37px;
+          }
+        }
+      }
+    }
+  }
+  .filter-options-wrapper {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    height: 4rem;
+    width: 100%;
+    .details-wrapper {
+      display: flex;
+      align-items: center;
+      .title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 600;
+        color: var(--theme-col-blurple);
+        font-size: 1rem;
+        margin-right: 1rem;
+        margin-left: 1rem;
+      }
+    }
+    .view-options {
+      button {
+        border: 2px solid var(--theme-col-blurple);
+        width: 85px;
+        height: 25px;
+        font-size: 0.9rem;
+        font-family: 'Space Grotesk', serif;
         padding-bottom: 4px;
         cursor: pointer;
         transition:
@@ -407,10 +546,6 @@ export default defineComponent({
       }
     }
   }
-  .player-view-wrapper {
-    // display: flex;
-    // height: 100%;
-  }
   .player-xp-bar {
     background-color: var(--theme-col-parchment-dark);
     height: 1em;
@@ -486,16 +621,19 @@ export default defineComponent({
     img {
       width: 30px;
     }
-    // img {
-    //   filter: brightness(0) saturate(100%) invert(18%) sepia(22%) saturate(746%) hue-rotate(10deg)
-    //     brightness(92%) contrast(89%);
-    // }
   }
   .player-wrapper {
     cursor: pointer;
     &:hover {
       color: var(--theme-col-blurple);
     }
+  }
+  .parchment-page {
+    width: 100%;
+    height: 100%;
+    padding: 3em 5em 3em 3em;
+    // padding-right: 5em;
+    background-image: url('@/assets/parchment.svg'); /* Adjust path as needed */
   }
 }
 </style>

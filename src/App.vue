@@ -31,27 +31,27 @@
           .rolled-up-flag.final
             img(v-if="dateAfter('sep')" src="@/assets/flags/final-flag-large.svg")
             img(v-else src="@/assets/flags/rolled-flag-final.svg" alt="Future Dungeon Flag")
-      .nav-wrapper
-        RouterLink.nav-button(
-          to="/"
-          custom
-          v-slot="{ navigate, isActive }"
-        )
-          button(@click="navigate", :class="{ active: isActive }")
-            | dashboard
-        RouterLink.nav-button(to="/map" custom v-slot="{ navigate, isActive }")
-          button(@click="navigate", :class="{ active: isActive }")
-            | map
-        RouterLink.nav-button(to="/campaign" custom v-slot="{ navigate, isActive }")
-          button(@click="navigate", :class="{ active: isActive }")
-            | campaign
+      //- .nav-wrapper
+        //- RouterLink.nav-button(
+        //-   to="/"
+        //-   custom
+        //-   v-slot="{ navigate, isActive }"
+        //- )
+        //-   button(@click="navigate", :class="{ active: isActive }")
+        //-     | dashboard
+        //- RouterLink.nav-button(to="/map" custom v-slot="{ navigate, isActive }")
+        //-   button(@click="navigate", :class="{ active: isActive }")
+        //-     | progress
+        //- RouterLink.nav-button(to="/campaign" custom v-slot="{ navigate, isActive }")
+        //-   button(@click="navigate", :class="{ active: isActive }")
+        //-     | campaign
 
   .main-content
     .left-column
       SvgLeaderboard(:currentAdventureMonth="currentAdventureMonth")
     .right-column
-      .parchment-page
-        RouterView
+      RouterView
+      //- .parchment-page
 .right-panel
 </template>
 <script lang="ts">
@@ -113,7 +113,7 @@ export default defineComponent({
     background-image: url('@/assets/noise.png');
   }
   .header-banner {
-    flex-basis: 38%;
+    // flex-basis: 38%;
     .title-svg {
       height: 28vh;
       z-index: 5;
@@ -205,10 +205,10 @@ export default defineComponent({
   .right-column {
     width: 85%;
   }
-  .parchment-page {
-    width: 100%;
-    height: 100%;
-    background-image: url('@/assets/parchment.svg'); /* Adjust path as needed */
-  }
+  // .parchment-page {
+  //   width: 100%;
+  //   height: 100%;
+  //   background-image: url('@/assets/parchment.svg'); /* Adjust path as needed */
+  // }
 }
 </style>

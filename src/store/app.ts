@@ -7,6 +7,7 @@ interface challengeData {
   activityTracker: []
   oathTracker: []
   achievementTracker: []
+  lylaActivityData: []
 }
 
 export const useAppStore = defineStore('app', () => {
@@ -41,6 +42,18 @@ export const useAppStore = defineStore('app', () => {
         return activity.playerId === player.playerId && activity.questType.includes('GS Oath')
       })
       .map((activity: any) => activity)
+
+    // console.log('player activity', playerActivity)
+
+    if (player.playerId == 'LYLA') {
+      // console.log('LYLA', lylaActivityData.value)
+      playerActivity = lylaActivityData.value
+      playerActivity = playerActivity.filter((activity: any) => activity.date !== '')
+      if (playerActivity[0].date == '#N/A') {
+        playerActivity = []
+      }
+      // console.log('LYLA', lylaActivityData.value)
+    }
 
     // Merge activities with the same date
     playerActivity = playerActivity.reduce((acc: any[], activity: any) => {
@@ -119,14 +132,14 @@ export const useAppStore = defineStore('app', () => {
             return weekNumber <= currentWeekNumber
           }),
         )
-        console.log('weeks', weeks)
+        // console.log('weeks', weeks)
         if (weeks['W14']) {
           delete weeks['W14']
         }
         // Map all the rates in our current selection
         const successRates = Object.values(weeks).map((week) => week.successRate)
 
-        console.log('successRates', successRates)
+        // console.log('successRates', successRates)
 
         if (successRates.length > 0) {
           ratesByMonth[month] = Math.round(
@@ -140,10 +153,6 @@ export const useAppStore = defineStore('app', () => {
           delete ratesByMonth[month]
         }
       })
-
-      if (ratesByMonth['apr'] == 100) {
-        console.log('findSuccessRates', ratesByMonth)
-      }
 
       return ratesByMonth
     }
@@ -165,7 +174,7 @@ export const useAppStore = defineStore('app', () => {
         ratesByMonth[month] = Math.round(adventureProgress * successRatesByMonth[month])
       })
 
-      console.log('findProgressRates', ratesByMonth)
+      // console.log('findProgressRates', ratesByMonth)
 
       return ratesByMonth
     }
@@ -324,7 +333,6 @@ export const useAppStore = defineStore('app', () => {
     // Collect all achievements
     const playerAchievements = achievementsData.value
       .filter((ach: any) => {
-        console.log(ach.flag)
         if (player.isShadow) {
           return ach.playerId === player.playerId && ach.isShadow
         } else if (player.isPersonalOnly) {
@@ -509,6 +517,7 @@ export const useAppStore = defineStore('app', () => {
 
   const playerTracker = computed(() => data.value?.playerTracker || [])
   const activityData = computed(() => data.value?.activityTracker || [])
+  const lylaActivityData = computed(() => data.value?.lylaActivityData || [])
   const oathTracker = computed(() => data.value?.oathTracker || [])
   const achievementsData = computed(() => data.value?.achievementTracker || [])
 
