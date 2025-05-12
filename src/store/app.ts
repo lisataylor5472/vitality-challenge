@@ -8,6 +8,7 @@ interface challengeData {
   oathTracker: []
   achievementTracker: []
   lylaActivityData: []
+  dungeonEnemy: []
 }
 
 export const useAppStore = defineStore('app', () => {
@@ -424,102 +425,15 @@ export const useAppStore = defineStore('app', () => {
 
     return { totalXp, playerLevel, levelPercent }
   }
-  // const findPlayerXp = (goalPerWeek: int, monthlyCounts: any, playerId: any) => {
-  //   let totalXp = 0
-  //   let playerLevel = 1
-  //   let levelPercent = 0
-
-  //   const startOfWeekDate = moment().startOf('week') // Find the first day of the given date's week
-  //   const endOfWeekDate = moment().endOf('week') // Find the last day of the given date's week
-  //   const weekForDay =
-  //     startOfWeekDate.month() < endOfWeekDate.month() ? startOfWeekDate : endOfWeekDate
-
-  //   const week = weekForDay.week()
-  //   const currentWeek = `W${week}`
-  //   const currentMonth = Object.keys(monthlyCounts).find((month) =>
-  //     Object.keys(monthlyCounts[month]).includes(currentWeek),
-  //   )
-
-  //   let currentAdventureProgress = 0
-
-  //   // Calculate current adventure progress
-  //   if (monthlyCounts[currentMonth]) {
-  //     let weekKeys = Object.keys(monthlyCounts[currentMonth])
-
-  //     // Do not count the first week of April (W14) in the progress calculation
-  //     // This was tutorial week and should not count
-  //     if (currentMonth == 'apr') {
-  //       weekKeys = weekKeys.splice(1, 4)
-  //     }
-
-  //     const currentWeekIndex = weekKeys.indexOf(`${currentWeek}`) + 1
-
-  //     currentAdventureProgress = currentWeekIndex / weekKeys.length
-  //   }
-
-  //   // IF the current week is not in the monthlyCounts, add it
-  //   // Occurs on Sunday when the week changes - and no events have been logged yet
-  //   if (monthlyCounts[currentMonth][currentWeek].successRate == null) {
-  //     monthlyCounts[currentMonth][currentWeek].successRate = 0
-  //   }
-
-  //   // Set the first week of April W14 to a successRate of null ---
-  //   // this was tutorial week and should not count
-  //   monthlyCounts['apr']['W14'].successRate = null
-
-  //   const weeks = monthlyCounts[currentMonth]
-  //   const weeklyRates = Object.entries(weeks)
-  //     .filter(([week, { successRate }]) => successRate != null)
-  //     .map(([week, { successRate }]) => successRate)
-  //   Object.entries(monthlyCounts).forEach(([_, weeks]) => {
-  //     Object.entries(weeks).forEach(([week, { count }]) => {
-  //       if (goalPerWeek == 7 && count == goalPerWeek) {
-  //         totalXp += 38.5
-  //       } else if (count > goalPerWeek && goalPerWeek > 0) {
-  //         totalXp += 38.5
-  //       } else if (count == goalPerWeek) {
-  //         totalXp += 35
-  //       } else if (count < goalPerWeek && count > 0) {
-  //         totalXp += (count / goalPerWeek) * 35
-  //       } else {
-  //         totalXp += 0
-  //       }
-  //     })
-  //   })
-
-  //   // Calculate player success rate
-  //   const totalSuccessRate =
-  //     weeklyRates.length == 0
-  //       ? 0
-  //       : weeklyRates.reduce((sum, rate) => sum + rate, 0) / weeklyRates.length
-
-  //   const currentSuccessRate =
-  //     weeklyRates.length == 0
-  //       ? 0
-  //       : weeklyRates
-  //           .slice(0, -1) // Exclude the last (incomplete) week
-  //           .reduce((sum, rate) => sum + rate, 0) / (weeklyRates.length - 1 || 1)
-
-  //   const successRate = Math.round(totalSuccessRate * currentAdventureProgress * 100)
-
-  //   // Find level XP based on total XP
-  //   Object.entries(levelThresholds).forEach(([level, thresholds]) => {
-  //     console.log(monthlyCounts)
-  //     const [minXp, maxXp] = thresholds
-  //     if (totalXp >= minXp && totalXp < maxXp) {
-  //       playerLevel = parseInt(level)
-  //       levelPercent = ((totalXp - minXp) / (maxXp - minXp)) * 100
-  //     }
-  //   })
-
-  //   return { totalXp, playerLevel, levelPercent, successRate, currentSuccessRate }
-  // }
 
   const playerTracker = computed(() => data.value?.playerTracker || [])
   const activityData = computed(() => data.value?.activityTracker || [])
   const lylaActivityData = computed(() => data.value?.lylaActivityData || [])
   const oathTracker = computed(() => data.value?.oathTracker || [])
   const achievementsData = computed(() => data.value?.achievementTracker || [])
+  const dungeonEnemy = computed(() => data.value?.dungeonEnemy || [])
+
+  const dungeonEnemyByMonth = {}
 
   watch(
     playerTracker,
@@ -532,13 +446,26 @@ export const useAppStore = defineStore('app', () => {
     { immediate: true },
   )
 
+  watch(dungeonEnemy, (newVal) => {
+    newVal.forEach((enemy) => {
+      if (!dungeonEnemyByMonth[enemy.month]) {
+        dungeonEnemyByMonth[enemy.month] = {
+          name: enemy.name,
+          progressRate: enemy.progressRate,
+        }
+      }
+    })
+  })
+
   return {
     data,
     isLoading,
     fetchChallengeData,
     playerTracker,
+    dungeonEnemy,
     activityData,
     oathTracker,
     achievementsData,
+    dungeonEnemyByMonth,
   }
 })

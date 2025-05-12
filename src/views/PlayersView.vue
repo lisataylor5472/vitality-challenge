@@ -65,7 +65,7 @@
                 tr.players-header-wrapper
                   th(v-for="(header, index) in activityColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
               tbody.scrollable-table
-                tr.player-wrapper(v-for="(player, playerIndex) in players" :key="playerIndex", @click="selectedPlayer = player")
+                tr.player-wrapper(v-for="(player, playerIndex) in activePlayers(currentAdventureMonth)" :key="playerIndex", @click="selectedPlayer = player")
                   td(v-for="(header, index) in activityColumns" :class="`col-${header.key}`" :key="index")
                     template(v-if="header.key === 'avatar'")
                       img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
@@ -85,11 +85,20 @@
                 tr.players-header-wrapper
                   th(v-for="(header, index) in progressColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
               tbody.scrollable-table
-                tr.player-wrapper(v-for="(player, playerIndex) in players" :key="playerIndex", @click="selectedPlayer = player")
+                tr.player-wrapper(v-for="(player, playerIndex) in activePlayers(currentAdventureMonth)" :key="playerIndex", @click="selectedPlayer = player")
                   td(v-for="(header, index) in progressColumns" :class="`col-${header.key}`" :key="index")
                     template(v-if="header.key === 'avatar'")
                       img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
                       img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
+                    //- template(v-if="header.key === 'progress_rate'")
+                    //-   p {{ player.progressRates[currentAdventureMonth] }}
+                    template(v-if="header.key === 'progress'")
+                      .progress-bar
+                        img.entry(:src="`/progress/entry.png`", alt="Enter!")
+                        img.bad-guy(:src="`/progress/the_scald.png`", alt="The Scald", :style="{'left': `max(0px, calc(${Math.min(enemies[currentAdventureMonth].progressRate, 100)}% - 20px))`}")
+                        img.player-av(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''", :style="{'left': `max(0px, calc(${Math.min(player.progressRates[currentAdventureMonth], 100)}% - 20px))`}")
+                        img.player-av(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
+                        img.escape(:src="`/progress/endpoint.png`", alt="Escape!")
                     template(v-else)
                       | {{ player[header.key] }}
 
@@ -125,6 +134,16 @@ export default defineComponent({
     const showShadowOnly = ref(false)
     const showLightOnly = ref(false)
 
+    const currentAdventureMonth = computed(() => {
+      const monthKey = months[currentMonthIndex.value]
+      return monthKey
+    })
+
+    const enemies = computed(() => {
+      console.log(appStore.dungeonEnemyByMonth)
+      return appStore.dungeonEnemyByMonth
+    })
+
     const players = computed(() => {
       return appStore.playerTracker.filter((player) => {
         if (showAllCharacters.value) {
@@ -137,6 +156,10 @@ export default defineComponent({
         return false
       })
     })
+
+    const activePlayers = (month: string) => {
+      return players.value.filter((player) => player.goalPerWeekByMonth[month] > 0)
+    }
 
     const isLoading = computed(() => appStore.isLoading)
 
@@ -179,7 +202,8 @@ export default defineComponent({
     const progressColumns = ref([
       { name: '', key: 'avatar' },
       { name: 'name', key: 'charName' },
-      { name: 'adventure progress [a work in ... ʘ‿ʘ ... progress ... ]', key: 'progress' },
+      // { name: 'rate', key: 'progress_rate' },
+      { name: 'adventure progress', key: 'progress' },
     ])
 
     const adventureMonthMap = {
@@ -201,11 +225,6 @@ export default defineComponent({
     }
 
     const currentDate = ref(moment.utc())
-
-    const currentAdventureMonth = computed(() => {
-      const monthKey = months[currentMonthIndex.value]
-      return monthKey
-    })
 
     const currentMonthIndex = ref(0)
 
@@ -248,6 +267,7 @@ export default defineComponent({
 
     return {
       onViewOption,
+      enemies,
       showDashboard,
       showDetails,
       showActivity,
@@ -270,6 +290,7 @@ export default defineComponent({
       currentMonthRange,
       currentDate,
       months,
+      activePlayers,
     }
   },
 })
@@ -634,6 +655,29 @@ export default defineComponent({
     padding: 3em 5em 3em 3em;
     // padding-right: 5em;
     background-image: url('@/assets/parchment.svg'); /* Adjust path as needed */
+  }
+  .progress-bar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+    // padding-left: 2em;
+    .bad-guy {
+      height: 40px;
+      position: absolute;
+    }
+    .player-av {
+      height: 40px;
+      position: absolute;
+    }
+    .entry {
+      height: 40px;
+      margin-right: auto;
+    }
+    .escape {
+      height: 40px;
+      margin-left: auto;
+    }
   }
 }
 </style>
