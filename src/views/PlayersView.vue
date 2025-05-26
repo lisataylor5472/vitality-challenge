@@ -3,7 +3,7 @@
     .players-view-header(v-if="selectedPlayer == null")
       .view-options-wrapper
         .deep-lore-button
-          button(v-tooltip="'Coming Back Soon'") campaign lore
+          button(@click="toggleView") {{ buttonText }}
         //-   button(v-if="!showDashboard", @click="showDashboard = true") dashboards
         .month-controls()
           template(@click="prevMonth", v-if="currentAdventureMonth != 'apr'")
@@ -30,6 +30,47 @@
     .parchment-page
       .loading-text(v-if="isLoading")
         h1 Conjuring the Data...
+
+      .campaign(v-if="!showDashboard")
+        .campaign-view
+          .campaign-view-header
+            img(src="@/assets/CampaignText.svg" alt="Campaign")
+          .campaign-view-content
+            .campaign-header-wrapper
+              h1 Intro :
+            p A group of adventurers are tasked by a mysterious benefactor to complete a legendary trial: The Quest for Vitality. To win the grand prize, they must overcome challenges that test their physical, mental, and social well-being. However, they soon find the challenge isn’t quite what they expected, as a digital entity seems to have pulled a small part of them into a digital realm. Can the adventurers complete the challenge and reclaim control over their digital and physical selves?
+            .campaign-header-wrapper
+              h1 Adventure Timeline :
+            .adventure-timeline-info
+              .adventure-wrapper.title
+                p MONTH
+                p EXACT DATES
+                p TITLE
+              .adventure-wrapper
+                p APRIL
+                p April 1 - May 3
+                p Escape the Darkness
+              .adventure-wrapper
+                p MAY
+                p May 4 - May 31
+                p The Ember Thirst
+              .adventure-wrapper
+                p JUNE
+                p Jun 1 - Jun 28
+                p.unrevealed ...Yet to be revealed...
+              .adventure-wrapper
+                p JULY
+                p Jun 29 - Aug 2
+                p.unrevealed ...Yet to be revealed...
+              .adventure-wrapper
+                p AUGUST
+                p Aug 3 - Aug 30
+                p.unrevealed ...Yet to be revealed...
+              .adventure-wrapper
+                p SEPTEMBER
+                p Aug 31 - Sep 27
+                p.unrevealed ...Yet to be revealed...
+
       .dashboard(v-if="showDashboard")
         template(v-if="!isLoading && selectedPlayer == null")
           .table-wrapper
@@ -46,9 +87,10 @@
                     template(v-else-if="header.key === 'achievements'")
                       template(v-if="player.achievements != '' ")
                         .achievements-wrapper
-                          template(v-for="achievement in player.achievements")
+                          template(v-for="(achievement, index) in player.achievements.slice(0, 4)" :key="index")
                             img.achievement-icon(:src="`/achievements/${achievement.icon}.svg`", alt="Achievements", :class="{ flag: achievement.flag == 'flag' }", v-tooltip="`${achievement.title}`")
-
+                          template(v-if="player.achievements.length > 4")
+                            span(v-tooltip="'...click to see more'") ...
                     template(v-else-if="header.key === 'level'")
                       | {{ player.level }}
                     template(v-else-if="header.key === 'avatar'")
@@ -224,6 +266,10 @@ export default defineComponent({
       sep: 'Sep',
     }
 
+    const toggleView = () => {
+      showDashboard.value = !showDashboard.value
+    }
+
     const currentDate = ref(moment.utc())
 
     const currentMonthIndex = ref(0)
@@ -244,6 +290,14 @@ export default defineComponent({
       showActivity.value = type == 'activity' ? true : false
       showProgress.value = type == 'progress' ? true : false
     }
+
+    const buttonText = computed(() => {
+      if (showDashboard.value) {
+        return 'campaign'
+      } else {
+        return 'dashboard'
+      }
+    })
 
     watch(
       currentDate,
@@ -266,6 +320,8 @@ export default defineComponent({
     }
 
     return {
+      buttonText,
+      toggleView,
       onViewOption,
       enemies,
       showDashboard,
@@ -325,7 +381,7 @@ export default defineComponent({
     align-items: center;
     justify-content: center;
     background-color: var(--theme-col-blurple);
-    margin-left: 2em;
+    margin-left: 1em;
     button {
       background-color: var(--theme-col-blurple);
       border: none;
@@ -348,7 +404,7 @@ export default defineComponent({
     button {
       border-radius: 37px;
       border: 2px solid #29f36e;
-      width: 175px;
+      width: 150px;
       height: 35px;
       font-size: 1.5rem;
       font-family: 'Grenze Gotisch', serif;
@@ -677,6 +733,70 @@ export default defineComponent({
     .escape {
       height: 40px;
       margin-left: auto;
+    }
+  }
+}
+
+.campaign-view {
+  padding: 0 4.8rem 2.5rem 2.5rem;
+  color: var(--theme-col-brown);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  .campaign-view-header {
+    img {
+      height: 10rem;
+    }
+  }
+  .campaign-view-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 50vh;
+    text-align: center;
+    // justify-content: center;
+    // height: 100%;
+    background-color: var(--theme-col-parchment-light);
+    border-radius: 30px;
+    padding: 1rem 6rem;
+    font-family: 'Space Grotesk', sans-serif;
+    .campaign-header-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: left;
+      h1 {
+        font-size: 2rem;
+        color: var(--theme-col-blurple);
+        // text-align: center;
+      }
+    }
+    .adventure-timeline-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      .adventure-wrapper {
+        width: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        &.title {
+          p {
+            font-size: 1rem;
+            font-weight: 700;
+          }
+        }
+      }
+      p {
+        width: 200px;
+        text-align: center;
+        font-size: 1rem;
+        color: var(--theme-col-brown);
+        // margin: 0.5rem 0;
+        // text-align: center;
+        &.unrevealed {
+          font-style: italic;
+        }
+      }
     }
   }
 }
