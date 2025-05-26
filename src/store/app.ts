@@ -7,6 +7,7 @@ interface challengeData {
   activityTracker: []
   oathTracker: []
   achievementTracker: []
+  dungeonTracker: []
   lylaActivityData: []
   dungeonEnemy: []
 }
@@ -158,7 +159,7 @@ export const useAppStore = defineStore('app', () => {
       return ratesByMonth
     }
 
-    const findProgressRates = (successRatesByMonth, monthlyCounts) => {
+    const findProgressRates = (successRatesByMonth, monthlyCounts, player) => {
       const currentWeekNumber = moment().week()
 
       const ratesByMonth = {}
@@ -175,19 +176,43 @@ export const useAppStore = defineStore('app', () => {
         ratesByMonth[month] = Math.round(adventureProgress * successRatesByMonth[month])
       })
 
-      // console.log('findProgressRates', ratesByMonth)
+      // Add dungeon tracker data to ratesByMonth
+      Object.keys(ratesByMonth).forEach((month) => {
+        const dungeonData = dungeonTracker.value.filter(
+          (event) => event.playerId === player.playerId && event.month === month,
+        )
+        dungeonData.forEach((event) => {
+          if (event.eventType == 'progress') {
+            ratesByMonth[month] = (ratesByMonth[month] || 0) + event.quantity
+          }
+        })
+      })
 
       return ratesByMonth
+    }
+
+    const findPlayerHp = (player) => {
+      const dungeonData = dungeonTracker.value.filter((event) => event.playerId === player.playerId)
+      let hp = 20
+      dungeonData.forEach((event) => {
+        if (event.eventType == 'hp') {
+          hp += event.quantity
+        }
+      })
+
+      return hp
     }
 
     // Calculate their total success rate for the month
     const successRatesByMonth = findSuccessRates(monthlyCounts)
 
     // Calculate how far along the adventure path the character is
-    const progressRatesByMonth = findProgressRates(successRatesByMonth, monthlyCounts)
+    const progressRatesByMonth = findProgressRates(successRatesByMonth, monthlyCounts, player)
 
     // Calculate total XP and level based on weekly counts
     const { totalXp, playerLevel, levelPercent } = findPlayerXp(monthlyCounts, player.playerId)
+
+    const playerHp = findPlayerHp(player)
 
     // monthly counts
     //     "apr": {
@@ -356,6 +381,7 @@ export const useAppStore = defineStore('app', () => {
     player.successAvg = successAvg
     player.goalPerWeekByMonth = goalPerWeekByMonth
     player.achievements = playerAchievements
+    player.hp = playerHp
   }
 
   const levelThresholds = {
@@ -432,6 +458,7 @@ export const useAppStore = defineStore('app', () => {
   const oathTracker = computed(() => data.value?.oathTracker || [])
   const achievementsData = computed(() => data.value?.achievementTracker || [])
   const dungeonEnemy = computed(() => data.value?.dungeonEnemy || [])
+  const dungeonTracker = computed(() => data.value?.dungeonTracker || [])
 
   const dungeonEnemyByMonth = {}
 
@@ -467,5 +494,6 @@ export const useAppStore = defineStore('app', () => {
     oathTracker,
     achievementsData,
     dungeonEnemyByMonth,
+    dungeonTracker,
   }
 })
