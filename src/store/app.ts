@@ -172,7 +172,8 @@ export const useAppStore = defineStore('app', () => {
           (week) => parseInt(week.slice(1)) < currentWeekNumber,
         ).length
 
-        const adventureProgress = completedWeeks / totalWeeks
+        const adventureProgress = (completedWeeks >= 1 ? completedWeeks : 1) / totalWeeks
+        console.log('adventureProgress', adventureProgress)
         ratesByMonth[month] = Math.round(adventureProgress * successRatesByMonth[month])
       })
 
@@ -187,6 +188,9 @@ export const useAppStore = defineStore('app', () => {
           }
         })
       })
+
+      console.log(player.charName)
+      console.log(ratesByMonth)
 
       return ratesByMonth
     }
@@ -372,6 +376,8 @@ export const useAppStore = defineStore('app', () => {
       Object.values(successRatesByMonth).reduce((sum, rate) => sum + rate, 0) /
         Object.values(successRatesByMonth).length || 0
 
+    // console.log(player.charName)
+    // console.log(successRatesByMonth)
     player.activity = playerActivity
     player.totalXp = totalXp
     player.xpBar = levelPercent

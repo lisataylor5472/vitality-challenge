@@ -178,6 +178,7 @@ export default defineComponent({
 
     const currentAdventureMonth = computed(() => {
       const monthKey = months[currentMonthIndex.value]
+      console.log(monthKey)
       return monthKey
     })
 
@@ -460,7 +461,7 @@ export default defineComponent({
     .view-options {
       button {
         border: 2px solid var(--theme-col-blurple);
-        width: 85px;
+        width: 75px;
         height: 25px;
         font-size: 0.9rem;
         font-family: 'Space Grotesk', serif;
@@ -517,7 +518,7 @@ export default defineComponent({
     .view-options {
       button {
         border: 2px solid var(--theme-col-blurple);
-        width: 85px;
+        width: 60px;
         height: 25px;
         font-size: 0.9rem;
         font-family: 'Space Grotesk', serif;

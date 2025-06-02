@@ -1070,6 +1070,7 @@ export default defineComponent({
                   newVal[index].charName.length > 22
                     ? newVal[index].charName.slice(0, 20) + '...'
                     : newVal[index].charName,
+                successAvg: Math.round(newVal[index].successAvg),
               }
             }
           })
