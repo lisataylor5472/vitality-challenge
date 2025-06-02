@@ -17,7 +17,7 @@
             img(v-else src="@/assets/flags/rolled-flag-snail.svg" alt="Future Dungeon Flag")
         .adventure-flag
           .rolled-up-flag.ladder
-            img(v-if="dateAfter('jun')" src="@/assets/flags/ladder-flag-large.svg" alt="Ladder Flag")
+            img(v-if="dateAfter('jun')" src="@/assets/flags/cardio-flag.svg" alt="Ladder Flag")
             img(v-else src="@/assets/flags/rolled-flag-ladder.svg" alt="Future Dungeon Flag")
         .adventure-flag
           .rolled-up-flag.feast

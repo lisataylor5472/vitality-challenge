@@ -137,7 +137,7 @@
                     template(v-if="header.key === 'progress'")
                       .progress-bar
                         img.entry(:src="`/progress/entry.png`", alt="Enter!")
-                        img.bad-guy(:src="`/progress/the_scald.png`", alt="The Scald", :style="{'left': `max(0px, calc(${Math.min(enemies[currentAdventureMonth].progressRate, 100)}% - 20px))`}")
+                        img.bad-guy(:src="`/progress/${enemies[currentAdventureMonth].name}.png`", alt="The Scald", :style="{'left': `max(0px, calc(${Math.min(enemies[currentAdventureMonth].progressRate, 100)}% - 20px))`}")
                         img.player-av(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''", :style="{'left': `max(0px, calc(${Math.min(player.progressRates[currentAdventureMonth], 100)}% - 20px))`}")
                         img.player-av(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
                         img.escape(:src="`/progress/endpoint.png`", alt="Escape!")
