@@ -107,7 +107,7 @@
                 tr.players-header-wrapper
                   th(v-for="(header, index) in activityColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
               tbody.scrollable-table
-                tr.player-wrapper(v-for="(player, playerIndex) in activePlayers(currentAdventureMonth)" :key="playerIndex", @click="selectedPlayer = player")
+                tr.player-wrapper(v-for="(player, playerIndex) in activePlayers(currentAdventureMonth)" :key="playerIndex")
                   td(v-for="(header, index) in activityColumns" :class="`col-${header.key}`" :key="index")
                     template(v-if="header.key === 'avatar'")
                       img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
@@ -127,7 +127,7 @@
                 tr.players-header-wrapper
                   th(v-for="(header, index) in progressColumns" :key="index" :data-header="header.key" :class="`col-${header.key}`") {{ header.name }}
               tbody.scrollable-table
-                tr.player-wrapper(v-for="(player, playerIndex) in activePlayers(currentAdventureMonth)" :key="playerIndex", @click="selectedPlayer = player")
+                tr.player-wrapper(v-for="(player, playerIndex) in activePlayers(currentAdventureMonth)" :key="playerIndex")
                   td(v-for="(header, index) in progressColumns" :class="`col-${header.key}`" :key="index")
                     template(v-if="header.key === 'avatar'")
                       img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
@@ -144,7 +144,7 @@
                     template(v-else)
                       | {{ player[header.key] }}
 
-      .player-view-wrapper(v-if="selectedPlayer != null")
+      .player-view-wrapper(v-if="selectedPlayer != null && showDetails")
         .char-header-wrapper
           button.back-button(@click="selectedPlayer = null", v-tooltip="`Back to players`")
             h1 <

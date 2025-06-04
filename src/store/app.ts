@@ -118,7 +118,8 @@ export const useAppStore = defineStore('app', () => {
       )
       monthlyCounts[monthKey].weeks[weekKey].count += 1
       monthlyCounts[monthKey].weeks[weekKey].successRate =
-        monthlyCounts[monthKey].weeks[weekKey].count / monthlyCounts[monthKey].goalPerWeek
+        monthlyCounts[monthKey].weeks[weekKey].count /
+        (monthlyCounts[monthKey].goalPerWeek > 0 ? monthlyCounts[monthKey].goalPerWeek : 1)
     })
 
     const findSuccessRates = (monthlyCounts) => {
@@ -141,7 +142,7 @@ export const useAppStore = defineStore('app', () => {
         // Map all the rates in our current selection
         const successRates = Object.values(weeks).map((week) => week.successRate)
 
-        // console.log('successRates', successRates)
+        console.log('successRates', successRates)
 
         if (successRates.length > 0) {
           ratesByMonth[month] = Math.round(
@@ -171,6 +172,8 @@ export const useAppStore = defineStore('app', () => {
         const completedWeeks = Object.keys(weeks).filter(
           (week) => parseInt(week.slice(1)) < currentWeekNumber,
         ).length
+
+        console.log('total weeks', totalWeeks)
 
         const adventureProgress = (completedWeeks >= 1 ? completedWeeks : 1) / totalWeeks
         console.log('adventureProgress', adventureProgress)
@@ -371,6 +374,8 @@ export const useAppStore = defineStore('app', () => {
         return ach.playerId === player.playerId && ach.isShadow == false
       })
       .map((ach: any) => ach)
+
+    console.log(successRatesByMonth)
 
     const successAvg =
       Object.values(successRatesByMonth).reduce((sum, rate) => sum + rate, 0) /
