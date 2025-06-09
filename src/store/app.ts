@@ -132,7 +132,7 @@ export const useAppStore = defineStore('app', () => {
           // Filter out any FUTURE weeks
           Object.entries(monthlyCounts[month].weeks).filter(([weekKey]) => {
             const weekNumber = parseInt(weekKey.slice(1))
-            return weekNumber <= currentWeekNumber
+            return weekNumber < currentWeekNumber
           }),
         )
         // console.log('weeks', weeks)
