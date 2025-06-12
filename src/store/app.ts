@@ -10,6 +10,7 @@ interface challengeData {
   dungeonTracker: []
   lylaActivityData: []
   dungeonEnemy: []
+  dungeonElements: []
 }
 
 export const useAppStore = defineStore('app', () => {
@@ -132,17 +133,14 @@ export const useAppStore = defineStore('app', () => {
           // Filter out any FUTURE weeks
           Object.entries(monthlyCounts[month].weeks).filter(([weekKey]) => {
             const weekNumber = parseInt(weekKey.slice(1))
-            return weekNumber < currentWeekNumber
+            return weekNumber <= currentWeekNumber
           }),
         )
-        // console.log('weeks', weeks)
         if (weeks['W14']) {
           delete weeks['W14']
         }
         // Map all the rates in our current selection
         const successRates = Object.values(weeks).map((week) => week.successRate)
-
-        console.log('successRates', successRates)
 
         if (successRates.length > 0) {
           ratesByMonth[month] = Math.round(
@@ -157,6 +155,10 @@ export const useAppStore = defineStore('app', () => {
         }
       })
 
+      // if (player.playerId == 'U03EBQ5M40M') {
+      //   console.log('success rates=', ratesByMonth)
+      // }
+
       return ratesByMonth
     }
 
@@ -170,13 +172,13 @@ export const useAppStore = defineStore('app', () => {
         const weeks = monthlyCounts[month].weeks
         const totalWeeks = Object.keys(weeks).length
         const completedWeeks = Object.keys(weeks).filter(
-          (week) => parseInt(week.slice(1)) < currentWeekNumber,
+          (week) => parseInt(week.slice(1)) <= currentWeekNumber,
         ).length
 
-        console.log('total weeks', totalWeeks)
-
         const adventureProgress = (completedWeeks >= 1 ? completedWeeks : 1) / totalWeeks
-        console.log('adventureProgress', adventureProgress)
+        // if (player.playerId == 'U03EBQ5M40M') {
+        //   console.log('current Adventure Progress=', adventureProgress)
+        // }
         ratesByMonth[month] = Math.round(adventureProgress * successRatesByMonth[month])
       })
 
@@ -192,8 +194,9 @@ export const useAppStore = defineStore('app', () => {
         })
       })
 
-      console.log(player.charName)
-      console.log(ratesByMonth)
+      // if (player.playerId == 'U03EBQ5M40M') {
+      //   console.log('progress rates=', ratesByMonth)
+      // }
 
       return ratesByMonth
     }
@@ -221,148 +224,6 @@ export const useAppStore = defineStore('app', () => {
 
     const playerHp = findPlayerHp(player)
 
-    // monthly counts
-    //     "apr": {
-    //         "successRate": null,
-    //         "progressRate": null,
-    //         "weeks": {
-    //             "W14": {
-    //                 "count": 5,
-    //                 "successRate": 1
-    //             },
-    //             "W15": {
-    //                 "count": 6,
-    //                 "successRate": 1
-    //             },
-    //             "W16": {
-    //                 "count": 5,
-    //                 "successRate": 1
-    //             },
-    //             "W17": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W18": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             }
-    //         }
-    //     },
-    //     "may": {
-    //         "successRate": null,
-    //         "progressRate": null,
-    //         "weeks": {
-    //             "W19": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W20": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W21": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W22": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             }
-    //         }
-    //     },
-    //     "jun": {
-    //         "successRate": null,
-    //         "progressRate": null,
-    //         "weeks": {
-    //             "W23": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W24": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W25": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W26": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             }
-    //         }
-    //     },
-    //     "jul": {
-    //         "successRate": null,
-    //         "progressRate": null,
-    //         "weeks": {
-    //             "W27": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W28": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W29": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W30": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W31": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             }
-    //         }
-    //     },
-    //     "aug": {
-    //         "successRate": null,
-    //         "progressRate": null,
-    //         "weeks": {
-    //             "W32": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W33": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W34": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W35": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             }
-    //         }
-    //     },
-    //     "sep": {
-    //         "successRate": null,
-    //         "progressRate": null,
-    //         "weeks": {
-    //             "W36": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W37": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W38": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             },
-    //             "W39": {
-    //                 "count": 0,
-    //                 "successRate": null
-    //             }
-    //         }
-    //     },
-
     // Collect all achievements
     const playerAchievements = achievementsData.value
       .filter((ach: any) => {
@@ -374,8 +235,6 @@ export const useAppStore = defineStore('app', () => {
         return ach.playerId === player.playerId && ach.isShadow == false
       })
       .map((ach: any) => ach)
-
-    console.log(successRatesByMonth)
 
     const successAvg =
       Object.values(successRatesByMonth).reduce((sum, rate) => sum + rate, 0) /
@@ -469,9 +328,11 @@ export const useAppStore = defineStore('app', () => {
   const oathTracker = computed(() => data.value?.oathTracker || [])
   const achievementsData = computed(() => data.value?.achievementTracker || [])
   const dungeonEnemy = computed(() => data.value?.dungeonEnemy || [])
+  const dungeonElements = computed(() => data.value?.dungeonElements || [])
   const dungeonTracker = computed(() => data.value?.dungeonTracker || [])
 
   const dungeonEnemyByMonth = {}
+  const dungeonElementsByMonth = {}
 
   watch(
     playerTracker,
@@ -495,6 +356,27 @@ export const useAppStore = defineStore('app', () => {
     })
   })
 
+  watch(dungeonElements, (newVal) => {
+    newVal.forEach((element) => {
+      if (!dungeonElementsByMonth[element.month]) {
+        dungeonElementsByMonth[element.month] = {
+          chest1Location: element.chest1Location,
+          chest1Visible: element.chest1Visible,
+          chest1Exhausted: element.chest1Exhausted,
+          chest2Location: element.chest2Location,
+          chest2Visible: element.chest2Visible,
+          chest2Exhausted: element.chest2Exhausted,
+          chest3Location: element.chest3Location,
+          chest3Visible: element.chest3Visible,
+          chest3Exhausted: element.chest3Exhausted,
+          chest4Location: element.chest4Location,
+          chest4Visible: element.chest4Visible,
+          chest4Exhausted: element.chest4Exhausted,
+        }
+      }
+    })
+  })
+
   return {
     data,
     isLoading,
@@ -505,6 +387,7 @@ export const useAppStore = defineStore('app', () => {
     oathTracker,
     achievementsData,
     dungeonEnemyByMonth,
+    dungeonElementsByMonth,
     dungeonTracker,
   }
 })

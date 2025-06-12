@@ -132,12 +132,16 @@
                     template(v-if="header.key === 'avatar'")
                       img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
                       img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
-                    //- template(v-if="header.key === 'progress_rate'")
-                    //-   p {{ player.progressRates[currentAdventureMonth] }}
+                    template(v-else-if="header.key === 'progressRate'")
+                      | {{ player?.progressRates[currentAdventureMonth] }}%
                     template(v-if="header.key === 'progress'")
                       .progress-bar
                         img.entry(:src="`/progress/entry.png`", alt="Enter!")
                         img.bad-guy(:src="`/progress/${enemies[currentAdventureMonth].name}.png`", alt="Enemy", :style="{'left': `max(0px, calc(${Math.min(enemies[currentAdventureMonth].progressRate, 100)}% - 20px))`}")
+                        img.chest(v-if="elements[currentAdventureMonth].chest1Visible", :src="`/progress/chest.png`", :style="{'left': `max(0px, calc(${Math.min(elements[currentAdventureMonth].chest1Location, 100)}% - 20px))`}")
+                        img.chest(v-if="elements[currentAdventureMonth].chest2Visible", :src="`/progress/chest.png`", :style="{'left': `max(0px, calc(${Math.min(elements[currentAdventureMonth].chest2Location, 100)}% - 20px))`}")
+                        img.chest(v-if="elements[currentAdventureMonth].chest3Visible", :src="`/progress/chest.png`", :style="{'left': `max(0px, calc(${Math.min(elements[currentAdventureMonth].chest3Location, 100)}% - 20px))`}")
+                        img.chest(v-if="elements[currentAdventureMonth].chest4Visible", :src="`/progress/chest.png`", :style="{'left': `max(0px, calc(${Math.min(elements[currentAdventureMonth].chest4Location, 100)}% - 20px))`}")
                         img.player-av(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''", :style="{'left': `max(0px, calc(${Math.min(player.progressRates[currentAdventureMonth], 100)}% - 20px))`}")
                         img.player-av(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
                         img.escape(:src="`/progress/endpoint.png`", alt="Escape!")
@@ -183,8 +187,12 @@ export default defineComponent({
     })
 
     const enemies = computed(() => {
-      console.log(appStore.dungeonEnemyByMonth)
       return appStore.dungeonEnemyByMonth
+    })
+
+    const elements = computed(() => {
+      console.log('elements', appStore.dungeonElementsByMonth)
+      return appStore.dungeonElementsByMonth
     })
 
     const players = computed(() => {
@@ -245,6 +253,7 @@ export default defineComponent({
     const progressColumns = ref([
       { name: '', key: 'avatar' },
       { name: 'name', key: 'charName' },
+      { name: 'rate', key: 'progressRate' },
       // { name: 'rate', key: 'progress_rate' },
       { name: 'adventure progress', key: 'progress' },
     ])
@@ -348,6 +357,7 @@ export default defineComponent({
       currentDate,
       months,
       activePlayers,
+      elements,
     }
   },
 })
@@ -676,6 +686,9 @@ export default defineComponent({
   .col-successRate {
     width: 8%;
   }
+  .col-progressRate {
+    width: 8%;
+  }
   .col-goalPerWeek {
     width: 8%;
   }
@@ -719,7 +732,8 @@ export default defineComponent({
     justify-content: flex-start;
     position: relative;
     // padding-left: 2em;
-    .bad-guy {
+    .bad-guy,
+    .chest {
       height: 40px;
       position: absolute;
     }
