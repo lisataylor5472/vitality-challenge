@@ -351,6 +351,10 @@ export const useAppStore = defineStore('app', () => {
         dungeonEnemyByMonth[enemy.month] = {
           name: enemy.name,
           progressRate: enemy.progressRate,
+          hp: enemy.hp,
+          hpMax: enemy.hpMax,
+          disName: enemy.disName,
+          speed: enemy.speed,
         }
       }
     })

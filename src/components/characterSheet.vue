@@ -21,6 +21,10 @@
   .right-column-wrapper
     .character-detail.activity
       activityTracker(:activityData="player.activity")
+    .character-detail.items
+      h2 Items
+      p {{ player.items }}
+
 
 </template>
 
@@ -94,7 +98,8 @@ export default defineComponent({
       align-items: center;
       height: 100%;
       .achievement-icon {
-        width: 30px;
+        height: 30px;
+        width: 60px;
         margin: 0.5rem;
       }
     }
@@ -104,7 +109,7 @@ export default defineComponent({
     flex-basis: 30%;
     display: flex;
     flex-direction: column;
-    justify-content: space-betsween;
+    justify-content: space-between;
     .activity {
       display: flex;
       flex-direction: column;
@@ -112,8 +117,8 @@ export default defineComponent({
       padding: 1rem 1rem;
       // height: 60%;
     }
-    .abilities {
-      height: 30%;
+    .items {
+      height: 40%;
     }
   }
 

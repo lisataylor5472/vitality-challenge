@@ -2,24 +2,25 @@
   .players-dashboard
     .players-view-header(v-if="selectedPlayer == null")
       .view-options-wrapper
-        .deep-lore-button
-          button(@click="toggleView") {{ buttonText }}
+        //- .deep-lore-button
+        //-   button(@click="toggleView") {{ buttonText }}
         //-   button(v-if="!showDashboard", @click="showDashboard = true") dashboards
-        .month-controls()
+        h1(v-if="!showDashboard") CAMPAIGN :: The Quest for Vitality!
+        .month-controls(v-if="showDashboard")
           template(@click="prevMonth", v-if="currentAdventureMonth != 'apr'")
             button(@click="prevMonth", v-if="currentAdventureMonth != 'apr'")
               .month-title <
           .month-title.month-name {{ currentMonthName[currentAdventureMonth] }}
           button(@click="nextMonth", v-if="currentAdventureMonth != 'sep'")
             .month-title >
-        .details-wrapper
+        .details-wrapper(v-if="showDashboard")
           .title view player:
           .view-options
             button(@click="onViewOption('details')", :class="{ active: showDetails }") details
             button(@click="onViewOption('activity')", :class="{ active: showActivity}") activity
             button(@click="onViewOption('progress')", :class="{ active: showProgress }") progress
 
-        .details-wrapper
+        .details-wrapper(v-if="showDashboard")
           .title filter:
           .view-options
             button(@click="toggleCharacterType('all')", :class="{ active: showAllCharacters }") all
@@ -31,16 +32,26 @@
       .loading-text(v-if="isLoading")
         h1 Conjuring the Data...
 
+      template(v-if="!isLoading && !selectedPlayer")
+        .top-info
+          .details(v-if="showDashboard")
+            .title Threat ::
+            img.bad-guy(:src="`/progress/${enemies[currentAdventureMonth].name}.png`", alt="Enemy")
+            .enemy-stats {{ enemies[currentAdventureMonth].disName }}
+            .title HP ::
+            .enemy-stats {{ enemies[currentAdventureMonth].hp }} / {{ enemies[currentAdventureMonth].hpMax }}
+            .title Speed ::
+            .enemy-stats {{ enemies[currentAdventureMonth].speed }}% per week
+          .deep-lore-button
+            button(@click="toggleView") {{ buttonText }}
+
       .campaign(v-if="!showDashboard")
         .campaign-view
-          .campaign-view-header
-            img(src="@/assets/CampaignText.svg" alt="Campaign")
+          h1 Introduction :
           .campaign-view-content
-            .campaign-header-wrapper
-              h1 Intro :
             p A group of adventurers are tasked by a mysterious benefactor to complete a legendary trial: The Quest for Vitality. To win the grand prize, they must overcome challenges that test their physical, mental, and social well-being. However, they soon find the challenge isn’t quite what they expected, as a digital entity seems to have pulled a small part of them into a digital realm. Can the adventurers complete the challenge and reclaim control over their digital and physical selves?
-            .campaign-header-wrapper
-              h1 Adventure Timeline :
+          h1 Adventures Timeline :
+          .campaign-view-content
             .adventure-timeline-info
               .adventure-wrapper.title
                 p MONTH
@@ -57,7 +68,7 @@
               .adventure-wrapper
                 p JUNE
                 p Jun 1 - Jun 28
-                p.unrevealed ...Yet to be revealed...
+                p The Ghostly Gauntlet
               .adventure-wrapper
                 p JULY
                 p Jun 29 - Aug 2
@@ -100,7 +111,7 @@
                       | {{ player[header.key] }}
                     template(v-else)
                       | {{ player[header.key] }}
-        template(v-if="showActivity")
+        template(v-if="showActivity && !isLoading")
           .table-wrapper
             table
               thead
@@ -303,9 +314,9 @@ export default defineComponent({
 
     const buttonText = computed(() => {
       if (showDashboard.value) {
-        return 'campaign'
+        return 'the deep lore...'
       } else {
-        return 'dashboard'
+        return 'back to dashboard...'
       }
     })
 
@@ -364,6 +375,41 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.top-info {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start; // Add this for vertical alignment
+  // gap: 3rem; // Optional: adds space between items
+  margin-bottom: 1em;
+  .details {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.5em;
+    .title {
+      font-family: 'Space Grotesk', sans-serif;
+      // font-family: 'Pixelify Sans', sans-serif;
+      font-weight: 600;
+      color: var(--theme-col-blurple);
+      font-size: 1rem;
+      margin-right: 0.4em;
+      // margin-left: 1rem;
+    }
+    .enemy-stats {
+      margin-left: 0.1em;
+      margin-right: 1.5em;
+      font-size: 1.2rem;
+      color: var(--theme-col-blurple);
+      font-family: 'Space Grotesk', sans-serif;
+
+      // font-family: 'Pixelify Sans', sans-serif;
+    }
+    .bad-guy {
+      height: 40px;
+    }
+  }
+}
 .players-dashboard {
   padding: 0 4.8rem 2.5rem 2.5rem;
   color: var(--theme-col-brown);
@@ -412,10 +458,16 @@ export default defineComponent({
     }
   }
   .deep-lore-button {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 2.5em;
+    // margin-top: 0.5em;
+    // width: 100%;
     button {
       border-radius: 37px;
       border: 2px solid #29f36e;
-      width: 150px;
+      width: 200px;
       height: 35px;
       font-size: 1.5rem;
       font-family: 'Grenze Gotisch', serif;
@@ -722,7 +774,7 @@ export default defineComponent({
   .parchment-page {
     width: 100%;
     height: 100%;
-    padding: 3em 5em 3em 3em;
+    padding: 1em 5em 3em 3em;
     // padding-right: 5em;
     background-image: url('@/assets/parchment.svg'); /* Adjust path as needed */
   }
@@ -754,26 +806,25 @@ export default defineComponent({
 
 .campaign-view {
   padding: 0 4.8rem 2.5rem 2.5rem;
+  box-sizing: border-box;
   color: var(--theme-col-brown);
   height: 100%;
   display: flex;
   flex-direction: column;
-  .campaign-view-header {
-    img {
-      height: 10rem;
-    }
-  }
+  align-items: center;
+  justify-content: center;
   .campaign-view-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 50vh;
+    max-width: 40vw;
+    // height: 50vh;
     text-align: center;
     // justify-content: center;
     // height: 100%;
     background-color: var(--theme-col-parchment-light);
     border-radius: 30px;
-    padding: 1rem 6rem;
+    padding: 1rem 3rem;
     font-family: 'Space Grotesk', sans-serif;
     .campaign-header-wrapper {
       width: 100%;
@@ -790,7 +841,7 @@ export default defineComponent({
       flex-direction: column;
       align-items: center;
       .adventure-wrapper {
-        width: 600px;
+        width: 500px;
         display: flex;
         align-items: center;
         justify-content: space-between;
