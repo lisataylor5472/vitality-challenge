@@ -143,6 +143,8 @@
                     template(v-if="header.key === 'avatar'")
                       img(v-if="player?.playerPng", :src="`/avatars/${player.playerPng}`", alt="Player Avatar", :class="player.isShadow ? 'shadow' : ''")
                       img(v-else, :src="`/avatars/default.svg`", alt="Player Avatar")
+                    template(v-else-if="header.key === 'successRate'")
+                      | {{ player?.successRates[currentAdventureMonth] }}%
                     template(v-else-if="header.key === 'progressRate'")
                       | {{ player?.progressRates[currentAdventureMonth] }}%
                     template(v-if="header.key === 'progress'")
@@ -264,7 +266,8 @@ export default defineComponent({
     const progressColumns = ref([
       { name: '', key: 'avatar' },
       { name: 'name', key: 'charName' },
-      { name: 'rate', key: 'progressRate' },
+      { name: 'success%', key: 'successRate' },
+      { name: 'progress%', key: 'progressRate' },
       // { name: 'rate', key: 'progress_rate' },
       { name: 'adventure progress', key: 'progress' },
     ])
