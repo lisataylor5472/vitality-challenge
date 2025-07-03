@@ -150,7 +150,13 @@
                     template(v-if="header.key === 'progress'")
                       .progress-bar
                         img.entry(:src="`/progress/entry.png`", alt="Enter!")
-                        img.bad-guy(:src="`/progress/${enemies[currentAdventureMonth].name}.png`", alt="Enemy", :style="{'left': `max(0px, calc(${Math.min(enemies[currentAdventureMonth].progressRate, 100)}% - 20px))`}")
+                        img.bad-guy(v-if="currentAdventureMonth != 'jul'", :src="`/progress/${enemies[currentAdventureMonth].name}.png`", alt="Enemy", :style="{'left': `max(0px, calc(${Math.min(enemies[currentAdventureMonth].progressRate, 100)}% - 20px))`}")
+                        //- img.bad-guy(
+                        //-   v-else
+                        //-   :src="`/progress/${enemies[currentAdventureMonth].name}.png`",
+                        //-   alt="Enemy",
+                        //-   :style="{'left': `max(0px, calc(${Math.min(enemies[currentAdventureMonth].progressRate, 100)}% - 20px))`, 'display': player.progressRates[currentAdventureMonth] > 50 ? 'none' : ''}"
+                        //- )
                         img.chest(v-if="elements[currentAdventureMonth].chest1Visible", :src="`/progress/chest.png`", :style="{'left': `max(0px, calc(${Math.min(elements[currentAdventureMonth].chest1Location, 100)}% - 20px))`}")
                         img.chest(v-if="elements[currentAdventureMonth].chest2Visible", :src="`/progress/chest.png`", :style="{'left': `max(0px, calc(${Math.min(elements[currentAdventureMonth].chest2Location, 100)}% - 20px))`}")
                         img.chest(v-if="elements[currentAdventureMonth].chest3Visible", :src="`/progress/chest.png`", :style="{'left': `max(0px, calc(${Math.min(elements[currentAdventureMonth].chest3Location, 100)}% - 20px))`}")
