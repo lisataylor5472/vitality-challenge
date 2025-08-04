@@ -72,11 +72,11 @@
               .adventure-wrapper
                 p JULY
                 p Jun 29 - Aug 2
-                p.unrevealed ...Yet to be revealed...
+                p.unrevealed Pact of Two Paths
               .adventure-wrapper
                 p AUGUST
                 p Aug 3 - Aug 30
-                p.unrevealed ...Yet to be revealed...
+                p.unrevealed Beware the Bennygorgen
               .adventure-wrapper
                 p SEPTEMBER
                 p Aug 31 - Sep 27

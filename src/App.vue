@@ -25,7 +25,7 @@
             img(v-else src="@/assets/flags/rolled-flag-feast.svg" alt="Future Dungeon Flag")
         .adventure-flag
           .rolled-up-flag.benny
-            img(v-if="dateAfter('aug')" src="@/assets/flags/benny-flag-large.svg")
+            img(v-if="dateAfter('aug')" src="@/assets/flags/strength-flag.svg")
             img(v-else src="@/assets/flags/rolled-flag-benny.svg" alt="Future Dungeon Flag")
         .adventure-flag
           .rolled-up-flag.final
