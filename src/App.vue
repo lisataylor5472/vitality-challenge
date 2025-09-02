@@ -29,7 +29,7 @@
             img(v-else src="@/assets/flags/rolled-flag-benny.svg" alt="Future Dungeon Flag")
         .adventure-flag
           .rolled-up-flag.final
-            img(v-if="dateAfter('sep')" src="@/assets/flags/final-flag-large.svg")
+            img(v-if="dateAfter('sep')" src="@/assets/flags/final-flag.svg")
             img(v-else src="@/assets/flags/rolled-flag-final.svg" alt="Future Dungeon Flag")
       //- .nav-wrapper
         //- RouterLink.nav-button(
