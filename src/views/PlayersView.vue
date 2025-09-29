@@ -201,7 +201,7 @@ export default defineComponent({
 
     const currentAdventureMonth = computed(() => {
       const monthKey = months[currentMonthIndex.value]
-      console.log(monthKey)
+      console.log('adventure Month', monthKey)
       return monthKey
     })
 
@@ -284,7 +284,7 @@ export default defineComponent({
       jun: [moment.utc('2025-06-01'), moment.utc('2025-06-28')],
       jul: [moment.utc('2025-06-29'), moment.utc('2025-08-02')],
       aug: [moment.utc('2025-08-03'), moment.utc('2025-08-30')],
-      sep: [moment.utc('2025-08-31'), moment.utc('2025-09-27')],
+      sep: [moment.utc('2025-08-31'), moment.utc('2025-10-02')],
     } as any
 
     const currentMonthName = {

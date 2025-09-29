@@ -87,7 +87,7 @@ export const useAppStore = defineStore('app', () => {
 
     const monthlyCounts = {}
 
-    for (let week = 14; week <= 39; week++) {
+    for (let week = 14; week <= 40; week++) {
       const weekKey = `W${week}`
       const date = moment().month(0).startOf('month').week(week)
       const monthKey = date.format('MMM').toLowerCase()
