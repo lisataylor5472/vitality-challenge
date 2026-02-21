@@ -31,20 +31,6 @@
           .rolled-up-flag.final
             img(v-if="dateAfter('sep')" src="@/assets/flags/final-flag.svg")
             img(v-else src="@/assets/flags/rolled-flag-final.svg" alt="Future Dungeon Flag")
-      //- .nav-wrapper
-        //- RouterLink.nav-button(
-        //-   to="/"
-        //-   custom
-        //-   v-slot="{ navigate, isActive }"
-        //- )
-        //-   button(@click="navigate", :class="{ active: isActive }")
-        //-     | dashboard
-        //- RouterLink.nav-button(to="/map" custom v-slot="{ navigate, isActive }")
-        //-   button(@click="navigate", :class="{ active: isActive }")
-        //-     | progress
-        //- RouterLink.nav-button(to="/campaign" custom v-slot="{ navigate, isActive }")
-        //-   button(@click="navigate", :class="{ active: isActive }")
-        //-     | campaign
 
   .main-content
     .left-column

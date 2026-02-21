@@ -177,7 +177,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 import { useAppStore } from '@/store/app'
 import CharacterSheet from '@/components/characterSheet.vue'
 import LinearTracker from '@/components/linearTracker.vue'
@@ -302,7 +302,7 @@ export default defineComponent({
 
     const currentDate = ref(moment.utc())
 
-    const currentMonthIndex = ref(0)
+    const currentMonthIndex = ref(1) // hardcoded to May 2025
 
     const months = ['apr', 'may', 'jun', 'jul', 'aug', 'sep']
 
@@ -328,18 +328,6 @@ export default defineComponent({
         return 'back to dashboard...'
       }
     })
-
-    watch(
-      currentDate,
-      (val) => {
-        const monthIndex = months.findIndex((key) => {
-          const [start, end] = adventureMonthMap[key]
-          return currentDate.value.isSameOrAfter(start) && currentDate.value.isSameOrBefore(end)
-        })
-        currentMonthIndex.value = monthIndex
-      },
-      { immediate: true },
-    )
 
     const prevMonth = () => {
       currentMonthIndex.value -= 1
